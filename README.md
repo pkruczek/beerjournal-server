@@ -26,6 +26,26 @@ which is added to test scope
 Define connection parameters in application.properties file
 
 
+by default in application.properties we set
+
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.repositories.enabled=true
+
+but we can also set another properties :
+
+# MONGODB (MongoProperties)
+spring.data.mongodb.authentication-database= # Authentication database name.
+spring.data.mongodb.database=test # Database name.
+spring.data.mongodb.field-naming-strategy= # Fully qualified name of the FieldNamingStrategy to use.
+spring.data.mongodb.grid-fs-database= # GridFS database name.
+spring.data.mongodb.host=localhost # Mongo server host. Cannot be set with uri.
+spring.data.mongodb.password= # Login password of the mongo server. Cannot be set with uri.
+spring.data.mongodb.port=27017 # Mongo server port. Cannot be set with uri.
+spring.data.mongodb.repositories.enabled=true # Enable Mongo repositories.
+spring.data.mongodb.uri=mongodb://localhost/test # Mongo database URI. Cannot be set with host, port and credentials.
+spring.data.mongodb.username= # Login user of the mongo server. Cannot be set with uri.
+
 If You want to do some operations on the database just use e.g:
 
 https://spring.io/guides/gs/accessing-data-mongodb/
