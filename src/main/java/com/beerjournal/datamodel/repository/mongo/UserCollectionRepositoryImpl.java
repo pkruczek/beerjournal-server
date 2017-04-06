@@ -21,6 +21,11 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	
 	@Autowired
 	private CollectableObjectsRepository collectibleObjectsRepository;
+	
+	@Override
+	public Collection<UserCollectionEntity> getAll() {
+		return repository.findAll().stream().map(this::getEntity).collect(Collectors.toList());
+	}
 
 	@Override
 	public Collection<UserCollectionEntity> getAllCollections() {

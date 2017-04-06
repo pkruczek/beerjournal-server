@@ -14,6 +14,11 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 	
 	@Autowired
 	private CollectableObjectsMongoRepository repository;
+	
+	@Override
+	public Collection<CollectableObjectEntity> getAll() {
+		return repository.findAll().stream().map(CollectableObjectsMapper::getEntity).collect(Collectors.toList());
+	}
 
 	@Override
 	public Collection<CollectableObjectEntity> getByBrewery(String brewery) {

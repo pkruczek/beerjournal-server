@@ -1,6 +1,8 @@
 package com.beerjournal.datamodel.entity;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,19 @@ public class UserCollectionEntity {
 
 	public void setObjectsInCollection(Collection<CollectableObjectEntity> objectsInCollection) {
 		this.objectsInCollection = objectsInCollection;
+	}
+	
+	public void addCollectableObject(CollectableObjectEntity entity) {
+		if (Objects.isNull(objectsInCollection)) {
+			objectsInCollection = new LinkedList<>();
+		}
+		objectsInCollection.add(entity);
+	}
+	
+	public void removeObjectFromCollection(CollectableObjectEntity entity) {
+		if (Objects.nonNull(objectsInCollection)) {
+			objectsInCollection.remove(entity);
+		}
 	}
 	
 	/**
