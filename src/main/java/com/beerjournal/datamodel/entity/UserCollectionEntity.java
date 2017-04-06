@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class UserCollectionEntity {
 
-	private Optional<String> id;
+	private Optional<String> id = Optional.empty();
 	private String userID;
 	private Collection<CollectableObjectEntity> objectsInCollection;
 

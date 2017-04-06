@@ -43,16 +43,18 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	}
 
 	@Override
-	public UserCollection save(UserCollectionEntity objectToSave) {
-		Collection<String> objectsInCollection = objectToSave.getObjectsInCollection()
-																		.stream()
-																		.map(objectInCollection -> collectibleObjectsRepository.update(objectInCollection).id)
-																		.collect(Collectors.toList());
+	public void save(UserCollectionEntity objectToSave) {
+		objectToSave.getObjectsInCollection().stream()
+											 .forEach(objectInCollection -> collectibleObjectsRepository.update(objectInCollection));
+		
+		Collection<String> objectsInCollection = objectToSave.getObjectsInCollection().stream()
+																					  .map(CollectableObjectEntity::getId)
+																					  .map(Optional::get)
+																					  .collect(Collectors.toList());
 		
 		UserCollection userCollection = new UserCollection(objectToSave.getUserID(), objectsInCollection);
 		repository.save(userCollection);
 		objectToSave.setId(userCollection.id);
-		return userCollection;
 	}
 
 	@Override
@@ -72,14 +74,13 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	}
 
 	@Override
-	public UserCollection update(UserCollectionEntity objectToUpdate) {
+	public void update(UserCollectionEntity objectToUpdate) {
 		if (!objectToUpdate.getId().isPresent()) {
-			return save(objectToUpdate);
+			save(objectToUpdate);
+			return;
 		}
 		
-		objectToUpdate.getObjectsInCollection().stream()
-											   .map(objectInCollection -> collectibleObjectsRepository.update(objectInCollection))
-											   .collect(Collectors.toList());
+		objectToUpdate.getObjectsInCollection().stream().forEach(objectInCollection -> collectibleObjectsRepository.update(objectInCollection));
 		
 		UserCollection userCollection = repository.findById(objectToUpdate.getId().get());
 		
@@ -88,7 +89,7 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 																				    .map(CollectableObjectEntity::getId)
 																				    .map(Optional::get)
 																				    .collect(Collectors.toList());
-		return repository.save(userCollection);
+		repository.save(userCollection);
 	}
 	
 	private UserCollection getObjectById(String id) {

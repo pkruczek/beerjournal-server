@@ -18,6 +18,7 @@ import com.beerjournal.datamodel.entity.CollectableObjectEntity;
 import com.beerjournal.datamodel.entity.UserCollectionEntity;
 import com.beerjournal.datamodel.repository.CollectableObjectsRepository;
 import com.beerjournal.datamodel.repository.UserCollectionRepository;
+import com.google.common.collect.Lists;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,12 +35,12 @@ public class PersistenceTest {
 	
 	@Before
 	public void beforeTest() {
-		clearData();
+		DatamodelTestUtils.clearData(Lists.newArrayList(collectibleObjectsRepository, userCollectionRepository));
 	}
 	
 	@After
 	public void afterTest() {
-		clearData();
+		DatamodelTestUtils.clearData(Lists.newArrayList(collectibleObjectsRepository, userCollectionRepository));
 	}
 	
 	@Test
@@ -86,10 +87,5 @@ public class PersistenceTest {
 		
 		Assertions.assertThat(objectsFromBrewery).hasSize(2);
 		Assertions.assertThat(collectionForUser).hasSize(1);
-	}
-	
-	private void clearData() {
-		userCollectionRepository.deleteAll();
-		collectibleObjectsRepository.deleteAll();
 	}
 }

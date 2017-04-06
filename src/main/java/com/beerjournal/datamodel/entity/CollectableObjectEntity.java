@@ -3,7 +3,7 @@ package com.beerjournal.datamodel.entity;
 import java.util.Optional;
 
 public abstract class CollectableObjectEntity {
-	protected Optional<String> id;
+	protected Optional<String> id = Optional.empty();
 	protected String brewery;
 	protected String ownerID;
 	

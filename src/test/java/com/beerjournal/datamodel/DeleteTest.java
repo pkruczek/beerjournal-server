@@ -18,12 +18,13 @@ import com.beerjournal.datamodel.entity.CollectableObjectEntity;
 import com.beerjournal.datamodel.entity.UserCollectionEntity;
 import com.beerjournal.datamodel.repository.CollectableObjectsRepository;
 import com.beerjournal.datamodel.repository.UserCollectionRepository;
+import com.google.common.collect.Lists;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DeleteTest {
 	@Autowired
-	public CollectableObjectsRepository collectibleObjectsRepository;
+	private CollectableObjectsRepository collectibleObjectsRepository;
 	
 	@Autowired
 	private UserCollectionRepository userCollectionRepository;
@@ -33,13 +34,13 @@ public class DeleteTest {
 	
 	@Before
 	public void beforeTest() {
-		clearData();
+		DatamodelTestUtils.clearData(Lists.newArrayList(collectibleObjectsRepository, userCollectionRepository));
 		persistData();
 	}
 	
 	@After
 	public void afterTest() {
-		clearData();
+		DatamodelTestUtils.clearData(Lists.newArrayList(collectibleObjectsRepository, userCollectionRepository));
 	}
 	
 	@Test
@@ -95,10 +96,5 @@ public class DeleteTest {
 		UserCollectionEntity userCollection = new UserCollectionEntity(USER_ID, collection);
 		
 		userCollectionRepository.save(userCollection);
-	}
-	
-	private void clearData() {
-		userCollectionRepository.deleteAll();
-		collectibleObjectsRepository.deleteAll();
 	}
 }
