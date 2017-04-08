@@ -15,13 +15,13 @@ import com.beerjournal.datamodel.repository.UserCollectionRepository;
 import com.beerjournal.datamodel.repository.mongo.access.UserCollectionMongoRepository;
 
 public class UserCollectionRepositoryImpl implements UserCollectionRepository {
-	
+
 	@Autowired
 	private UserCollectionMongoRepository repository;
-	
+
 	@Autowired
 	private CollectableObjectsRepository collectibleObjectsRepository;
-	
+
 	@Override
 	public Collection<UserCollectionEntity> getAll() {
 		return repository.findAll().stream().map(this::getEntity).collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	public Collection<UserCollectionEntity> getUserCollections(String userId) {
 		return repository.findByUserID(userId).stream().map(this::getEntity).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public void deleteAll() {
 		repository.deleteAll();
@@ -46,12 +46,12 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	public void save(UserCollectionEntity objectToSave) {
 		objectToSave.getObjectsInCollection().stream()
 											 .forEach(objectInCollection -> collectibleObjectsRepository.update(objectInCollection));
-		
+
 		Collection<String> objectsInCollection = objectToSave.getObjectsInCollection().stream()
 																					  .map(CollectableObjectEntity::getId)
 																					  .map(Optional::get)
 																					  .collect(Collectors.toList());
-		
+
 		UserCollection userCollection = new UserCollection(objectToSave.getUserID(), objectsInCollection);
 		repository.save(userCollection);
 		objectToSave.setId(userCollection.id);
@@ -61,12 +61,12 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	public UserCollectionEntity getById(String id) {
 		return getEntity(getObjectById(id));
 	}
-	
+
 	@Override
 	public void delete(UserCollectionEntity objectToDelete) {
 		repository.delete(objectToDelete.getId().get());
 	}
-	
+
 	@Override
 	public void deleteWholeCollection(UserCollectionEntity entity) {
 		entity.getObjectsInCollection().stream().forEach(objectInCollection -> collectibleObjectsRepository.delete(objectInCollection));
@@ -79,11 +79,11 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 			save(objectToUpdate);
 			return;
 		}
-		
+
 		objectToUpdate.getObjectsInCollection().stream().forEach(objectInCollection -> collectibleObjectsRepository.update(objectInCollection));
-		
+
 		UserCollection userCollection = repository.findById(objectToUpdate.getId().get());
-		
+
 		userCollection.userID = objectToUpdate.getUserID();
 		userCollection.objectsInCollection = objectToUpdate.getObjectsInCollection().stream()
 																				    .map(CollectableObjectEntity::getId)
@@ -91,11 +91,11 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 																				    .collect(Collectors.toList());
 		repository.save(userCollection);
 	}
-	
+
 	private UserCollection getObjectById(String id) {
 		return repository.findById(id);
 	}
-	
+
 	private UserCollectionEntity getEntity(UserCollection collection) {
 		Collection<CollectableObjectEntity> collectibleObjects = collection.objectsInCollection
 																		   .stream()
