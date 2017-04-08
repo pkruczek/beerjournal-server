@@ -2,6 +2,7 @@ package com.beerjournal.datamodel;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -82,6 +83,25 @@ public class UpdateTest {
 		collection = userCollections.iterator().next();
 		
 		Assertions.assertThat(collection.getObjectsInCollection()).hasSize(3);
+	}
+	
+	@Test
+	public void updateVolume() {
+		double newVolume = 3;
+		
+		Collection<CollectableObjectEntity> allObjects = collectibleObjectsRepository.getAll();
+		BottleEntity bottle = findBottleEntity(allObjects).get();
+		
+		bottle.setVolume(newVolume);
+		
+		collectibleObjectsRepository.update(bottle);
+		bottle = (BottleEntity)collectibleObjectsRepository.getById(bottle.getId().get());
+		
+		Assertions.assertThat(bottle.getVolume()).isEqualTo(newVolume);
+	}
+	
+	private Optional<BottleEntity> findBottleEntity(Collection<CollectableObjectEntity> entities) {
+		return entities.stream().filter(entity -> entity instanceof BottleEntity).map(entity -> (BottleEntity)entity).findAny();
 	}
 	
 	private void persistData() {

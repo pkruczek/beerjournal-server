@@ -55,12 +55,7 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 	
 	@Override
 	public CollectableObjectEntity getById(String id) {
-		return CollectableObjectsMapper.getEntity(getObjectById(id));
-	}
-	
-	@Override
-	public CollectableObject getObjectById(String id) {
-		return repository.findById(id);
+		return CollectableObjectsMapper.getEntity(repository.findById(id));
 	}
 	
 	@Override
@@ -116,13 +111,9 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 		return new Query().addCriteria(Criteria.where(FILENAME_FIELD).is(objectID + "." + IMAGE_EXTENSION));
 	}
 	
-	//TODO
 	private CollectableObject updateObject(CollectableObjectEntity entity) {
-		CollectableObject object = getObjectById(entity.getId().get());
-		
-		object.brewery = entity.getBrewery();
-		object.ownerID = entity.getOwnerID();
-
+		CollectableObject object = repository.findById(entity.getId().get());
+		CollectableObjectsMapper.updateObject(entity, object);
 		return object;
 	}
 

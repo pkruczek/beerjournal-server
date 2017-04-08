@@ -51,4 +51,17 @@ public class CollectableObjectsMapper {
 		
 		return result;
 	}
+	
+	public static void updateObject(CollectableObjectEntity entity, CollectableObject object) {
+		object.brewery = entity.getBrewery();
+		object.ownerID = entity.getOwnerID();
+		
+		if (entity instanceof BottleEntity) {
+			BottleEntity bottle = (BottleEntity)entity;
+			((Bottle)object).volume = bottle.getVolume();
+		} else if (entity instanceof CanEntity) {
+			CanEntity can = (CanEntity)entity;
+			((Can)object).volume = can.getVolume();
+		}
+	}
 }
