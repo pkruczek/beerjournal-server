@@ -2,6 +2,9 @@ package com.beerjournal.datamodel.entity;
 
 import java.util.Optional;
 
+import com.beerjournal.datamodel.model.Bottle;
+import com.beerjournal.datamodel.model.CollectableObject;
+
 public class BottleEntity extends CollectableObjectEntity{
 	private double volume;
 
@@ -43,5 +46,10 @@ public class BottleEntity extends CollectableObjectEntity{
 	@Override
 	public String toString() {
 		return "BottleEntity [volume=" + volume + ", id=" + id + ", brewery=" + brewery + ", ownerID=" + ownerID + "]";
+	}
+
+	@Override
+	public CollectableObject getObject() {
+		return new Bottle(ownerID, brewery, volume);
 	}
 }

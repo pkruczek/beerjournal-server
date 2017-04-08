@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,17 +35,17 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 	
 	@Override
 	public Collection<CollectableObjectEntity> getAll() {
-		return repository.findAll().stream().map(CollectableObjectsMapper::getEntity).collect(Collectors.toList());
+		return repository.findAll().stream().map(CollectableObject::getEntity).collect(Collectors.toList());
 	}
 	
 	@Override
 	public Collection<CollectableObjectEntity> getAllObjectsForUser(String userID) {
-		return repository.findByOwnerID(userID).stream().map(CollectableObjectsMapper::getEntity).collect(Collectors.toList());
+		return repository.findByOwnerID(userID).stream().map(CollectableObject::getEntity).collect(Collectors.toList());
 	}
 
 	@Override
 	public Collection<CollectableObjectEntity> getByBrewery(String brewery) {
-		return repository.findByBrewery(brewery).stream().map(CollectableObjectsMapper::getEntity).collect(Collectors.toList());
+		return repository.findByBrewery(brewery).stream().map(CollectableObject::getEntity).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -55,19 +56,24 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 	
 	@Override
 	public CollectableObjectEntity getById(String id) {
-		return CollectableObjectsMapper.getEntity(repository.findById(id));
+		CollectableObject collectableObject = repository.findById(id);
+		if (Objects.isNull(collectableObject)) {
+			return null;
+		}
+		return collectableObject.getEntity();
 	}
 	
 	@Override
 	public void save(CollectableObjectEntity objectToSave) {
-		CollectableObject object = repository.save(CollectableObjectsMapper.getObject(objectToSave));
+		CollectableObject object = repository.save(objectToSave.getObject());
 		objectToSave.setId(object.id);
 	}
 	
 	@Override
 	public void update(CollectableObjectEntity objectToUpdate) {
 		if (objectToUpdate.getId().isPresent()) {
-			repository.save(updateObject(objectToUpdate));
+			CollectableObject object = repository.findById(objectToUpdate.getId().get());
+			repository.save(object.update(objectToUpdate));
 		} else {
 			save(objectToUpdate);
 		}
@@ -109,12 +115,6 @@ public class CollectableObjectsRepositoryImpl implements CollectableObjectsRepos
 	
 	private Query findSingleImage(String objectID) {
 		return new Query().addCriteria(Criteria.where(FILENAME_FIELD).is(objectID + "." + IMAGE_EXTENSION));
-	}
-	
-	private CollectableObject updateObject(CollectableObjectEntity entity) {
-		CollectableObject object = repository.findById(entity.getId().get());
-		CollectableObjectsMapper.updateObject(entity, object);
-		return object;
 	}
 
 }
