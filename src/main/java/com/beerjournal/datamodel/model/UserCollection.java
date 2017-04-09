@@ -10,18 +10,21 @@ public class UserCollection {
 	public String id;
 	
 	public String userID;
+	public String name;
 	public Collection<String> objectsInCollection;
 
 	public UserCollection() {
 	}
 
-	public UserCollection(String userID, Collection<String> objectsInCollection) {
+	public UserCollection(String name, String userID, Collection<String> objectsInCollection) {
+		this.name = name;
 		this.userID = userID;
 		this.objectsInCollection = objectsInCollection;
 	}
 
 	@Override
 	public String toString() {
-		return "UserCollection [id=" + id + ", objectsInCollection=" + String.join("", objectsInCollection) + "]";
+		return "UserCollection [id=" + id + ", userID=" + userID + ", name=" + name + ", objectsInCollection="
+				+ objectsInCollection + "]";
 	}
 }

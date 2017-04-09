@@ -3,8 +3,6 @@ package com.beerjournal.datamodel;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.beerjournal.datamodel.entity.BottleEntity;
 import com.beerjournal.datamodel.entity.CanEntity;
 import com.beerjournal.datamodel.entity.CollectableObjectEntity;
@@ -32,7 +30,7 @@ public abstract class DatamodelTestUtils {
 		collection.add(bottle);
 		collection.add(can);
 		
-		UserCollectionEntity userCollection = new UserCollectionEntity(userID, collection);
+		UserCollectionEntity userCollection = new UserCollectionEntity("MyCollection", userID, collection);
 		
 		userCollectionRepository.save(userCollection);
 	}

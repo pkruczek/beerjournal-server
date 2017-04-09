@@ -1,5 +1,6 @@
 package com.beerjournal.datamodel.repository.mongo;
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import com.beerjournal.datamodel.entity.UserCollectionEntity;
 import com.beerjournal.datamodel.model.UserCollection;
 import com.beerjournal.datamodel.repository.CollectableObjectsRepository;
 import com.beerjournal.datamodel.repository.UserCollectionRepository;
+import com.beerjournal.datamodel.repository.mongo.access.ImageService;
 import com.beerjournal.datamodel.repository.mongo.access.UserCollectionMongoRepository;
 
 public class UserCollectionRepositoryImpl implements UserCollectionRepository {
@@ -21,6 +23,9 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	
 	@Autowired
 	private CollectableObjectsRepository collectibleObjectsRepository;
+	
+	@Autowired
+	private ImageService imageService;
 	
 	@Override
 	public Collection<UserCollectionEntity> getAll() {
@@ -39,6 +44,7 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	
 	@Override
 	public void deleteAll() {
+		getAll().stream().forEach(userCollection -> imageService.deleteCollectableObjectImage(userCollection.getId().get()));
 		repository.deleteAll();
 	}
 
@@ -52,7 +58,7 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 																					  .map(Optional::get)
 																					  .collect(Collectors.toList());
 		
-		UserCollection userCollection = new UserCollection(objectToSave.getUserID(), objectsInCollection);
+		UserCollection userCollection = new UserCollection(objectToSave.getName(), objectToSave.getUserID(), objectsInCollection);
 		repository.save(userCollection);
 		objectToSave.setId(userCollection.id);
 	}
@@ -64,12 +70,14 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 	
 	@Override
 	public void delete(UserCollectionEntity objectToDelete) {
+		imageService.deleteUserCollectionImage(objectToDelete.getId().get());
 		repository.delete(objectToDelete.getId().get());
 	}
 	
 	@Override
 	public void deleteWholeCollection(UserCollectionEntity entity) {
 		entity.getObjectsInCollection().stream().forEach(objectInCollection -> collectibleObjectsRepository.delete(objectInCollection));
+		imageService.deleteUserCollectionImage(entity.getId().get());
 		delete(entity);
 	}
 
@@ -84,12 +92,18 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 		
 		UserCollection userCollection = repository.findById(objectToUpdate.getId().get());
 		
+		userCollection.name = objectToUpdate.getName();
 		userCollection.userID = objectToUpdate.getUserID();
 		userCollection.objectsInCollection = objectToUpdate.getObjectsInCollection().stream()
 																				    .map(CollectableObjectEntity::getId)
 																				    .map(Optional::get)
 																				    .collect(Collectors.toList());
 		repository.save(userCollection);
+	}
+	
+	@Override
+	public Optional<BufferedImage> getImageForUserCollection(String userCollectionId) {
+		return imageService.getImageForUserCollection(userCollectionId);
 	}
 	
 	private UserCollection getObjectById(String id) {
@@ -102,6 +116,6 @@ public class UserCollectionRepositoryImpl implements UserCollectionRepository {
 																		   .map(collectibleObjectsRepository::getById)
 																		   .filter(Objects::nonNull)
 																		   .collect(Collectors.toList());
-		return new UserCollectionEntity(collection.id, collection.userID, collectibleObjects);
+		return new UserCollectionEntity(collection.name, collection.id, collection.userID, collectibleObjects);
 	}
 }

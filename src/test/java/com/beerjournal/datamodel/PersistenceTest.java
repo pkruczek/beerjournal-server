@@ -71,7 +71,7 @@ public class PersistenceTest {
 		collection.add(bottle);
 		collection.add(can);
 		
-		UserCollectionEntity userCollection = new UserCollectionEntity(USER_ID, collection);
+		UserCollectionEntity userCollection = new UserCollectionEntity("MyCollection", USER_ID, collection);
 		
 		userCollectionRepository.save(userCollection);
 		
