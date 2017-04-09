@@ -1,5 +1,8 @@
 package com.beerjournal.datamodel.model;
 
+import com.beerjournal.datamodel.entity.CapEntity;
+import com.beerjournal.datamodel.entity.CollectableObjectEntity;
+
 public class Cap extends CollectableObject{
 	
 	public Cap() {
@@ -13,5 +16,10 @@ public class Cap extends CollectableObject{
 	@Override
 	public String toString() {
 		return "Cap [id=" + id + ", brewery=" + brewery + "]";
+	}
+
+	@Override
+	public CollectableObjectEntity getEntity() {
+		return new CapEntity(id, ownerID, brewery);
 	}
 }

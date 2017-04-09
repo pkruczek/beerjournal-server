@@ -1,12 +1,15 @@
 package com.beerjournal.datamodel.repository;
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
+import java.util.Optional;
 
 import com.beerjournal.datamodel.entity.UserCollectionEntity;
 
 public interface UserCollectionRepository extends Repository<UserCollectionEntity> {
-	public Collection<UserCollectionEntity> getAllCollections();
-	public Collection<UserCollectionEntity> getUserCollections(String userId);
-	public UserCollectionEntity getById(String id);
-	public void deleteWholeCollection(UserCollectionEntity entity);
+	Collection<UserCollectionEntity> getAllCollections();
+	Collection<UserCollectionEntity> getUserCollections(String userId);
+	UserCollectionEntity getById(String id);
+	Optional<BufferedImage> getImageForUserCollection(String userCollectionId);
+	void deleteWholeCollection(UserCollectionEntity entity);
 }

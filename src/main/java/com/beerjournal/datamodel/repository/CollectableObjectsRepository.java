@@ -8,9 +8,9 @@ import java.util.Optional;
 import com.beerjournal.datamodel.entity.CollectableObjectEntity;
 
 public interface CollectableObjectsRepository extends Repository<CollectableObjectEntity> {
-	public Collection<CollectableObjectEntity> getByBrewery(String brewery);
-	public Collection<CollectableObjectEntity> getAllObjectsForUser(String userID);
-	public CollectableObjectEntity getById(String id);
-	public void saveImageForObject(CollectableObjectEntity object, InputStream image);
-	public Optional<BufferedImage> getImageForObject(String objectID);
+	Collection<CollectableObjectEntity> getByBrewery(String brewery);
+	Collection<CollectableObjectEntity> getAllObjectsForUser(String userID);
+	CollectableObjectEntity getById(String id);
+	void saveImageForObject(CollectableObjectEntity object, InputStream image);
+	Optional<BufferedImage> getImageForObject(String objectID);
 }

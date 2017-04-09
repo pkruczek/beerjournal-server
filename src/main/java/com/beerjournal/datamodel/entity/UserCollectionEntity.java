@@ -9,28 +9,31 @@ import java.util.stream.Collectors;
 public class UserCollectionEntity {
 
 	private Optional<String> id = Optional.empty();
+	private String name;
 	private String userID;
 	private Collection<CollectableObjectEntity> objectsInCollection;
 
 	/**
-	 * 
+	 * @param name - name of collection
 	 * @param id - object identifier on data base
 	 * @param userID - identifier of owner
 	 * @param objectsInCollection - collection of CollectableObjects
 	 */
-	public UserCollectionEntity(String id, String userID, Collection<CollectableObjectEntity> objectsInCollection) {
+	public UserCollectionEntity(String name, String id, String userID, Collection<CollectableObjectEntity> objectsInCollection) {
 		this.id = Optional.of(id);
+		this.name = name;
 		this.userID = userID;
 		this.objectsInCollection = objectsInCollection;
 	}
 	
 	/**
-	 * 
+	 * @param name = name of collection
 	 * @param userID - identifier of owner
 	 * @param objectsInCollection - collection of CollectableObjects
 	 */
-	public UserCollectionEntity(String userID, Collection<CollectableObjectEntity> objectsInCollection) {
+	public UserCollectionEntity(String name, String userID, Collection<CollectableObjectEntity> objectsInCollection) {
 		this.id = Optional.empty();
+		this.name = name;
 		this.userID = userID;
 		this.objectsInCollection = objectsInCollection;
 	}
@@ -41,6 +44,14 @@ public class UserCollectionEntity {
 
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Collection<CollectableObjectEntity> getObjectsInCollection() {
@@ -83,6 +94,7 @@ public class UserCollectionEntity {
 	@Override
 	public String toString() {
 		String objects = String.join("", objectsInCollection.stream().map(CollectableObjectEntity::toString).collect(Collectors.toList()));
-		return "UserCollection [id=" + id + ", objectsInCollection=" + objects + "]";
-	}
+		return "UserCollectionEntity [id=" + id + ", name=" + name + ", userID=" + userID + ", objectsInCollection="
+				+ objects + "]";
+	}	
 }

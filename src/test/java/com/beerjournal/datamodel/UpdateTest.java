@@ -1,6 +1,5 @@
 package com.beerjournal.datamodel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.beerjournal.datamodel.entity.BottleEntity;
-import com.beerjournal.datamodel.entity.CanEntity;
 import com.beerjournal.datamodel.entity.CapEntity;
 import com.beerjournal.datamodel.entity.CollectableObjectEntity;
 import com.beerjournal.datamodel.entity.UserCollectionEntity;
@@ -37,7 +35,7 @@ public class UpdateTest {
 	@Before
 	public void beforeTest() {
 		DatamodelTestUtils.clearData(Lists.newArrayList(collectibleObjectsRepository, userCollectionRepository));
-		persistData();
+		DatamodelTestUtils.persistDataForUpdateAndDeleteTest(USER_ID, BREWERY, collectibleObjectsRepository, userCollectionRepository);
 	}
 	
 	@After
@@ -102,21 +100,5 @@ public class UpdateTest {
 	
 	private Optional<BottleEntity> findBottleEntity(Collection<CollectableObjectEntity> entities) {
 		return entities.stream().filter(entity -> entity instanceof BottleEntity).map(entity -> (BottleEntity)entity).findAny();
-	}
-	
-	private void persistData() {
-		CollectableObjectEntity bottle = new BottleEntity(USER_ID, BREWERY, 0.5);
-		CollectableObjectEntity can = new CanEntity(USER_ID, BREWERY, 0.5);
-		
-		collectibleObjectsRepository.save(bottle);
-		collectibleObjectsRepository.save(can);
-		
-		Collection<CollectableObjectEntity> collection = new ArrayList<>();
-		collection.add(bottle);
-		collection.add(can);
-		
-		UserCollectionEntity userCollection = new UserCollectionEntity(USER_ID, collection);
-		
-		userCollectionRepository.save(userCollection);
 	}
 }
