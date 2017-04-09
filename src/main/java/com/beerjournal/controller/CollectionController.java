@@ -5,7 +5,9 @@ import com.beerjournal.datamodel.repository.UserCollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "collections")
@@ -22,6 +24,11 @@ public class CollectionController {
     @GetMapping("{id}")
     public UserCollectionEntity getCollection(@PathVariable("id") String id) {
         return userCollectionRepository.getById(id);
+    }
+
+    @GetMapping("{id}/image")
+    public Optional<BufferedImage> getImageForCollection(@PathVariable("id") String id) {
+        return userCollectionRepository.getImageForUserCollection(id);
     }
 
     @DeleteMapping("")
