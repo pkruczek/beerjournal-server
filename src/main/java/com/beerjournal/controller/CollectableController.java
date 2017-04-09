@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "collectables")
@@ -18,7 +17,7 @@ public class CollectableController {
     @Autowired
     private CollectableObjectsRepository collectableObjectsRepository;
 
-    @GetMapping("")
+    @GetMapping()
     public Collection<CollectableObjectEntity> getCollectables() {
         return collectableObjectsRepository.getAll();
     }
@@ -29,16 +28,16 @@ public class CollectableController {
     }
 
     @GetMapping("{id}/images")
-    public Optional<BufferedImage> getImage(@PathVariable("id") String id) {
-        return collectableObjectsRepository.getImageForObject(id);
+    public BufferedImage getImage(@PathVariable("id") String id) {
+        return collectableObjectsRepository.getImageForObject(id).get();
     }
 
     @GetMapping("brewery/{name}")
-    public Collection<CollectableObjectEntity> getByBrewery(@PathVariable("name") String name){
+    public Collection<CollectableObjectEntity> getByBrewery(@PathVariable("name") String name) {
         return collectableObjectsRepository.getByBrewery(name);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping()
     public void deleteCollectables() {
         collectableObjectsRepository.deleteAll();
     }
@@ -48,7 +47,7 @@ public class CollectableController {
         collectableObjectsRepository.delete(collectableObjectsRepository.getById(id));
     }
 
-    @PostMapping("")
+    @PostMapping()
     public void addCollectable(@RequestBody CollectableObjectEntity collectableObjectEntity) {
         collectableObjectsRepository.save(collectableObjectEntity);
     }
@@ -58,7 +57,7 @@ public class CollectableController {
         collectableObjectsRepository.saveImageForObject(collectableObjectsRepository.getById(id), image);
     }
 
-    @PutMapping("")
+    @PutMapping()
     public void updateCollectable(@RequestBody CollectableObjectEntity collectableObjectEntity) {
         collectableObjectsRepository.update(collectableObjectEntity);
     }

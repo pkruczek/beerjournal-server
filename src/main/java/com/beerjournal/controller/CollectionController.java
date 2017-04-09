@@ -16,7 +16,7 @@ public class CollectionController {
     @Autowired
     private UserCollectionRepository userCollectionRepository;
 
-    @GetMapping("")
+    @GetMapping()
     public Collection<UserCollectionEntity> getCollections() {
         return userCollectionRepository.getAll();
     }
@@ -31,7 +31,7 @@ public class CollectionController {
         return userCollectionRepository.getImageForUserCollection(id);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping()
     public void deleteCollections() {
         userCollectionRepository.deleteAll();
     }
@@ -42,12 +42,12 @@ public class CollectionController {
     }
 
 
-    @PostMapping("")
+    @PostMapping()
     public void addCollection(@RequestBody UserCollectionEntity userCollectionEntity) {
         userCollectionRepository.save(userCollectionEntity);
     }
 
-    @PutMapping("")
+    @PutMapping()
     public void updateCollection(@RequestBody UserCollectionEntity userEntity) {
         userCollectionRepository.update(userEntity);
     }

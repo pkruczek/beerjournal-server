@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("")
+    @GetMapping()
     public Collection<UserEntity> getUsers() {
         return userRepository.getAllUsers();
     }
@@ -24,7 +24,7 @@ public class UserController {
         return userRepository.getById(id);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping()
     public void deleteUsers() {
         userRepository.deleteAll();
     }
@@ -34,12 +34,12 @@ public class UserController {
         userRepository.deleteUser(userRepository.getById(id));
     }
 
-    @PostMapping("")
+    @PostMapping()
     public void addUser(@RequestBody UserEntity userEntity) {
         userRepository.save(userEntity);
     }
 
-    @PutMapping("")
+    @PutMapping()
     public void updateUser(@RequestBody UserEntity userEntity) {
         userRepository.update(userEntity);
     }
