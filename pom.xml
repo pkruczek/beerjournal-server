@@ -25,7 +25,7 @@
 		<cglib.version>3.2.5</cglib.version>
 		<guava.version>21.0</guava.version>
 		<lombok.version>1.16.16</lombok.version>
-		<spock.version>1.0-groovy-2.4</spock.version>
+		<spock.version>1.1-groovy-2.4-rc-4</spock.version>
 	</properties>
 
 	<dependencies>
@@ -58,6 +58,12 @@
 		<dependency>
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
+			<version>${spock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-spring</artifactId>
 			<version>${spock.version}</version>
 			<scope>test</scope>
 		</dependency>
