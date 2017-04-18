@@ -1,8 +1,10 @@
 package com.beerjournal.breweriana.persistence.item;
 
+import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,10 +14,11 @@ import java.util.Set;
 @Document
 @Data
 @EqualsAndHashCode(exclude = {"id"})
-public class ItemDetails {
+public class Item {
 
     @Id
-    private final String id;
+    private final ObjectId id;
+    private final ObjectId ownerId;
     private final String name;
     private final String category;
     private final String country;
@@ -24,8 +27,10 @@ public class ItemDetails {
     private final Set<Attribute> attributes;
 
     @PersistenceConstructor
-    ItemDetails(String id, String name, String category, String country, String brewery, String style, Set<Attribute> attributes) {
+    Item(ObjectId id, ObjectId ownerId, String name, String category, String country, String brewery,
+         String style, Set<Attribute> attributes) {
         this.id = id;
+        this.ownerId = ownerId;
         this.name = name;
         this.category = category;
         this.country = country;
@@ -35,7 +40,16 @@ public class ItemDetails {
     }
 
     @Builder
-    ItemDetails(String name, String category, String country, String brewery, String style, Set<Attribute> attributes) {
-        this(null, name, category, country, brewery, style, attributes);
+    Item(ObjectId ownerId, String name, String category, String country, String brewery, String style,
+         Set<Attribute> attributes) {
+        this(null, ownerId, name, category, country, brewery, style, attributes);
+    }
+
+    public ItemRef asItemRef() {
+        return ItemRef.builder()
+                .name(name)
+                .category(category)
+                .itemId(id)
+                .build();
     }
 }

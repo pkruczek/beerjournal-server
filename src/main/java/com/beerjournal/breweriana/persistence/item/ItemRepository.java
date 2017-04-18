@@ -9,14 +9,14 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class ItemDetailsRepository {
+public class ItemRepository {
 
-    private final ItemDetailsCrudRepository crudRepository;
+    private final ItemCrudRepository crudRepository;
     private final CategoryRepository categoryRepository;
 
-    public ItemDetails save(ItemDetails itemDetails) {
-        ensureCategory(itemDetails.getCategory());
-        return crudRepository.save(itemDetails);
+    public Item save(Item item) {
+        ensureCategory(item.getCategory());
+        return crudRepository.save(item);
     }
 
     private void ensureCategory(String category) {

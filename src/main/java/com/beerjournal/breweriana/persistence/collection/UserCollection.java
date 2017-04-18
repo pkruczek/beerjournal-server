@@ -3,10 +3,12 @@ package com.beerjournal.breweriana.persistence.collection;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Document
@@ -15,19 +17,19 @@ import java.util.Set;
 public class UserCollection {
 
     @Id
-    private final String id;
-    private final String userId;
-    private final Set<Item> items;
+    private final ObjectId id;
+    private final ObjectId ownerId;
+    private final Set<ItemRef> itemRefs;
 
     @PersistenceConstructor
-    UserCollection(String id, String userId, Set<Item> items) {
+    UserCollection(ObjectId id, ObjectId ownerId, Set<ItemRef> itemRefs) {
         this.id = id;
-        this.userId = userId;
-        this.items = items;
+        this.ownerId = ownerId;
+        this.itemRefs = itemRefs;
     }
 
     @Builder
-    UserCollection(String userId, Set<Item> items) {
-        this(null, userId, items);
+    UserCollection(ObjectId ownerId, Set<ItemRef> itemRefs) {
+        this(null, ownerId, itemRefs == null ? Collections.emptySet() : itemRefs);
     }
 }
