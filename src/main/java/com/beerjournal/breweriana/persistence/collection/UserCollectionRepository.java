@@ -34,4 +34,5 @@ public class UserCollectionRepository {
 
         return writeResult.getN();
     }
+
 }
