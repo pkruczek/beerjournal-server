@@ -10,16 +10,15 @@ import org.springframework.stereotype.Repository;
 
 import java.io.InputStream;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class ImageRepository {
+public class FileRepository {
 
     private final GridFsOperations gridFsOperations;
 
-    public String saveFile(InputStream inputStream, String contentType) {
-        GridFSFile file = gridFsOperations.store(inputStream, UUID.randomUUID().toString(), contentType);
+    public String saveFile(InputStream inputStream, String filename, String contentType) {
+        GridFSFile file = gridFsOperations.store(inputStream, filename, contentType);
         return file.getFilename();
     }
 
