@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-interface ItemCrudRepository extends MongoRepository<Item, ObjectId> {
+public interface ItemCrudRepository extends MongoRepository<Item, ObjectId> {
     Optional<Item> findOneByName(String name);
     Set<Item> findByNameNotIn(Collection itemsNames);
 }

@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.persistence.item
 
 import com.beerjournal.breweriana.persistence.category.Category
-import com.beerjournal.breweriana.persistence.category.CategoryRepository
+import com.beerjournal.breweriana.persistence.category.CategoryCrudRepository
 import com.beerjournal.breweriana.utils.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,7 +20,7 @@ class ItemRepositoryTest extends Specification {
     ItemCrudRepository itemCrudRepository
 
     @Autowired
-    CategoryRepository categoryRepository
+    CategoryCrudRepository categoryRepository
 
     @Autowired
     MongoTemplate mongoTemplate

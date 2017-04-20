@@ -1,10 +1,10 @@
 package com.beerjournal.breweriana.persistence.item;
 
 import com.beerjournal.breweriana.persistence.category.Category;
-import com.beerjournal.breweriana.persistence.category.CategoryRepository;
+import com.beerjournal.breweriana.persistence.category.CategoryCrudRepository;
 import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
-import com.beerjournal.breweriana.persistence.collection.UserCollectionRepository;
+import com.beerjournal.breweriana.persistence.collection.UserCollectionCrudRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
-    private final CategoryRepository categoryRepository;
-    private final UserCollectionRepository userCollectionRepository;
+    private final CategoryCrudRepository categoryRepository;
+    private final UserCollectionCrudRepository userCollectionCrudRepository;
 
     public Item save(Item item) {
         ensureCategory(item.getCategory());
@@ -34,7 +34,7 @@ public class ItemRepository {
     }
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
-        UserCollection userCollection = userCollectionRepository.findByOwnerId(ownerId)
+        UserCollection userCollection = userCollectionCrudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(RuntimeException::new); //TODO Better error handling
         Set<String> userItemsNames = userCollection.getItemRefs().stream()
                 .map(ItemRef::getName)
