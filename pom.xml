@@ -25,8 +25,9 @@
 		<cglib.version>3.2.5</cglib.version>
 		<guava.version>21.0</guava.version>
 		<lombok.version>1.16.16</lombok.version>
-		<spock.version>1.0-groovy-2.4</spock.version>
-	</properties>
+		<spock.version>1.1-groovy-2.4-rc-4</spock.version>
+        <commons-io.version>2.5</commons-io.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -82,7 +83,15 @@
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -90,8 +99,40 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- Run Spock tests -->
+			<plugin>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>addTestSources</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*Spec.java</include>
+					</includes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
