@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserCollectionRepository {
@@ -35,4 +37,7 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
+    public Optional<UserCollection> findByOwnerId(ObjectId ownerId) {
+        return crudRepository.findOneByOwnerId(ownerId);
+    }
 }
