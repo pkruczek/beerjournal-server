@@ -1,10 +1,9 @@
-package com.beerjournal.breweriana.persistence.item;
+package com.beerjournal.breweriana.persistence;
 
 import com.beerjournal.breweriana.persistence.category.Category;
-import com.beerjournal.breweriana.persistence.category.CategoryCrudRepository;
 import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
-import com.beerjournal.breweriana.persistence.collection.UserCollectionCrudRepository;
+import com.beerjournal.breweriana.persistence.item.Item;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -18,8 +17,8 @@ import java.util.stream.Collectors;
 public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
-    private final CategoryCrudRepository categoryRepository;
-    private final UserCollectionCrudRepository userCollectionCrudRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserCollectionRepository userCollectionCrudRepository;
 
     public Item save(Item item) {
         ensureCategory(item.getCategory());
@@ -34,7 +33,7 @@ public class ItemRepository {
     }
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
-        UserCollection userCollection = userCollectionCrudRepository.findOneByOwnerId(ownerId)
+        UserCollection userCollection = userCollectionCrudRepository.findByOwnerId(ownerId)
                 .orElseThrow(RuntimeException::new); //TODO Better error handling
         Set<String> userItemsNames = userCollection.getItemRefs().stream()
                 .map(ItemRef::getName)

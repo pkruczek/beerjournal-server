@@ -1,7 +1,9 @@
 package com.beerjournal.breweriana.persistence.collection
 
-import com.beerjournal.breweriana.persistence.item.ItemCrudRepository
-import com.beerjournal.breweriana.persistence.user.UserRepository
+import com.beerjournal.breweriana.persistence.ItemCrudRepository
+import com.beerjournal.breweriana.persistence.UserCollectionCrudRepository
+import com.beerjournal.breweriana.persistence.UserCollectionRepository
+import com.beerjournal.breweriana.persistence.UserRepository
 import com.beerjournal.breweriana.utils.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

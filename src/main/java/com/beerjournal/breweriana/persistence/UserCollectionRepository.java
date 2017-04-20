@@ -1,7 +1,8 @@
-package com.beerjournal.breweriana.persistence.collection;
+package com.beerjournal.breweriana.persistence;
 
+import com.beerjournal.breweriana.persistence.collection.ItemRef;
+import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.item.Item;
-import com.beerjournal.breweriana.persistence.item.ItemRepository;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -19,7 +20,7 @@ public class UserCollectionRepository {
 
     private final UserCollectionCrudRepository crudRepository;
     private final MongoOperations mongoOperations;
-    private final ItemRepository itemRepository;
+    private final ItemCrudRepository itemRepository;
 
     public UserCollection save(UserCollection userCollection) {
         return crudRepository.save(userCollection);

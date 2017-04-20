@@ -1,5 +1,6 @@
-package com.beerjournal.breweriana.persistence.user;
+package com.beerjournal.breweriana.persistence;
 
+import com.beerjournal.breweriana.persistence.user.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
