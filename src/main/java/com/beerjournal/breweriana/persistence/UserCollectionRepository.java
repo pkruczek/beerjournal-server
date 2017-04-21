@@ -20,7 +20,7 @@ public class UserCollectionRepository {
 
     private final UserCollectionCrudRepository crudRepository;
     private final MongoOperations mongoOperations;
-    private final ItemCrudRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     public UserCollection save(UserCollection userCollection) {
         return crudRepository.save(userCollection);

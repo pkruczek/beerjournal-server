@@ -22,9 +22,9 @@ public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
     private final CategoryRepository categoryRepository;
-    private final UserCollectionRepository userCollectionCrudRepository;
+    private final UserCollectionCrudRepository userCollectionCrudRepository;
 
-    public Item save(Item item) {
+    Item save(Item item) {
         ensureCategory(item.getCategory());
         return crudRepository.save(item);
     }
@@ -37,12 +37,16 @@ public class ItemRepository {
     }
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
-        UserCollection userCollection = userCollectionCrudRepository.findByOwnerId(ownerId)
+        UserCollection userCollection = userCollectionCrudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         Set<String> userItemsNames = userCollection.getItemRefs().stream()
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
         return crudRepository.findByNameNotIn(userItemsNames);
+    }
+
+    public Optional<Item> findOneById(String id){
+        return crudRepository.findOneById(id);
     }
 
 }
