@@ -3,8 +3,8 @@ package com.beerjournal.breweriana.persistence;
 import com.beerjournal.breweriana.persistence.category.Category;
 import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
+import com.beerjournal.breweriana.persistence.config.error.ClientErrorException;
 import com.beerjournal.breweriana.persistence.item.Item;
-import com.beerjournal.utils.ClientErrorException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.beerjournal.utils.ErrorInfo.NOT_USER_COLLECTION_FOUND;
+import static com.beerjournal.breweriana.persistence.config.error.ErrorInfo.NOT_USER_COLLECTION_FOUND;
+
 
 @Repository
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.beerjournal.utils;
+package com.beerjournal.breweriana.persistence.config.error;
 
 public class ClientErrorException extends RuntimeException {
     private ErrorInfo info;

@@ -1,4 +1,4 @@
-package com.beerjournal.utils;
+package com.beerjournal.breweriana.persistence.config.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
