@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BeerJournalException.class})
-    public ResponseEntity<ErrorInfo> handleClientErrorException(BeerJournalException bjException) {
+    public ResponseEntity<ErrorInfo> handleBeerJournalException(BeerJournalException bjException) {
         ErrorInfo errorInfo = bjException.getInfo();
         return new ResponseEntity<>(errorInfo, errorInfo.getStatus());
     }
@@ -19,7 +19,7 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler({Exception.class})
     public ResponseEntity<?> handleOtherException(Exception ex) {
         if (ex instanceof BeerJournalException) {
-            return handleClientErrorException((BeerJournalException) ex);
+            return handleBeerJournalException((BeerJournalException) ex);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
