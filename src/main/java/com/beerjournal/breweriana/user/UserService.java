@@ -7,6 +7,9 @@ import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
 
 @Service
@@ -14,6 +17,13 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
 class UserService {
 
     private final UserRepository userRepository;
+
+    Set<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserDto::toProtectedDto)
+                .collect(Collectors.toSet());
+    }
 
     UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(UserDto.fromDto(userDto));

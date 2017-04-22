@@ -2,6 +2,7 @@ package com.beerjournal.breweriana.persistence;
 
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.user.User;
+import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,12 @@ public class UserRepository {
 
     private final UserCrudRepository crudRepository;
     private final UserCollectionCrudRepository userCollectionCrudRepository;
+
+    public ImmutableSet<User> findAll() {
+        return ImmutableSet.<User>builder()
+                .addAll(crudRepository.findAll())
+                .build();
+    }
 
     public Optional<User> findOneById(ObjectId objectId) {
         return crudRepository.findOneById(objectId);
