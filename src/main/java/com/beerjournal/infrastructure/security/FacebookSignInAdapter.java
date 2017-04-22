@@ -1,4 +1,4 @@
-package com.beerjournal.security;
+package com.beerjournal.infrastructure.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

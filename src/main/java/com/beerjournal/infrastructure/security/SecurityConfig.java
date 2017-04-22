@@ -1,10 +1,11 @@
-package com.beerjournal.security;
+package com.beerjournal.infrastructure.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,22 +17,16 @@ import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
 
 @Configuration
-@Profile("!test")
+@Profile({"dev", "prod"})
 @EnableWebSecurity
-@ComponentScan(basePackages = { "com.beerjournal.security" })
+@ComponentScan(basePackages = {"com.beerjournal.infrastructure.security"})
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private ConnectionFactoryLocator connectionFactoryLocator;
-
-    @Autowired
-    private UsersConnectionRepository usersConnectionRepository;
-
-    @Autowired
-    private FacebookConnectionSignup facebookConnectionSignup;
+    private final UserDetailsService userDetailsService;
+    private final ConnectionFactoryLocator connectionFactoryLocator;
+    private final UsersConnectionRepository usersConnectionRepository;
+    private final FacebookConnectionSignup facebookConnectionSignup;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login*", "/signin/**", "/signup/**").permitAll()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources",
+                        "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll();

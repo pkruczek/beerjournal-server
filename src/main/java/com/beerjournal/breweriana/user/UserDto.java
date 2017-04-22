@@ -18,6 +18,7 @@ class UserDto {
 
     @NotEmpty private final String firstName;
     @NotEmpty private final String lastName;
+    @NotEmpty private final String password;
     @Email private final String email;
 
     static UserDto toDto(User user){
@@ -36,6 +37,7 @@ class UserDto {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .password(userDto.getPassword())
                 .build();
     }
 

@@ -1,19 +1,19 @@
-package com.beerjournal.security;
+package com.beerjournal.infrastructure.security;
 
 import com.beerjournal.breweriana.persistence.UserRepository;
 import com.beerjournal.breweriana.persistence.user.User;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FacebookConnectionSignup implements ConnectionSignUp {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public String execute(Connection<?> connection) {
