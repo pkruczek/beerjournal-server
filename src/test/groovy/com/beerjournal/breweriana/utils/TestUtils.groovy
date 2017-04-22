@@ -15,6 +15,7 @@ final class TestUtils {
                 .firstName("Janusz")
                 .lastName("Nowak")
                 .email("nowak@piwo.pl")
+                .password("alamakota123")
                 .build()
     }
 

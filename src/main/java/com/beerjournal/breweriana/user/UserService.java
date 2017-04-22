@@ -21,7 +21,7 @@ class UserService {
     Set<UserDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserDto::toProtectedDto)
+                .map(UserDto::toDto)
                 .collect(Collectors.toSet());
     }
 

@@ -23,10 +23,11 @@ public class User {
     private final String lastName;
     @Indexed(unique = true)
     private final String email;
+    private final String password;
 
     @Builder
-    public static User of(String firstName, String lastName, String email) {
-        return new User(null, firstName, lastName, email);
+    public static User of(String firstName, String lastName, String email, String password) {
+        return new User(null, firstName, lastName, email, password);
     }
 
 }
