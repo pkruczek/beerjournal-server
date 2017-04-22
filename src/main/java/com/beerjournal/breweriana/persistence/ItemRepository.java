@@ -3,8 +3,8 @@ package com.beerjournal.breweriana.persistence;
 import com.beerjournal.breweriana.persistence.category.Category;
 import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
-import com.beerjournal.breweriana.persistence.config.error.ClientErrorException;
 import com.beerjournal.breweriana.persistence.item.Item;
+import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.beerjournal.breweriana.persistence.config.error.ErrorInfo.NOT_USER_COLLECTION_FOUND;
+import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
 
 @Repository
@@ -38,7 +38,7 @@ public class ItemRepository {
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
         UserCollection userCollection = userCollectionCrudRepository.findByOwnerId(ownerId)
-                .orElseThrow(() -> new ClientErrorException(NOT_USER_COLLECTION_FOUND));
+                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         Set<String> userItemsNames = userCollection.getItemRefs().stream()
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
