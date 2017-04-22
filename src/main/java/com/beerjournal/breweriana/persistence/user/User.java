@@ -21,10 +21,11 @@ public class User {
     private final String firstName;
     private final String lastName;
     private final String email;
+    private final String password;
 
     @Builder
-    public static User of(String firstName, String lastName, String email) {
-        return new User(null, firstName, lastName, email);
+    public static User of(String firstName, String lastName, String email, String password) {
+        return new User(null, firstName, lastName, email, password);
     }
 
 }
