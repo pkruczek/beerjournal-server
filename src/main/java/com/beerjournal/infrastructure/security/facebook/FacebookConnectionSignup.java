@@ -1,4 +1,4 @@
-package com.beerjournal.infrastructure.security;
+package com.beerjournal.infrastructure.security.facebook;
 
 import com.beerjournal.breweriana.persistence.UserRepository;
 import com.beerjournal.breweriana.persistence.user.User;

@@ -1,4 +1,4 @@
-package com.beerjournal.infrastructure.security;
+package com.beerjournal.infrastructure.security.facebook;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
