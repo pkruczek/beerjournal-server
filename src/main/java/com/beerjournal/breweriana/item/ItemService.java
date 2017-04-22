@@ -23,10 +23,11 @@ class ItemService {
     private final ItemRepository itemRepository;
     private final UserCollectionRepository userCollectionRepository;
 
-    Set<ItemDto> getAllNotInUserCollection(String userId) {
+    Set<ItemRefDto> getAllNotInUserCollection(String userId) {
         return itemRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId))
                 .stream()
-                .map(ItemDto::toDto)
+                .map(Item::asItemRef)
+                .map(ItemRefDto::toDto)
                 .collect(Collectors.toSet());
     }
 

@@ -13,12 +13,12 @@ class CollectionController {
 
     private final CollectionService collectionService;
 
-    @GetMapping("{ownerId}/collections")
+    @GetMapping("{ownerId}/collection")
     ResponseEntity<UserCollectionDto> getCollectionByOwnerId(@PathVariable(value = "ownerId") String ownerId) {
         return new ResponseEntity<>(collectionService.getCollectionByOwnerId(ownerId), HttpStatus.OK);
     }
 
-    @PostMapping("{ownerId}/collections")
+    @PostMapping("{ownerId}/collection/items")
     ResponseEntity<ItemDto> addItemToCollection(@PathVariable(value = "ownerId") String ownerId, @RequestBody ItemDto item) {
         return new ResponseEntity<>(collectionService.addItem(ownerId, item), HttpStatus.CREATED);
     }

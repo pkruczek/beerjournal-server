@@ -3,12 +3,10 @@ package com.beerjournal.breweriana.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -17,18 +15,14 @@ class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("users/{id}/not_owned_items")
-    ResponseEntity<Collection<ItemDto>> getAllNotInUserCollection(@PathVariable(value = "id") String id) {
-        return new ResponseEntity<>(itemService.getAllNotInUserCollection(id), HttpStatus.OK);
+    @GetMapping("users/{userId}/collection/items")
+    ResponseEntity<Collection<ItemRefDto>> getAllNotInUserCollection(@RequestParam(value="lacking", defaultValue="false") boolean lacking,  @PathVariable(value = "userId") String id) {
+        Set<ItemRefDto> items = lacking ? itemService.getAllNotInUserCollection(id) : itemService.getAllItemRefsInUserCollection(id);
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
-    @GetMapping("users/{id}/owned_items")
-    ResponseEntity<Collection<ItemRefDto>> getAllItemRefsInUserCollection(@PathVariable(value = "id") String id) {
-        return new ResponseEntity<>(itemService.getAllItemRefsInUserCollection(id), HttpStatus.OK);
-    }
-
-    @GetMapping("items/{id}")
-    ResponseEntity<ItemDto> getItemDetails(@PathVariable(value = "id") String id) {
+    @GetMapping("items/{itemId}")
+    ResponseEntity<ItemDto> getItemDetails(@PathVariable(value = "itemId") String id) {
         return new ResponseEntity<>(itemService.getItemDetails(id), HttpStatus.OK);
     }
 
