@@ -16,7 +16,7 @@ class ItemController {
     private final ItemService itemService;
 
     @GetMapping("users/{userId}/collection/items")
-    ResponseEntity<Collection<ItemRefDto>> getAllNotInUserCollection(@RequestParam(value="lacking", defaultValue="false") boolean lacking,  @PathVariable(value = "userId") String id) {
+    ResponseEntity<Collection<ItemRefDto>> getAllItemRefsInUserCollection(@RequestParam(value = "lacking", defaultValue = "false") boolean lacking, @PathVariable(value = "userId") String id) {
         Set<ItemRefDto> items = lacking ? itemService.getAllNotInUserCollection(id) : itemService.getAllItemRefsInUserCollection(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
