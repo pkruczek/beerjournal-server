@@ -6,6 +6,7 @@ import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Set;
 
@@ -17,12 +18,13 @@ import static lombok.AccessLevel.PRIVATE;
 public class ItemDto {
 
     private final String id;
-    private final String ownerId;
-    private final String name;
-    private final String category;
-    private final String country;
-    private final String brewery;
-    private final String style;
+
+    @NotEmpty private final String ownerId;
+    @NotEmpty private final String name;
+    @NotEmpty private final String category;
+    @NotEmpty private final String country;
+    @NotEmpty private final String brewery;
+    @NotEmpty private final String style;
     private final Set<Attribute> attributes;
 
     public static ItemDto toDto(Item item){

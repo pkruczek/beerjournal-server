@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.item;
+package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import lombok.Builder;

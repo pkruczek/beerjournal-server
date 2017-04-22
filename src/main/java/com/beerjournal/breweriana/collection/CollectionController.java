@@ -4,6 +4,7 @@ import com.beerjournal.breweriana.item.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,8 @@ class CollectionController {
     }
 
     @PostMapping("{ownerId}/collection/items")
-    ResponseEntity<ItemDto> addItemToCollection(@PathVariable(value = "ownerId") String ownerId, @RequestBody ItemDto item) {
+    ResponseEntity<ItemDto> addItemToCollection(@PathVariable(value = "ownerId") String ownerId,
+                                                @RequestBody @Validated ItemDto item) {
         return new ResponseEntity<>(collectionService.addItem(ownerId, item), HttpStatus.CREATED);
     }
 

@@ -1,6 +1,5 @@
 package com.beerjournal.breweriana.collection;
 
-import com.beerjournal.breweriana.item.ItemRefDto;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import lombok.Builder;
 import lombok.Data;

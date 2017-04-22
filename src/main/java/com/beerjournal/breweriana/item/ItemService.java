@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.item;
 
+import com.beerjournal.breweriana.collection.ItemRefDto;
 import com.beerjournal.breweriana.persistence.ItemRepository;
 import com.beerjournal.breweriana.persistence.UserCollectionRepository;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;

@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.item;
 
+import com.beerjournal.breweriana.collection.ItemRefDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

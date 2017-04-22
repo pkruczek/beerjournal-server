@@ -3,6 +3,7 @@ package com.beerjournal.breweriana.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,7 +15,7 @@ class UserController {
     private final UserService userService;
 
     @PostMapping
-    ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+    ResponseEntity<UserDto> createUser(@RequestBody @Validated UserDto user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 

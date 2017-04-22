@@ -4,6 +4,8 @@ import com.beerjournal.breweriana.persistence.user.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -13,9 +15,10 @@ import static lombok.AccessLevel.PRIVATE;
 class UserDto {
 
     private final String id;
-    private final String firstName;
-    private final String lastName;
-    private final String email;
+
+    @NotEmpty private final String firstName;
+    @NotEmpty private final String lastName;
+    @Email private final String email;
 
     static UserDto toDto(User user){
         return UserDto.builder()
