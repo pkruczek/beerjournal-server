@@ -22,13 +22,10 @@ class UserDto {
     @Email private final String email;
 
     static UserDto toDto(User user){
-        return baseBuilder(user)
-                .email(user.getEmail())
-                .build();
-    }
-
-    static UserDto toProtectedDto(User user) {
-        return baseBuilder(user)
+        return UserDto.builder()
+                .id(user.getId().toHexString())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .build();
     }
 
@@ -39,13 +36,6 @@ class UserDto {
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
                 .build();
-    }
-
-    private static UserDtoBuilder baseBuilder(User user) {
-        return UserDto.builder()
-                .id(user.getId().toHexString())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName());
     }
 
 }

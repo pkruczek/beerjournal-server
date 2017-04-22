@@ -19,7 +19,7 @@ public class ItemDto {
 
     private final String id;
 
-    @NotEmpty private final String ownerId;
+    private final String ownerId;
     @NotEmpty private final String name;
     @NotEmpty private final String category;
     @NotEmpty private final String country;
