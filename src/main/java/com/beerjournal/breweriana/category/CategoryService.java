@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.CATEGORY_NOT_FOUND;
 
@@ -16,13 +17,18 @@ class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    Category getCategoryByName(String name) {
-        return categoryRepository.findOneByName(name)
+    CategoryDto getCategoryByName(String name) {
+        Category category = categoryRepository.findOneByName(name)
                 .orElseThrow(() -> new BeerJournalException(CATEGORY_NOT_FOUND));
+
+        return CategoryDto.toDto(category);
     }
 
-    Set<Category> getCategories() {
-        return categoryRepository.findAll();
+    Set<CategoryDto> getCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryDto::toDto)
+                .collect(Collectors.toSet());
     }
 
 }

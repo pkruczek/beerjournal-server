@@ -1,7 +1,6 @@
 package com.beerjournal.breweriana.collection;
 
-import com.beerjournal.breweriana.persistence.collection.UserCollection;
-import com.beerjournal.breweriana.persistence.item.Item;
+import com.beerjournal.breweriana.item.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +14,12 @@ class CollectionController {
     private final CollectionService collectionService;
 
     @GetMapping("{ownerId}/collections")
-    ResponseEntity<UserCollection> getCollectionByOwnerId(@PathVariable(value = "ownerId") String ownerId) {
+    ResponseEntity<UserCollectionDto> getCollectionByOwnerId(@PathVariable(value = "ownerId") String ownerId) {
         return new ResponseEntity<>(collectionService.getCollectionByOwnerId(ownerId), HttpStatus.OK);
     }
 
     @PostMapping("{ownerId}/collections")
-    ResponseEntity<Item> addItemToCollection(@PathVariable(value = "ownerId") String ownerId, @RequestBody Item item) {
+    ResponseEntity<ItemDto> addItemToCollection(@PathVariable(value = "ownerId") String ownerId, @RequestBody ItemDto item) {
         return new ResponseEntity<>(collectionService.addItem(ownerId, item), HttpStatus.CREATED);
     }
 

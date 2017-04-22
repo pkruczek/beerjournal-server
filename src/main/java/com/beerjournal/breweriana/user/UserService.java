@@ -15,14 +15,15 @@ class UserService {
 
     private final UserRepository userRepository;
 
-    User createUser(User user) {
-        userRepository.save(user);
-        return user;
+    UserDto createUser(UserDto userDto) {
+        User savedUser = userRepository.save(UserDto.fromDto(userDto));
+        return UserDto.toDto(savedUser);
     }
 
-    User getUserWithID(String userId) {
-        return userRepository.findOneById(ServiceUtils.stringToObjectId(userId))
+    UserDto getUserWithID(String userId) {
+        User user = userRepository.findOneById(ServiceUtils.stringToObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+        return UserDto.toDto(user);
     }
 
 }

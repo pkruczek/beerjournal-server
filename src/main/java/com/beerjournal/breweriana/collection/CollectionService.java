@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.collection;
 
+import com.beerjournal.breweriana.item.ItemDto;
 import com.beerjournal.breweriana.persistence.UserCollectionRepository;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.item.Item;
@@ -16,14 +17,17 @@ class CollectionService {
 
     private final UserCollectionRepository userCollectionRepository;
 
-    UserCollection getCollectionByOwnerId(String ownerId) {
-        return userCollectionRepository.findByOwnerId(ServiceUtils.stringToObjectId(ownerId))
+    UserCollectionDto getCollectionByOwnerId(String ownerId) {
+        UserCollection userCollection = userCollectionRepository.findByOwnerId(ServiceUtils.stringToObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
+
+        return UserCollectionDto.toDto(userCollection);
     }
 
-    Item addItem(String ownerId, Item item) {
+    ItemDto addItem(String ownerId, ItemDto itemDto) {
+        Item item = ItemDto.fromDto(itemDto, ownerId);
         userCollectionRepository.addNewItem(ServiceUtils.stringToObjectId(ownerId), item);
-        return item;
+        return itemDto;
     }
 
 }

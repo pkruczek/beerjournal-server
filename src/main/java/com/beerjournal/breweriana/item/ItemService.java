@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.ITEM_NOT_FOUND;
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
@@ -22,21 +23,29 @@ class ItemService {
     private final ItemRepository itemRepository;
     private final UserCollectionRepository userCollectionRepository;
 
-    Set<Item> getAllNotInUserCollection(String userId) {
-        return itemRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId));
+    Set<ItemDto> getAllNotInUserCollection(String userId) {
+        return itemRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId))
+                .stream()
+                .map(ItemDto::toDto)
+                .collect(Collectors.toSet());
     }
 
-    Set<ItemRef> getAllItemRefsInUserCollection(String userId) {
+    Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {
         UserCollection userCollection = userCollectionRepository
                 .findByOwnerId(ServiceUtils.stringToObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
-        return userCollection.getItemRefs();
+        return userCollection.getItemRefs()
+                .stream()
+                .map(ItemRefDto::toDto)
+                .collect(Collectors.toSet());
     }
 
-    Item getItemDetails(String id) {
-        return itemRepository.findOneById(id)
+    ItemDto getItemDetails(String id) {
+        Item item = itemRepository.findOneById(id)
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
+
+        return ItemDto.toDto(item);
     }
 
 }
