@@ -21,28 +21,28 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT
 public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
-    private final CategoryRepository categoryRepository;
-    private final UserCollectionRepository userCollectionCrudRepository;
-
-    public Item save(Item item) {
-        ensureCategory(item.getCategory());
-        return crudRepository.save(item);
-    }
-
-    private void ensureCategory(String category) {
-        Optional<Category> maybeCategory = categoryRepository.findOneByName(category);
-        if (!maybeCategory.isPresent()) {
-            categoryRepository.save(Category.of(category));
-        }
-    }
+    private final CategoryCrudRepository categoryCrudRepository;
+    private final UserCollectionCrudRepository userCollectionCrudRepository;
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
-        UserCollection userCollection = userCollectionCrudRepository.findByOwnerId(ownerId)
+        UserCollection userCollection = userCollectionCrudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         Set<String> userItemsNames = userCollection.getItemRefs().stream()
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
         return crudRepository.findByNameNotIn(userItemsNames);
+    }
+
+    Item save(Item item) {
+        ensureCategory(item.getCategory());
+        return crudRepository.save(item);
+    }
+
+    private void ensureCategory(String category) {
+        Optional<Category> maybeCategory = categoryCrudRepository.findOneByName(category);
+        if (!maybeCategory.isPresent()) {
+            categoryCrudRepository.save(Category.of(category));
+        }
     }
 
 }

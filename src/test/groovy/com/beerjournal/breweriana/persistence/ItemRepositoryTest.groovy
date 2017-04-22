@@ -1,11 +1,6 @@
-package com.beerjournal.breweriana.persistence.item
+package com.beerjournal.breweriana.persistence
 
-import com.beerjournal.breweriana.persistence.UserCollectionRepository
-import com.beerjournal.breweriana.persistence.UserRepository
 import com.beerjournal.breweriana.persistence.category.Category
-import com.beerjournal.breweriana.persistence.CategoryCrudRepository
-import com.beerjournal.breweriana.persistence.ItemCrudRepository
-import com.beerjournal.breweriana.persistence.ItemRepository
 import com.beerjournal.breweriana.persistence.collection.UserCollection
 import com.beerjournal.breweriana.utils.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,10 +23,13 @@ class ItemRepositoryTest extends Specification {
     CategoryCrudRepository categoryRepository
 
     @Autowired
+    UserCollectionCrudRepository userCollectionCrudRepository
+
+    @Autowired
     UserCollectionRepository userCollectionRepository
 
     @Autowired
-    UserRepository userRepository
+    UserCrudRepository userRepository
 
     @Autowired
     MongoTemplate mongoTemplate
@@ -70,7 +68,7 @@ class ItemRepositoryTest extends Specification {
 
     def "should return not owned items"() {
         given:
-        userCollectionRepository.save(someUserCollection)
+        userCollectionCrudRepository.save(someUserCollection)
         itemRepository.save(someItem1)
         itemRepository.save(someItem2)
 
@@ -83,7 +81,7 @@ class ItemRepositoryTest extends Specification {
 
     def "shouldn't return owned item"() {
         given:
-        userCollectionRepository.save(someUserCollection)
+        userCollectionCrudRepository.save(someUserCollection)
         itemRepository.save(someItem1)
         userCollectionRepository.addNewItem(savedUser.id, someItem1)
 
