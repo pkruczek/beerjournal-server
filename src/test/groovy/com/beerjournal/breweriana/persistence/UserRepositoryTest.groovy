@@ -54,13 +54,13 @@ class UserRepositoryTest extends Specification {
         def savedUser = userCrudRepository.save(someUser)
 
         expect:
-        def maybeUser = userRepository.findById(savedUser.id)
+        def maybeUser = userRepository.findOneById(savedUser.id)
         TestUtils.equalsOptionalValue(maybeUser, someUser)
     }
 
     def "should return an empty optional when there is no user with given id"() {
         expect:
-        def maybeUser = userRepository.findById(new ObjectId())
+        def maybeUser = userRepository.findOneById(new ObjectId())
         !maybeUser.isPresent()
     }
 }

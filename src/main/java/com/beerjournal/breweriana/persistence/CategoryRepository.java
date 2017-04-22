@@ -13,7 +13,7 @@ public class CategoryRepository {
 
     private final CategoryCrudRepository crudRepository;
 
-    public Optional<Category> findByName(String category) {
+    public Optional<Category> findOneByName(String category) {
         return crudRepository.findOneByName(category);
     }
 

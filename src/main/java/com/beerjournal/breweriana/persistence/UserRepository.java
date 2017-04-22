@@ -16,7 +16,7 @@ public class UserRepository {
     private final UserCrudRepository crudRepository;
     private final UserCollectionCrudRepository userCollectionCrudRepository;
 
-    public Optional<User> findById(ObjectId objectId) {
+    public Optional<User> findOneById(ObjectId objectId) {
         return crudRepository.findOneById(objectId);
     }
 

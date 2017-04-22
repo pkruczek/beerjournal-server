@@ -24,6 +24,10 @@ public class ItemRepository {
     private final CategoryCrudRepository categoryCrudRepository;
     private final UserCollectionCrudRepository userCollectionCrudRepository;
 
+    public Optional<Item> findOneById(ObjectId id) {
+        return crudRepository.findOneById(id);
+    }
+
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
         UserCollection userCollection = userCollectionCrudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));

@@ -51,13 +51,13 @@ class CategoryRepositoryTest extends Specification {
         categoryCrudRepository.save(someCategories())
 
         expect:
-        def maybeCategory = categoryRepository.findByName("butelka")
+        def maybeCategory = categoryRepository.findOneByName("butelka")
         TestUtils.equalsOptionalValue(maybeCategory, Category.of("butelka"))
     }
 
     def "should return empty optional when there is no category with given id"() {
         expect:
-        def maybeCategory = categoryRepository.findByName("fakeName")
+        def maybeCategory = categoryRepository.findOneByName("fakeName")
         !maybeCategory.isPresent()
     }
 

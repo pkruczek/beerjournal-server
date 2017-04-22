@@ -34,7 +34,7 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
-    public Optional<UserCollection> findByOwnerId(ObjectId ownerId) {
+    public Optional<UserCollection> findOneByOwnerId(ObjectId ownerId) {
         return crudRepository.findOneByOwnerId(ownerId);
     }
 }
