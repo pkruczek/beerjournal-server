@@ -1,7 +1,8 @@
-package com.beerjournal.breweriana.persistence.collection;
+package com.beerjournal.breweriana.persistence;
 
+import com.beerjournal.breweriana.persistence.collection.ItemRef;
+import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.item.Item;
-import com.beerjournal.breweriana.persistence.item.ItemRepository;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserCollectionRepository {
@@ -18,10 +21,6 @@ public class UserCollectionRepository {
     private final UserCollectionCrudRepository crudRepository;
     private final MongoOperations mongoOperations;
     private final ItemRepository itemRepository;
-
-    public UserCollection save(UserCollection userCollection) {
-        return crudRepository.save(userCollection);
-    }
 
     public int addNewItem(ObjectId ownerId, Item item) {
         Item savedDetails = itemRepository.save(item);
@@ -35,4 +34,7 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
+    public Optional<UserCollection> findOneByOwnerId(ObjectId ownerId) {
+        return crudRepository.findOneByOwnerId(ownerId);
+    }
 }

@@ -1,7 +1,7 @@
 package com.beerjournal.security;
 
+import com.beerjournal.breweriana.persistence.UserRepository;
 import com.beerjournal.breweriana.persistence.user.User;
-import com.beerjournal.breweriana.persistence.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 

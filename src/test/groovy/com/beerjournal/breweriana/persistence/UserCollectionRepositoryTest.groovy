@@ -1,7 +1,6 @@
-package com.beerjournal.breweriana.persistence.collection
+package com.beerjournal.breweriana.persistence
 
-import com.beerjournal.breweriana.persistence.item.ItemCrudRepository
-import com.beerjournal.breweriana.persistence.user.UserRepository
+import com.beerjournal.breweriana.persistence.collection.UserCollection
 import com.beerjournal.breweriana.utils.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,7 +13,7 @@ import spock.lang.Specification
 class UserCollectionRepositoryTest extends Specification {
 
     @Autowired
-    UserRepository userRepository
+    UserCrudRepository userRepository
 
     @Autowired
     UserCollectionRepository userCollectionRepository
@@ -37,15 +36,6 @@ class UserCollectionRepositoryTest extends Specification {
                 .ownerId(savedUser.id)
                 .build()
         mongoTemplate.db.dropDatabase()
-    }
-
-    def "should save a collection"() {
-        when:
-        userCollectionRepository.save(someUserCollection)
-
-        then:
-        def maybeUserCollection = crudRepository.findOneByOwnerId(savedUser.id)
-        TestUtils.equalsOptionalValue(maybeUserCollection, someUserCollection)
     }
 
     def "should add an item to collection"() {
