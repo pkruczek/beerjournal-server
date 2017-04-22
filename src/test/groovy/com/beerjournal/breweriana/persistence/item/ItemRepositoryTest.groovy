@@ -68,7 +68,7 @@ class ItemRepositoryTest extends Specification {
         TestUtils.equalsOptionalValue(maybeCategory, Category.of(someItem1.category))
     }
 
-    def "should return not owned item"() {
+    def "should return not owned items"() {
         given:
         userCollectionRepository.save(someUserCollection)
         itemRepository.save(someItem1)
