@@ -47,17 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configureLogin(http);
         configureLogout(http);
         configureMisc(http);
-
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/login*", "/signin/**", "/signup/**").permitAll()
-                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources",
-                        "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().loginPage("/login").permitAll();
     }
 
     private void configureRequestAuthorization(HttpSecurity http) throws Exception {
