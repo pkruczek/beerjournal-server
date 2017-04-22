@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,6 +19,11 @@ class UserController {
     @PostMapping
     ResponseEntity<UserDto> createUser(@RequestBody @Validated UserDto user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    ResponseEntity<Collection<UserDto>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

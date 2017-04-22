@@ -34,6 +34,14 @@ final class TestUtils {
                 .build()
     }
 
+    static def someUsers() {
+        [
+                User.builder().firstName("Janusz").lastName("Nowak").email("janusz@wp.pl").build(),
+                User.builder().firstName("Grazyna").lastName("Nowak").email("grazyna@onet.pl").build(),
+                User.builder().firstName("Sebastian").lastName("Kowalski").email("seba@gmail.com").build()
+        ] as Set
+    }
+
     static void equalsOptionalValue(optional, value) {
         assert optional.isPresent()
         assert optional.get() == value

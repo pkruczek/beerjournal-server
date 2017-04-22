@@ -63,4 +63,18 @@ class UserRepositoryTest extends Specification {
         def maybeUser = userRepository.findOneById(new ObjectId())
         !maybeUser.isPresent()
     }
+
+    def "should return empty set when there is not any user"() {
+        expect:
+        userRepository.findAll().isEmpty()
+    }
+
+    def "should find all users"() {
+        setup:
+        userCrudRepository.save(TestUtils.someUsers())
+
+        expect:
+        userRepository.findAll() == TestUtils.someUsers()
+    }
+
 }
