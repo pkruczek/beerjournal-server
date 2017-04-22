@@ -22,10 +22,6 @@ public class UserCollectionRepository {
     private final MongoOperations mongoOperations;
     private final ItemRepository itemRepository;
 
-    public UserCollection save(UserCollection userCollection) {
-        return crudRepository.save(userCollection);
-    }
-
     public int addNewItem(ObjectId ownerId, Item item) {
         Item savedDetails = itemRepository.save(item);
         ItemRef itemRef = savedDetails.asItemRef();
@@ -38,7 +34,7 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
-    public Optional<UserCollection> findByOwnerId(ObjectId ownerId) {
+    public Optional<UserCollection> findOneByOwnerId(ObjectId ownerId) {
         return crudRepository.findOneByOwnerId(ownerId);
     }
 }

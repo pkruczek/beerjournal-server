@@ -18,7 +18,7 @@ class CollectionService {
     private final UserCollectionRepository userCollectionRepository;
 
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
-        UserCollection userCollection = userCollectionRepository.findByOwnerId(ServiceUtils.stringToObjectId(ownerId))
+        UserCollection userCollection = userCollectionRepository.findOneByOwnerId(ServiceUtils.stringToObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
         return UserCollectionDto.toDto(userCollection);

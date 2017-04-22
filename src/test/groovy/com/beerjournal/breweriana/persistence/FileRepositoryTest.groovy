@@ -1,5 +1,6 @@
-package com.beerjournal.breweriana.persistence.image
+package com.beerjournal.breweriana.persistence
 
+import com.beerjournal.breweriana.persistence.image.FileRepository
 import org.apache.commons.io.IOUtils
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired

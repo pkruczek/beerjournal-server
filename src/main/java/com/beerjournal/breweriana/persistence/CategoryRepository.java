@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,12 +17,10 @@ public class CategoryRepository {
         return crudRepository.findOneByName(category);
     }
 
-    public Set<Category> findAll() {
-        return ImmutableSet.copyOf(crudRepository.findAll());
-    }
-
-    Category save(Category category) {
-        return crudRepository.save(category);
+    public ImmutableSet<Category> findAll() {
+        return ImmutableSet.<Category>builder()
+                .addAll(crudRepository.findAll())
+                .build();
     }
 
 }

@@ -2,7 +2,6 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.persistence.ItemRepository;
 import com.beerjournal.breweriana.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.persistence.collection.ItemRef;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.item.Item;
 import com.beerjournal.breweriana.utils.ServiceUtils;
@@ -33,7 +32,7 @@ class ItemService {
 
     Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {
         UserCollection userCollection = userCollectionRepository
-                .findByOwnerId(ServiceUtils.stringToObjectId(userId))
+                .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
         return userCollection.getItemRefs()
@@ -43,7 +42,7 @@ class ItemService {
     }
 
     ItemDto getItemDetails(String id) {
-        Item item = itemRepository.findOneById(id)
+        Item item = itemRepository.findOneById(ServiceUtils.stringToObjectId(id))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
 
         return ItemDto.toDto(item);

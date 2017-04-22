@@ -2,11 +2,11 @@ package com.beerjournal.breweriana.persistence;
 
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
 import com.beerjournal.breweriana.persistence.user.User;
-import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Repository
@@ -14,22 +14,19 @@ import java.util.Optional;
 public class UserRepository {
 
     private final UserCrudRepository crudRepository;
-    private final UserCollectionRepository userCollectionRepository;
+    private final UserCollectionCrudRepository userCollectionCrudRepository;
 
-    public Optional<User> findOneById(ObjectId id) {
-        return crudRepository.findOneById(id);
+    public Optional<User> findOneById(ObjectId objectId) {
+        return crudRepository.findOneById(objectId);
     }
 
     public User save(User user) {
         User savedUser = crudRepository.save(user);
-
-        userCollectionRepository.save(UserCollection
-                .builder()
-                .ownerId(savedUser.getId())
-                .itemRefs(Sets.newHashSet())
-                .build());
-
+        addEmptyCollection(savedUser.getId());
         return savedUser;
     }
 
+    private UserCollection addEmptyCollection(ObjectId ownerId) {
+        return userCollectionCrudRepository.save(UserCollection.of(ownerId, Collections.emptySet()));
+    }
 }

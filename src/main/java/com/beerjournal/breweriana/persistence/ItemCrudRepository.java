@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 interface ItemCrudRepository extends MongoRepository<Item, ObjectId> {
+    Optional<Item> findOneById(ObjectId id);
     Optional<Item> findOneByName(String name);
-    Optional<Item> findOneById(String id);
     Set<Item> findByNameNotIn(Collection itemsNames);
 }

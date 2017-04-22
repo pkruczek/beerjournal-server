@@ -8,4 +8,5 @@ import java.util.Optional;
 
 interface UserCrudRepository extends MongoRepository<User, ObjectId>{
     Optional<User> findOneById(ObjectId id);
+    Optional<User> findOneByEmail(String email);
 }

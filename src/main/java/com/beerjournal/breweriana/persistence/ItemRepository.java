@@ -21,19 +21,11 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT
 public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryCrudRepository categoryCrudRepository;
     private final UserCollectionCrudRepository userCollectionCrudRepository;
 
-    Item save(Item item) {
-        ensureCategory(item.getCategory());
-        return crudRepository.save(item);
-    }
-
-    private void ensureCategory(String category) {
-        Optional<Category> maybeCategory = categoryRepository.findOneByName(category);
-        if (!maybeCategory.isPresent()) {
-            categoryRepository.save(Category.of(category));
-        }
+    public Optional<Item> findOneById(ObjectId id) {
+        return crudRepository.findOneById(id);
     }
 
     public Set<Item> findAllNotInUserCollection(ObjectId ownerId) {
@@ -45,8 +37,16 @@ public class ItemRepository {
         return crudRepository.findByNameNotIn(userItemsNames);
     }
 
-    public Optional<Item> findOneById(String id){
-        return crudRepository.findOneById(id);
+    Item save(Item item) {
+        ensureCategory(item.getCategory());
+        return crudRepository.save(item);
+    }
+
+    private void ensureCategory(String category) {
+        Optional<Category> maybeCategory = categoryCrudRepository.findOneByName(category);
+        if (!maybeCategory.isPresent()) {
+            categoryCrudRepository.save(Category.of(category));
+        }
     }
 
 }
