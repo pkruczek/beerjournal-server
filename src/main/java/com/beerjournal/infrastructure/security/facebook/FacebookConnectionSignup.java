@@ -18,9 +18,17 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
     @Override
     public String execute(Connection<?> connection) {
         UserProfile userProfile = connection.fetchUserProfile();
-        String generatedPassword = RandomStringUtils.randomAlphanumeric(8);
-        User user = User.of(userProfile.getFirstName(), userProfile.getLastName(), userProfile.getEmail(), generatedPassword);
-        userRepository.save(user);
+
+        User user = userRepository.findOneByEmail(userProfile.getEmail())
+                .orElse(createUser(userProfile));
+
         return user.getEmail();
     }
+
+    private User createUser(UserProfile userProfile) {
+        String generatedPassword = RandomStringUtils.randomAlphanumeric(8);
+        User user = User.of(userProfile.getFirstName(), userProfile.getLastName(), userProfile.getEmail(), generatedPassword);
+        return userRepository.save(user);
+    }
+
 }
