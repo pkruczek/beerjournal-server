@@ -5,3 +5,5 @@ services: mongodb
 cache:
   directories:
     - $HOME/.m2
+notifications:
+  slack: $SLACK_NOTIFICATIONS
