@@ -1,6 +1,6 @@
 package com.beerjournal.infrastructure.security.handlers;
 
-import com.beerjournal.infrastructure.security.BjUser;
+import com.beerjournal.infrastructure.security.BjPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -18,7 +18,7 @@ public class BjAuthenticationSuccessHandler implements AuthenticationSuccessHand
             HttpServletResponse response,
             Authentication auth) throws IOException, ServletException {
 
-        BjUser user = (BjUser) auth.getPrincipal();
+        BjPrincipal user = (BjPrincipal) auth.getPrincipal();
         String responseBody = user.getDbUser().getId().toHexString();
         saveBody(response.getWriter(), responseBody);
         response.setStatus(HttpServletResponse.SC_OK);

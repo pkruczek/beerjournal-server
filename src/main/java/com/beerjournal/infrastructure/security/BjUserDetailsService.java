@@ -21,7 +21,7 @@ public class BjUserDetailsService implements UserDetailsService {
         User user = userRepository.findOneByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return BjUser.builder()
+        return BjPrincipal.builder()
                 .dbUser(user)
                 .username(username)
                 .password(user.getPassword())
