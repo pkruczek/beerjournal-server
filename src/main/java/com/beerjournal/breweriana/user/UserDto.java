@@ -1,6 +1,7 @@
 package com.beerjournal.breweriana.user;
 
 import com.beerjournal.breweriana.persistence.user.User;
+import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ class UserDto {
     @NotEmpty private final String password;
     @Email private final String email;
 
-    static UserDto toDto(User user){
+    static UserDto of(User user){
         return UserDto.builder()
                 .id(user.getId().toHexString())
                 .firstName(user.getFirstName())
@@ -29,13 +30,16 @@ class UserDto {
                 .build();
     }
 
-    static User fromDto(UserDto userDto){
+    static User asUser(UserDto userDto){
         return User.builder()
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
                 .password(userDto.getPassword())
                 .build();
+    }
+
+    static User asModifiableUser(String id, UserDto userDto){
+        return User.ofModifiable(ServiceUtils.stringToObjectId(id), asUser(userDto));
     }
 
 }

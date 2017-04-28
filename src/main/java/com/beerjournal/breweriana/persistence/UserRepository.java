@@ -31,6 +31,11 @@ public class UserRepository {
         return crudRepository.findOneByEmail(email);
     }
 
+    public Optional<User> deleteOneById(ObjectId objectId) {
+        //// TODO: 2017-04-28 should we also delete usercollection/items?
+        return crudRepository.deleteOneById(objectId);
+    }
+
     public User save(User user) {
         User savedUser = crudRepository.save(user);
         addEmptyCollection(savedUser.getId());
