@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.category;
 
-import com.beerjournal.breweriana.persistence.CategoryRepository;
-import com.beerjournal.breweriana.persistence.category.Category;
+import com.beerjournal.breweriana.category.persistence.Category;
+import com.beerjournal.breweriana.category.persistence.CategoryRepository;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

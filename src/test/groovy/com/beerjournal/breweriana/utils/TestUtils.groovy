@@ -1,8 +1,8 @@
 package com.beerjournal.breweriana.utils
 
-import com.beerjournal.breweriana.persistence.item.Attribute
-import com.beerjournal.breweriana.persistence.item.Item
-import com.beerjournal.breweriana.persistence.user.User
+import com.beerjournal.breweriana.item.persistence.Attribute
+import com.beerjournal.breweriana.item.persistence.Item
+import com.beerjournal.breweriana.user.User
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
 import org.bson.types.ObjectId

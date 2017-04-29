@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.item;
 
-import com.beerjournal.breweriana.persistence.item.Attribute;
-import com.beerjournal.breweriana.persistence.item.Item;
+import com.beerjournal.breweriana.item.persistence.Attribute;
+import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-public class ItemDto {
+class ItemDto {
 
     private final String id;
 
@@ -27,7 +27,7 @@ public class ItemDto {
     @NotEmpty private final String style;
     private final Set<Attribute> attributes;
 
-    public static ItemDto toDto(Item item){
+    static ItemDto toDto(Item item){
         return ItemDto.builder()
                 .id(item.getId().toHexString())
                 .ownerId(item.getOwnerId().toHexString())
@@ -40,7 +40,7 @@ public class ItemDto {
                 .build();
     }
 
-    public static Item fromDto(ItemDto itemDto, String ownerId){
+    static Item fromDto(ItemDto itemDto, String ownerId){
         return Item.builder()
                 .ownerId(ServiceUtils.stringToObjectId(ownerId))
                 .name(itemDto.getName())

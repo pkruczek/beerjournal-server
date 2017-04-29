@@ -1,13 +1,15 @@
 package com.beerjournal.breweriana.collection;
 
-import com.beerjournal.breweriana.item.ItemDto;
-import com.beerjournal.breweriana.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.persistence.collection.UserCollection;
-import com.beerjournal.breweriana.persistence.item.Item;
+import com.beerjournal.breweriana.collection.persistence.UserCollection;
+import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository;
+import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
@@ -18,16 +20,31 @@ class CollectionService {
     private final UserCollectionRepository userCollectionRepository;
 
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
-        UserCollection userCollection = userCollectionRepository.findOneByOwnerId(ServiceUtils.stringToObjectId(ownerId))
-                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
+        UserCollection userCollection = getUserCollectionOrThrow(ownerId);
 
         return UserCollectionDto.toDto(userCollection);
     }
 
-    ItemDto addItem(String ownerId, ItemDto itemDto) {
-        Item item = ItemDto.fromDto(itemDto, ownerId);
-        userCollectionRepository.addNewItem(ServiceUtils.stringToObjectId(ownerId), item);
-        return itemDto;
+    Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {
+        UserCollection userCollection = getUserCollectionOrThrow(userId);
+
+        return userCollection.getItemRefs()
+                .stream()
+                .map(ItemRefDto::toDto)
+                .collect(Collectors.toSet());
+    }
+
+    Set<ItemRefDto> getAllNotInUserCollection(String userId) {
+        return userCollectionRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId))
+                .stream()
+                .map(ItemRefDto::toDto)
+                .collect(Collectors.toSet());
+    }
+
+    private UserCollection getUserCollectionOrThrow(String userId) {
+        return userCollectionRepository
+                .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
+                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
     }
 
 }

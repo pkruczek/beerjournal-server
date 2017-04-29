@@ -1,6 +1,6 @@
 package com.beerjournal.breweriana.category;
 
-import com.beerjournal.breweriana.persistence.category.Category;
+import com.beerjournal.breweriana.category.persistence.Category;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

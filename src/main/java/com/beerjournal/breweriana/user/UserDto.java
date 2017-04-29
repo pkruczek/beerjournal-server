@@ -1,6 +1,5 @@
 package com.beerjournal.breweriana.user;
 
-import com.beerjournal.breweriana.persistence.user.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
