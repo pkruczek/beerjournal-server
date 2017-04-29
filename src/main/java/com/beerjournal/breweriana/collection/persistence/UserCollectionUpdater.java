@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PACKAGE;
 
 @Component
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PACKAGE)
 class UserCollectionUpdater implements UserUpdateListener, ItemUpdateListener {
 
     private UserCollectionRepository userCollectionRepository;

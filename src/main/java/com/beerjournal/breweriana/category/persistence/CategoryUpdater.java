@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PACKAGE;
 
 @Component
-@RequiredArgsConstructor(access = PROTECTED)
+@RequiredArgsConstructor(access = PACKAGE)
 class CategoryUpdater implements ItemUpdateListener {
 
     private final CategoryCrudRepository categoryCrudRepository;
