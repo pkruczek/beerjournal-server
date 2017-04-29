@@ -25,4 +25,10 @@ class CollectionController {
         return new ResponseEntity<>(collectionService.addItem(ownerId, item), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("{ownerId}/collection/items/{itemId}")
+    ResponseEntity<ItemDto> deleteItemFromCollection(@PathVariable(value = "ownerId") String ownerId,
+                                                     @PathVariable(value = "itemId") String itemId) {
+        return new ResponseEntity<>(collectionService.deleteItem(ownerId, itemId), HttpStatus.OK);
+    }
+
 }

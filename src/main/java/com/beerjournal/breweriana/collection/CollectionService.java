@@ -30,4 +30,7 @@ class CollectionService {
         return itemDto;
     }
 
+    ItemDto deleteItem(String ownerId, String itemId) {
+        return userCollectionRepository.deleteItem(ServiceUtils.stringToObjectId(ownerId), itemId);
+    }
 }
