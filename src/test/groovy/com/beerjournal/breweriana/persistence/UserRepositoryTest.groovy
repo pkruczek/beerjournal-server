@@ -64,6 +64,21 @@ class UserRepositoryTest extends Specification {
         !maybeUser.isPresent()
     }
 
+    def "should find a user by email"() {
+        setup:
+        def savedUser = userCrudRepository.save(someUser)
+
+        expect:
+        def maybeUser = userRepository.findOneByEmail(savedUser.email)
+        TestUtils.equalsOptionalValue(maybeUser, someUser)
+    }
+
+    def "should return an empty optional when there is no user with given email"() {
+        expect:
+        def maybeUser = userRepository.findOneByEmail("fake@email.com")
+        !maybeUser.isPresent()
+    }
+
     def "should return empty set when there is not any user"() {
         expect:
         userRepository.findAll().isEmpty()

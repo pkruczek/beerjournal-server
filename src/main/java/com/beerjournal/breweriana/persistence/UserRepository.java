@@ -27,6 +27,10 @@ public class UserRepository {
         return crudRepository.findOneById(objectId);
     }
 
+    public Optional<User> findOneByEmail(String email) {
+        return crudRepository.findOneByEmail(email);
+    }
+
     public User save(User user) {
         User savedUser = crudRepository.save(user);
         addEmptyCollection(savedUser.getId());
