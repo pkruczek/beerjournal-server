@@ -1,5 +1,7 @@
 package com.beerjournal.breweriana.collection;
 
+import com.beerjournal.breweriana.events.EventDto;
+import com.beerjournal.breweriana.events.EventQueue;
 import com.beerjournal.breweriana.item.ItemDto;
 import com.beerjournal.breweriana.persistence.UserCollectionRepository;
 import com.beerjournal.breweriana.persistence.collection.UserCollection;
@@ -16,6 +18,7 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT
 class CollectionService {
 
     private final UserCollectionRepository userCollectionRepository;
+    private final EventQueue eventQueue;
 
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
         UserCollection userCollection = userCollectionRepository.findOneByOwnerId(ServiceUtils.stringToObjectId(ownerId))
@@ -26,8 +29,11 @@ class CollectionService {
 
     ItemDto addItem(String ownerId, ItemDto itemDto) {
         Item item = ItemDto.fromDto(itemDto, ownerId);
-        userCollectionRepository.addNewItem(ServiceUtils.stringToObjectId(ownerId), item);
-        return itemDto;
+        Item savedItem = userCollectionRepository.addNewItem(ServiceUtils.stringToObjectId(ownerId), item);
+
+        ItemDto savedItemDto = ItemDto.toDto(savedItem);
+        eventQueue.addEvent(EventDto.of(savedItemDto));
+        return savedItemDto;
     }
 
 }

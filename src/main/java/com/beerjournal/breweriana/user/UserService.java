@@ -1,5 +1,7 @@
 package com.beerjournal.breweriana.user;
 
+import com.beerjournal.breweriana.events.EventDto;
+import com.beerjournal.breweriana.events.EventQueue;
 import com.beerjournal.breweriana.persistence.UserRepository;
 import com.beerjournal.breweriana.persistence.user.User;
 import com.beerjournal.breweriana.utils.ServiceUtils;
@@ -17,6 +19,7 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
 class UserService {
 
     private final UserRepository userRepository;
+    private final EventQueue eventQueue;
 
     Set<UserDto> getAllUsers() {
         return userRepository.findAll()
@@ -27,7 +30,9 @@ class UserService {
 
     UserDto createUser(UserDto userDto) {
         User savedUser = userRepository.save(UserDto.fromDto(userDto));
-        return UserDto.toDto(savedUser);
+        UserDto savedUserDto = UserDto.toDto(savedUser);
+        eventQueue.addEvent(EventDto.of(savedUserDto));
+        return savedUserDto;
     }
 
     UserDto getUserWithID(String userId) {

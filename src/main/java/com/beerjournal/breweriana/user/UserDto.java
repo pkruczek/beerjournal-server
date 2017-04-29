@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-class UserDto {
+public class UserDto {
 
     private final String id;
 

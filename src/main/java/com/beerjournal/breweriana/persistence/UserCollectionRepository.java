@@ -22,7 +22,7 @@ public class UserCollectionRepository {
     private final MongoOperations mongoOperations;
     private final ItemRepository itemRepository;
 
-    public int addNewItem(ObjectId ownerId, Item item) {
+    public Item addNewItem(ObjectId ownerId, Item item) {
         Item savedDetails = itemRepository.save(item);
         ItemRef itemRef = savedDetails.asItemRef();
 
@@ -30,8 +30,9 @@ public class UserCollectionRepository {
                 new Query(Criteria.where("ownerId").is(ownerId)),
                 new Update().push("itemRefs", itemRef),
                 UserCollection.class);
+        int operations = writeResult.getN();
 
-        return writeResult.getN();
+        return savedDetails;
     }
 
     public Optional<UserCollection> findOneByOwnerId(ObjectId ownerId) {
