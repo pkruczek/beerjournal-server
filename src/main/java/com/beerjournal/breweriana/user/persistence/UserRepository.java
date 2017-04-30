@@ -1,6 +1,7 @@
 package com.beerjournal.breweriana.user.persistence;
 
 import com.beerjournal.breweriana.user.User;
+import com.beerjournal.breweriana.utils.UpdateListener;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -14,7 +15,7 @@ import java.util.Set;
 public class UserRepository {
 
     private final UserCrudRepository crudRepository;
-    private final Set<UserUpdateListener> userUpdateListeners;
+    private final Set<UpdateListener<User>> userUpdateListeners;
 
     public ImmutableSet<User> findAll() {
         return ImmutableSet.<User>builder()

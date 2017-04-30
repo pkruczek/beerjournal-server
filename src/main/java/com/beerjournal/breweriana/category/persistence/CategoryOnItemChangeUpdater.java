@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.category.persistence;
 
 import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.item.persistence.ItemUpdateListener;
+import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PACKAGE;
 
 @Component
 @RequiredArgsConstructor(access = PACKAGE)
-class CategoryUpdater implements ItemUpdateListener {
+class CategoryOnItemChangeUpdater implements UpdateListener<Item> {
 
     private final CategoryCrudRepository categoryCrudRepository;
 
@@ -26,6 +26,5 @@ class CategoryUpdater implements ItemUpdateListener {
             categoryCrudRepository.save(Category.of(category));
         }
     }
-
 
 }

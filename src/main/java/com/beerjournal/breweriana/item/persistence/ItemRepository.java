@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.item.persistence;
 
+import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import java.util.Set;
 public class ItemRepository {
 
     private final ItemCrudRepository crudRepository;
-    private final Set<ItemUpdateListener> itemUpdateListeners;
+    private final Set<UpdateListener<Item>> itemUpdateListeners;
 
     public Optional<Item> findOneById(ObjectId id) {
         return crudRepository.findOneById(id);
