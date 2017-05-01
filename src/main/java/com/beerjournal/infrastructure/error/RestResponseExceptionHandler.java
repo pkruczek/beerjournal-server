@@ -21,6 +21,6 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
         if (ex instanceof BeerJournalException) {
             return handleBeerJournalException((BeerJournalException) ex);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

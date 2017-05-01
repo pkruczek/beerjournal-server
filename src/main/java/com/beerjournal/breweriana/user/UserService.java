@@ -5,6 +5,7 @@ import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,27 +42,30 @@ class UserService {
     }
 
     UserDto modifyUserWithId(String userId, UserDto userDto) {
+        ObjectId userObjectId = ServiceUtils.stringToObjectId(userId);
+        userRepository.findOneById(userObjectId)
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+
         if(!securityUtils.checkIfAuthorized(userId)){
             throw new BeerJournalException(USER_FORBIDDEN_MODIFICATION);
         }
 
-        userRepository.findOneById(ServiceUtils.stringToObjectId(userId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
-
-        User updatedUser = userRepository.save(UserDto.asModifiableUser(userId, userDto));
+        User modifiedUser = User.ofModifiable(userObjectId, toUser(userDto));
+        User updatedUser = userRepository.update(modifiedUser);
         return UserDto.of(updatedUser);
     }
 
     UserDto deleteUserWithId(String userId) {
+        ObjectId userObjectId = ServiceUtils.stringToObjectId(userId);
+        userRepository.findOneById(userObjectId)
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+
         if(!securityUtils.checkIfAuthorized(userId)){
             throw new BeerJournalException(USER_FORBIDDEN_MODIFICATION);
         }
 
-        User user = userRepository.findOneById(ServiceUtils.stringToObjectId(userId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
-
-        userRepository.deleteOneById(ServiceUtils.stringToObjectId(userId));
-        return UserDto.of(user);
+        User deletedUser = userRepository.deleteOneById(userObjectId);
+        return UserDto.of(deletedUser);
     }
 
     private User toUser(UserDto userDto) {
