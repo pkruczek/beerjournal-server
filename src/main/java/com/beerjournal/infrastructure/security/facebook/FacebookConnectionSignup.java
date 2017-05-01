@@ -1,7 +1,7 @@
 package com.beerjournal.infrastructure.security.facebook;
 
-import com.beerjournal.breweriana.persistence.UserRepository;
-import com.beerjournal.breweriana.persistence.user.User;
+import com.beerjournal.breweriana.user.persistence.UserRepository;
+import com.beerjournal.breweriana.user.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.social.connect.Connection;
