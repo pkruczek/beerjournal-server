@@ -27,7 +27,6 @@ class CategoryOnItemChangeUpdater implements UpdateListener<Item> {
     private ImmutableMap<String, String> categories(Item item) {
         return ImmutableMap.<String, String>builder()
                 .put("type", item.getType())
-                .put("country", item.getCountry())
                 .put("style", item.getStyle())
                 .put("brewery", item.getBrewery())
                 .build();

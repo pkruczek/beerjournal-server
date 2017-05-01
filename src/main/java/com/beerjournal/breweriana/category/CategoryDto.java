@@ -14,16 +14,17 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 class CategoryDto {
 
-    private final String id;
     private final String name;
     private final Set<String> values;
 
     static CategoryDto toDto(Category category) {
         return CategoryDto.builder()
-                .id(category.getId().toHexString())
                 .name(category.getName())
                 .values(category.getValues())
                 .build();
     }
 
+    static CategoryDto of(String name, Set<String> values) {
+        return new CategoryDto(name, values);
+    }
 }
