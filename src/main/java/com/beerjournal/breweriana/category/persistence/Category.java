@@ -22,9 +22,9 @@ public class Category {
     private final ObjectId id;
     @Indexed(unique = true)
     private final String name;
-    private final Set<String> values;
+    private final Set<Object> values;
 
-    public static Category of(String name, Set<String> values) {
+    public static Category of(String name, Set<Object> values) {
         return new Category(null, name, values);
     }
 

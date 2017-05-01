@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 class CategoryDto {
 
     private final String name;
-    private final Set<String> values;
+    private final Set<Object> values;
 
     static CategoryDto toDto(Category category) {
         return CategoryDto.builder()
@@ -24,7 +24,4 @@ class CategoryDto {
                 .build();
     }
 
-    static CategoryDto of(String name, Set<String> values) {
-        return new CategoryDto(name, values);
-    }
 }
