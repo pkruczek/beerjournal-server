@@ -1,0 +1,8 @@
+${AnsiColor.WHITE}               ______                _____
+${AnsiColor.WHITE}              (, /    )             (, /                     /)
+${AnsiColor.WHITE}                /---(   _   _  __     /  ___    __ __   _   //
+${AnsiColor.YELLOW}             ) / ____)_(/__(/_/ (____/__(_)(_(_/ (_/ (_(_(_(/_
+${AnsiColor.YELLOW}            (_/ (               /   /
+${AnsiColor.YELLOW}                               (__ /
+
+${AnsiColor.BRIGHT_YELLOW}:: Spring Boot${spring-boot.formatted-version} :: ${Ansi.DEFAULT}
