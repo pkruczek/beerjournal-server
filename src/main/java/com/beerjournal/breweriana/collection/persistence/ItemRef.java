@@ -11,6 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ItemRef {
     private final ObjectId itemId;
     private final String name;
-    private final String category;
+    private final String type;
     //TODO: picture
 }

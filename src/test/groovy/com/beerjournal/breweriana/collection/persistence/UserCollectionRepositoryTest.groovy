@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.collection.persistence
 
+import com.beerjournal.breweriana.item.persistence.Attribute
 import com.beerjournal.breweriana.item.persistence.Item
 import com.beerjournal.breweriana.item.persistence.ItemRepository
 import com.beerjournal.breweriana.user.persistence.UserCrudRepository
@@ -34,8 +35,13 @@ class UserCollectionRepositoryTest extends Specification {
 
     def savedUsersItem
     def someOtherItem = Item.builder()
-        .name("Some other name")
-        .build()
+            .name("Butelka Tyskie")
+            .brewery("tyskie")
+            .country("Polska")
+            .type("bottle")
+            .style("zwykłe")
+            .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
+            .build()
 
     def setup() {
         savedUser = userRepository.save(TestUtils.someUser())

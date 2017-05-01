@@ -2,10 +2,9 @@ package com.beerjournal.breweriana.category.persistence;
 
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.UpdateListener;
+import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 import static lombok.AccessLevel.PACKAGE;
 
@@ -13,18 +12,25 @@ import static lombok.AccessLevel.PACKAGE;
 @RequiredArgsConstructor(access = PACKAGE)
 class CategoryOnItemChangeUpdater implements UpdateListener<Item> {
 
-    private final CategoryCrudRepository categoryCrudRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public void onInsert(Item item) {
-        ensureCategory(item.getCategory());
+        ensureCategories(item);
     }
 
-    private void ensureCategory(String category) {
-        Optional<Category> maybeCategory = categoryCrudRepository.findOneByName(category);
-        if (!maybeCategory.isPresent()) {
-            categoryCrudRepository.save(Category.of(category));
-        }
+    private void ensureCategories(Item item) {
+        categories(item)
+                .forEach(categoryRepository::ensureCategory);
+    }
+
+    private ImmutableMap<String, String> categories(Item item) {
+        return ImmutableMap.<String, String>builder()
+                .put("type", item.getType())
+                .put("country", item.getCountry())
+                .put("style", item.getStyle())
+                .put("brewery", item.getBrewery())
+                .build();
     }
 
 }

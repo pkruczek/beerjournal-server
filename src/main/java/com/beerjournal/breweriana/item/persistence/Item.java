@@ -23,22 +23,22 @@ public class Item {
     private final ObjectId id;
     private final ObjectId ownerId;
     private final String name;
-    private final String category;
+    private final String type;
     private final String country;
     private final String brewery;
     private final String style;
     private final Set<Attribute> attributes;
 
     @Builder
-    public static Item of(ObjectId ownerId, String name, String category, String country, String brewery, String style,
+    public static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
                    Set<Attribute> attributes) {
-        return new Item(null, ownerId, name, category, country, brewery, style, attributes);
+        return new Item(null, ownerId, name, type, country, brewery, style, attributes);
     }
 
     public ItemRef asItemRef() {
         return ItemRef.builder()
                 .name(name)
-                .category(category)
+                .type(type)
                 .itemId(id)
                 .build();
     }

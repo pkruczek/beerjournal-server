@@ -28,7 +28,7 @@ final class TestUtils {
                 .name("Butelka Ciechan")
                 .brewery("Ciechan")
                 .country("Polska")
-                .category("butelka")
+                .type("bottle")
                 .style("zwykłe")
                 .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
                 .ownerId(ownerId)

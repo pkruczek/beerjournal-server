@@ -16,7 +16,7 @@ class ItemRefDto {
         return ItemRefDto.builder()
                 .itemId(itemRef.getItemId().toHexString())
                 .name(itemRef.getName())
-                .category(itemRef.getCategory())
+                .category(itemRef.getType())
                 .build();
     }
 

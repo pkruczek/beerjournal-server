@@ -20,7 +20,7 @@ class CollectionController {
         return new ResponseEntity<>(collectionService.getCollectionByOwnerId(ownerId), HttpStatus.OK);
     }
 
-    @GetMapping("{userId}/collection/items")
+    @GetMapping("{ownerId}/collection/items")
     ResponseEntity<Collection<ItemRefDto>> getAllItemRefsInUserCollection(
             @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
             @PathVariable(value = "ownerId") String id) {

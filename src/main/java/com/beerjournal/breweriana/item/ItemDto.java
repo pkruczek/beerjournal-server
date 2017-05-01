@@ -21,7 +21,7 @@ class ItemDto {
 
     private final String ownerId;
     @NotEmpty private final String name;
-    @NotEmpty private final String category;
+    @NotEmpty private final String type;
     @NotEmpty private final String country;
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
@@ -32,7 +32,7 @@ class ItemDto {
                 .id(item.getId().toHexString())
                 .ownerId(item.getOwnerId().toHexString())
                 .name(item.getName())
-                .category(item.getCategory())
+                .type(item.getType())
                 .country(item.getCountry())
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
@@ -44,7 +44,7 @@ class ItemDto {
         return Item.builder()
                 .ownerId(ServiceUtils.stringToObjectId(ownerId))
                 .name(itemDto.getName())
-                .category(itemDto.getCategory())
+                .type(itemDto.getType())
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())

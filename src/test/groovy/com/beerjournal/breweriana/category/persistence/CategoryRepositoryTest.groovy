@@ -22,9 +22,9 @@ class CategoryRepositoryTest extends Specification {
 
     def someCategories() {
         [
-                Category.of("butelka"),
-                Category.of("kapsel"),
-                Category.of("etykieta")
+                Category.of("type", [] as Set),
+                Category.of("brewery", [] as Set),
+                Category.of("country", [] as Set)
         ] as Set
     }
 
@@ -50,14 +50,44 @@ class CategoryRepositoryTest extends Specification {
         categoryCrudRepository.save(someCategories())
 
         expect:
-        def maybeCategory = categoryRepository.findOneByName("butelka")
-        TestUtils.equalsOptionalValue(maybeCategory, Category.of("butelka"))
+        def maybeCategory = categoryRepository.findOneByName("brewery")
+        TestUtils.equalsOptionalValue(maybeCategory, Category.of("brewery", [] as Set))
     }
 
     def "should return empty optional when there is no category with given id"() {
         expect:
         def maybeCategory = categoryRepository.findOneByName("fakeName")
         !maybeCategory.isPresent()
+    }
+
+    def "should ensure category"() {
+        given:
+        def name = "brewery"
+        def value = "tyskie"
+
+        when:
+        categoryRepository.ensureCategory(name, value)
+
+        then:
+        def maybeCategory = categoryCrudRepository.findOneByName(name)
+        TestUtils.equalsOptionalValue(maybeCategory, Category.of(name, [value] as Set))
+        categoryCrudRepository.findAll().size() == 1
+    }
+
+    def "should add new value to existing category"() {
+        given:
+        def name = "brewery"
+        def value = "tyskie"
+        def existingValue = "lech"
+        categoryCrudRepository.save(Category.of(name, [existingValue] as Set))
+
+        when:
+        categoryRepository.ensureCategory(name, value)
+
+        then:
+        def maybeCategory = categoryCrudRepository.findOneByName(name)
+        TestUtils.equalsOptionalValue(maybeCategory, Category.of(name, [value, existingValue] as Set))
+        categoryCrudRepository.findAll().size() == 1
     }
 
 }

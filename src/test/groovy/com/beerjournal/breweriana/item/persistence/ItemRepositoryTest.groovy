@@ -4,7 +4,6 @@ import com.beerjournal.breweriana.category.persistence.Category
 import com.beerjournal.breweriana.category.persistence.CategoryCrudRepository
 import com.beerjournal.breweriana.collection.persistence.UserCollection
 import com.beerjournal.breweriana.collection.persistence.UserCollectionCrudRepository
-import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository
 import com.beerjournal.breweriana.user.persistence.UserCrudRepository
 import com.beerjournal.breweriana.utils.TestUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -65,8 +64,8 @@ class ItemRepositoryTest extends Specification {
         itemRepository.save(someItem)
 
         then:
-        def maybeCategory = categoryRepository.findOneByName(someItem.category)
-        TestUtils.equalsOptionalValue(maybeCategory, Category.of(someItem.category))
+        def maybeCategory = categoryRepository.findOneByName("type")
+        TestUtils.equalsOptionalValue(maybeCategory, Category.of("type", [someItem.type] as Set))
     }
 
     def "should add an item to collection (actually, no - delegated to listeners)"() {
