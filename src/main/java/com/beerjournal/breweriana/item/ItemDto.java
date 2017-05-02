@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.item;
 
-import com.beerjournal.breweriana.persistence.item.Attribute;
-import com.beerjournal.breweriana.persistence.item.Item;
+import com.beerjournal.breweriana.item.persistence.Attribute;
+import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -15,24 +15,24 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-public class ItemDto {
+class ItemDto {
 
     private final String id;
 
     private final String ownerId;
     @NotEmpty private final String name;
-    @NotEmpty private final String category;
+    @NotEmpty private final String type;
     @NotEmpty private final String country;
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
     private final Set<Attribute> attributes;
 
-    public static ItemDto toDto(Item item){
+    static ItemDto toDto(Item item){
         return ItemDto.builder()
                 .id(item.getId().toHexString())
                 .ownerId(item.getOwnerId().toHexString())
                 .name(item.getName())
-                .category(item.getCategory())
+                .type(item.getType())
                 .country(item.getCountry())
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
@@ -40,11 +40,11 @@ public class ItemDto {
                 .build();
     }
 
-    public static Item fromDto(ItemDto itemDto, String ownerId){
+    static Item fromDto(ItemDto itemDto, String ownerId){
         return Item.builder()
                 .ownerId(ServiceUtils.stringToObjectId(ownerId))
                 .name(itemDto.getName())
-                .category(itemDto.getCategory())
+                .type(itemDto.getType())
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())

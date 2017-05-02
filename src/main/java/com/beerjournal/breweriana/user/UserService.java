@@ -2,8 +2,7 @@ package com.beerjournal.breweriana.user;
 
 import com.beerjournal.breweriana.events.EventDto;
 import com.beerjournal.breweriana.events.EventQueue;
-import com.beerjournal.breweriana.persistence.UserRepository;
-import com.beerjournal.breweriana.persistence.user.User;
+import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
