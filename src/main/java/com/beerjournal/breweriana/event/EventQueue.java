@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.events;
+package com.beerjournal.breweriana.event;
 
 
 import com.google.common.collect.EvictingQueue;

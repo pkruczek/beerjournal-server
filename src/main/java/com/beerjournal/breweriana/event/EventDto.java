@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.events;
+package com.beerjournal.breweriana.event;
 
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.user.User;
@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.beerjournal.breweriana.events.EventType.ITEM_;
-import static com.beerjournal.breweriana.events.EventType.USER_;
+import static com.beerjournal.breweriana.event.EventDto.EventType.ITEM_;
+import static com.beerjournal.breweriana.event.EventDto.EventType.USER_;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -45,10 +45,10 @@ public class EventDto {
                 .date(LocalDateTime.now().toString())
                 .build();
     }
-}
 
-enum EventType {
-    USER_,
-    ITEM_
+    enum EventType {
+        ITEM_,
+        USER_
+    }
 }
 

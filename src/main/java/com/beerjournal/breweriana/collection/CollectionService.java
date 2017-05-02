@@ -2,7 +2,6 @@ package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.collection.persistence.UserCollection;
 import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.events.EventQueue;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT
 class CollectionService {
 
     private final UserCollectionRepository userCollectionRepository;
-    private final EventQueue eventQueue;
 
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
         UserCollection userCollection = getUserCollectionOrThrow(ownerId);

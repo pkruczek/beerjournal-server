@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.events;
+package com.beerjournal.breweriana.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class EventsService {
+class EventService {
 
     private final EventQueue eventQueue;
 

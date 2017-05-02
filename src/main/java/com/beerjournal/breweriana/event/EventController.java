@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.events;
+package com.beerjournal.breweriana.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,14 +13,14 @@ import java.util.Collection;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/events")
-class EventsController {
+class EventController {
 
-    private final EventsService eventsService;
+    private final EventService eventService;
 
     @GetMapping
     ResponseEntity<Collection<EventDto>> getEventsFeed(
             @RequestParam(value = "count", defaultValue = "50") int count) {
-        return new ResponseEntity<>(eventsService.getLatestEvents(count), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.getLatestEvents(count), HttpStatus.OK);
     }
 
 }

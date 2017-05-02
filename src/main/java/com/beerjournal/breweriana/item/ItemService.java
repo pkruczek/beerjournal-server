@@ -24,8 +24,8 @@ class ItemService {
 
     ItemDto addItem(String ownerId, ItemDto itemDto) {
         Item item = ItemDto.fromDto(itemDto, ownerId);
-        itemRepository.save(item);
-        return itemDto;
+        Item savedItem = itemRepository.save(item);
+        return ItemDto.toDto(savedItem);
     }
 
 }
