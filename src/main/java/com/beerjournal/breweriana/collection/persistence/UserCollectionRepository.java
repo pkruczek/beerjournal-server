@@ -43,6 +43,15 @@ public class UserCollectionRepository {
                 .collect(Collectors.toSet());
     }
 
+    UserCollection deleteOneByOwnerId(ObjectId ownerId) {
+        findOneByOwnerId(ownerId)
+                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
+
+        return mongoOperations.findAndRemove(
+                new Query(Criteria.where("ownerId").is(ownerId)),
+                UserCollection.class);
+    }
+
     UserCollection save(UserCollection userCollection) {
         return crudRepository.save(userCollection);
     }

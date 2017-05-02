@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.user;
+package com.beerjournal.breweriana.user.persistence;
 
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class User {
         return new User(null, firstName, lastName, email, password);
     }
 
-    public static User ofModifiable(ObjectId id, User user) {
+    public static User copyWithAssignedId(ObjectId id, User user) {
         return new User(id, user.firstName, user.lastName, user.email, user.password);
     }
 

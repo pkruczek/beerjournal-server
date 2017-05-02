@@ -1,6 +1,5 @@
 package com.beerjournal.breweriana.user.persistence;
 
-import com.beerjournal.breweriana.user.User;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ public class UserRepository {
     }
 
     public User deleteOneById(ObjectId objectId) {
-        //// TODO: 2017-04-28 should we also delete usercollection/items?
         User deletedUser = mongoOperations.findAndRemove(
                 new Query(Criteria.where("Id").is(objectId)),
                 User.class);

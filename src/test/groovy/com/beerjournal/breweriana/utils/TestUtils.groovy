@@ -2,7 +2,7 @@ package com.beerjournal.breweriana.utils
 
 import com.beerjournal.breweriana.item.persistence.Attribute
 import com.beerjournal.breweriana.item.persistence.Item
-import com.beerjournal.breweriana.user.User
+import com.beerjournal.breweriana.user.persistence.User
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
 import org.bson.types.ObjectId

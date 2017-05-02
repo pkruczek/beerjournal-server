@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.user;
 
+import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.breweriana.utils.ServiceUtils;
@@ -50,7 +51,7 @@ class UserService {
             throw new BeerJournalException(USER_FORBIDDEN_MODIFICATION);
         }
 
-        User modifiedUser = User.ofModifiable(userObjectId, toUser(userDto));
+        User modifiedUser = User.copyWithAssignedId(userObjectId, toUser(userDto));
         User updatedUser = userRepository.update(modifiedUser);
         return UserDto.of(updatedUser);
     }
