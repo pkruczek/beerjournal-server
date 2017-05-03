@@ -18,4 +18,8 @@ class CollectionOnItemChangeUpdater implements UpdateListener<Item> {
         userCollectionRepository.addNewItem(item);
     }
 
+    @Override
+    public void onDelete(Item item) {
+        userCollectionRepository.deleteItem(item);
+    }
 }

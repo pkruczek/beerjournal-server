@@ -67,10 +67,20 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
+    int deleteItem(Item item) {
+        ItemRef itemRef = item.asItemRef();
+
+        WriteResult writeResult = mongoOperations.updateFirst(
+                new Query(Criteria.where("ownerId").is(item.getOwnerId())),
+                new Update().pull("itemRefs", itemRef),
+                UserCollection.class);
+
+        return writeResult.getN();
+    }
+
     private List<Item> findAllNotIn(Set<String> userItemsNames) {
         return mongoOperations.find(
                 new Query(Criteria.where("name").not().in(userItemsNames)),
                 Item.class);
     }
-
 }

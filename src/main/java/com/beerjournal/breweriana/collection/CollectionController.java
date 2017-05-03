@@ -27,11 +27,4 @@ class CollectionController {
         Set<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id) : collectionService.getAllItemRefsInUserCollection(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
-
-    @DeleteMapping("{ownerId}/collection/items/{itemId}")
-    ResponseEntity<ItemDto> deleteItemFromCollection(@PathVariable(value = "ownerId") String ownerId,
-                                                     @PathVariable(value = "itemId") String itemId) {
-        return new ResponseEntity<>(collectionService.deleteItem(ownerId, itemId), HttpStatus.OK);
-    }
-
 }

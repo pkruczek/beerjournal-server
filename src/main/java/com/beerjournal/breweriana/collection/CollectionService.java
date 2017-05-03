@@ -45,8 +45,4 @@ class CollectionService {
                 .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
     }
-
-    ItemDto deleteItem(String ownerId, String itemId) {
-        return userCollectionRepository.deleteItem(ServiceUtils.stringToObjectId(ownerId), itemId);
-    }
 }

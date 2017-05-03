@@ -34,4 +34,11 @@ class ItemService {
         return itemDto;
     }
 
+    ItemDto deleteItem(String ownerId, String itemId) {
+        userRepository.findOneById(ServiceUtils.stringToObjectId(ownerId))
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+
+        Item deletedItem = itemRepository.delete(itemId);
+        return ItemDto.toDto(deletedItem);
+    }
 }
