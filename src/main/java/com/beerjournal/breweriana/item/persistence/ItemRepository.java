@@ -1,8 +1,12 @@
 package com.beerjournal.breweriana.item.persistence;
 
+import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.breweriana.utils.UpdateListener;
+import com.beerjournal.infrastructure.error.BeerJournalException;
+import com.beerjournal.infrastructure.error.ErrorInfo;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -24,5 +28,19 @@ public class ItemRepository {
         Item savedItem = crudRepository.save(item);
         itemUpdateListeners.forEach(listener -> listener.onInsert(item));
         return savedItem;
+    }
+
+    public Item delete(String itemId) {
+        Item itemToDelete = crudRepository.findOneById(ServiceUtils.stringToObjectId(itemId))
+                .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
+
+        itemUpdateListeners.forEach(listener -> listener.onDelete(itemToDelete));
+        return itemToDelete;
+    }
+
+    public Item update(Item item) {
+        Item updatedItem = crudRepository.save(item);
+        itemUpdateListeners.forEach(listener -> listener.onUpdate(updatedItem));
+        return updatedItem;
     }
 }

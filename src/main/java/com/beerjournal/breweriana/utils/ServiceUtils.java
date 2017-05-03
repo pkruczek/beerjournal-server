@@ -10,10 +10,10 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public final class ServiceUtils {
 
-    public static ObjectId stringToObjectId(String ownerId) {
+    public static ObjectId stringToObjectId(String id) {
         ObjectId objectId;
         try {
-            objectId = new ObjectId(ownerId);
+            objectId = new ObjectId(id);
         } catch (IllegalArgumentException e) {
             throw new BeerJournalException(INCORRECT_USER_ID);
         }
