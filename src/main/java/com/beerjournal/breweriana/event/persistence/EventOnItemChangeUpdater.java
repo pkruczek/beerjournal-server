@@ -1,8 +1,6 @@
 package com.beerjournal.breweriana.event.persistence;
 
 import com.beerjournal.breweriana.event.Action;
-import com.beerjournal.breweriana.event.EventDto;
-import com.beerjournal.breweriana.event.EventQueue;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +12,24 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class EventOnItemChangeUpdater implements UpdateListener<Item> {
 
-    private final EventQueue eventQueue;
+    private final EventRepository eventRepository;
 
     @Override
     public void onInsert(Item item) {
-        EventDto itemCreated = EventDto.of(item, Action.CREATED);
-        eventQueue.addEvent(itemCreated);
+        Event event = Event.of(Action.CREATE, item);
+        eventRepository.save(event);
     }
 
     @Override
     public void onUpdate(Item item) {
-        EventDto itemUpdated = EventDto.of(item, Action.UPDATED);
-        eventQueue.addEvent(itemUpdated);
+        Event event = Event.of(Action.UPDATE, item);
+        eventRepository.save(event);
     }
 
     @Override
     public void onDelete(Item item) {
-        EventDto itemDeleted = EventDto.of(item, Action.DELETED);
-        eventQueue.addEvent(itemDeleted);
+        Event event = Event.of(Action.DELETE, item);
+        eventRepository.save(event);
     }
 
 }

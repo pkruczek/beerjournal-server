@@ -19,8 +19,9 @@ class EventController {
 
     @GetMapping
     ResponseEntity<Collection<EventDto>> getEventsFeed(
-            @RequestParam(value = "count", defaultValue = "50") int count) {
-        return new ResponseEntity<>(eventService.getLatestEvents(count), HttpStatus.OK);
+            @RequestParam(value = "count", defaultValue = "10") int count,
+            @RequestParam(value = "page", defaultValue = "0") int page) {
+        return new ResponseEntity<>(eventService.getLatestEvents(page, count), HttpStatus.OK);
     }
 
 }

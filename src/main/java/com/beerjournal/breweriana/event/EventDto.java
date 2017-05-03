@@ -1,15 +1,11 @@
 package com.beerjournal.breweriana.event;
 
-import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.user.User;
+import com.beerjournal.breweriana.event.persistence.Event;
+import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
-import static com.beerjournal.breweriana.event.EventDto.EventType.ITEM_;
-import static com.beerjournal.breweriana.event.EventDto.EventType.USER_;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -17,38 +13,19 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class EventDto {
 
-    private final String authorId;
-    private final String itemId;
-    private final String name;
-    private final String type;
     private final String action;
     private final String date;
-    //// TODO: 2017-04-29 add image
+    private final String contentType;
+    private final Object content;
 
-    public static EventDto of(Item item, Action action){
+    public static EventDto of(Event event) {
         return EventDto.builder()
-                .authorId(item.getOwnerId().toHexString())
-                .itemId(item.getId().toHexString())
-                .name(item.getName())
-                .type(item.getType())
-                .action(ITEM_ + action.toString())
-                .date(LocalDateTime.now().toString())
+                .action(event.getAction())
+                .date(ServiceUtils.objectIdToDateInstant(event.getId()).toString())
+                .contentType(event.getContentType())
+                .content(event.getContent())
                 .build();
     }
 
-    public static EventDto of(User user, Action action){
-        return EventDto.builder()
-                .authorId(user.getId().toHexString())
-                .name(user.getFirstName() + " " + user.getLastName())
-                .type("Users")
-                .action(USER_ + action.toString())
-                .date(LocalDateTime.now().toString())
-                .build();
-    }
-
-    enum EventType {
-        ITEM_,
-        USER_
-    }
 }
 
