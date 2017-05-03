@@ -44,7 +44,7 @@ class ItemService {
         }
 
         Item deletedItem = itemRepository.delete(itemId);
-        return ItemDto.toDto(deletedItem);
+        return ItemDto.of(deletedItem);
     }
 
     ItemDto updateItem(String ownerId, String itemId, ItemDto itemDto) {
@@ -56,8 +56,8 @@ class ItemService {
         }
 
         Item itemToUpdate = Item.copyWithAssignedId(ServiceUtils.stringToObjectId(itemId),
-                ItemDto.fromDto(itemDto, ownerId));
+                ItemDto.asItem(itemDto, ownerId));
         Item updatedItem = itemRepository.update(itemToUpdate);
-        return ItemDto.toDto(updatedItem);
+        return ItemDto.of(updatedItem);
     }
 }
