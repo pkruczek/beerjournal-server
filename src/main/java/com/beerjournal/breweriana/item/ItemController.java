@@ -30,4 +30,11 @@ class ItemController {
                                                      @PathVariable(value = "itemId") String itemId) {
         return new ResponseEntity<>(itemService.deleteItem(ownerId, itemId), HttpStatus.OK);
     }
+
+    @PutMapping("users/{ownerId}/collection/items/{itemId}")
+    ResponseEntity<ItemDto> updateItemInCollection(@PathVariable(value = "ownerId") String ownerId,
+                                                   @PathVariable(value = "itemId") String itemId,
+                                                   @RequestBody @Validated ItemDto updatedItem) {
+        return new ResponseEntity<>(itemService.updateItem(ownerId, itemId, updatedItem), HttpStatus.OK);
+    }
 }

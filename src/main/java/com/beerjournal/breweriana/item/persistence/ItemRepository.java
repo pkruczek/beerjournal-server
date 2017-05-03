@@ -37,4 +37,10 @@ public class ItemRepository {
         itemUpdateListeners.forEach(listener -> listener.onDelete(itemToDelete));
         return itemToDelete;
     }
+
+    public Item update(Item item) {
+        Item updatedItem = crudRepository.save(item);
+        itemUpdateListeners.forEach(listener -> listener.onUpdate(updatedItem));
+        return updatedItem;
+    }
 }
