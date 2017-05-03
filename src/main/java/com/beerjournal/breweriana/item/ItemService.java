@@ -22,16 +22,16 @@ class ItemService {
         Item item = itemRepository.findOneById(ServiceUtils.stringToObjectId(id))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
 
-        return ItemDto.toDto(item);
+        return ItemDto.of(item);
     }
 
     ItemDto addItem(String ownerId, ItemDto itemDto) {
         userRepository.findOneById(ServiceUtils.stringToObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
 
-        Item item = ItemDto.fromDto(itemDto, ownerId);
+        Item item = ItemDto.asItem(itemDto, ownerId);
         Item savedItem = itemRepository.save(item);
-        return ItemDto.toDto(savedItem);
+        return ItemDto.of(savedItem);
     }
 
 }

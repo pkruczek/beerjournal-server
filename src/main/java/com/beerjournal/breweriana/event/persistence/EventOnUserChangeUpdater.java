@@ -1,7 +1,8 @@
 package com.beerjournal.breweriana.event.persistence;
 
 import com.beerjournal.breweriana.event.Action;
-import com.beerjournal.breweriana.user.User;
+import com.beerjournal.breweriana.event.ContentType;
+import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,11 @@ public class EventOnUserChangeUpdater implements UpdateListener<User> {
 
     @Override
     public void onInsert(User user) {
-        Event event = Event.of(Action.CREATE, user);
+        saveAsEvent(user, Action.CREATE);
+    }
+
+    private void saveAsEvent(User user, Action action) {
+        Event event = Event.of(action, user, ContentType.USER);
         eventRepository.save(event);
     }
 

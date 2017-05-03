@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.event.persistence;
 
 import com.beerjournal.breweriana.event.Action;
-import lombok.Builder;
+import com.beerjournal.breweriana.event.ContentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,8 @@ public class Event {
     private final String contentType;
     private final Object content;
 
-
-    public static Event of(Action action, Object content) {
-        return new Event(null, action.toString(), content.getClass().getSimpleName(), content);
+    public static Event of(Action action, Object content, ContentType contentType) {
+        return new Event(null, action.toString(), contentType.toString(), content);
     }
 
 }

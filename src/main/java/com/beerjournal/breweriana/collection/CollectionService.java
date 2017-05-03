@@ -21,7 +21,7 @@ class CollectionService {
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
         UserCollection userCollection = getUserCollectionOrThrow(ownerId);
 
-        return UserCollectionDto.toDto(userCollection);
+        return UserCollectionDto.of(userCollection);
     }
 
     Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {

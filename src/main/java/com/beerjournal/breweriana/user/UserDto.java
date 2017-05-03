@@ -21,7 +21,7 @@ public class UserDto {
     @NotEmpty private final String password;
     @Email @NotEmpty private final String email;
 
-    static UserDto of(User user){
+    public static UserDto of(User user){
         return UserDto.builder()
                 .id(user.getId().toHexString())
                 .firstName(user.getFirstName())

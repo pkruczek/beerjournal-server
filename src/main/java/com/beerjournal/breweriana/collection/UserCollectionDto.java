@@ -19,7 +19,7 @@ class UserCollectionDto {
     private final String ownerId;
     private final Set<ItemRefDto> itemRefs;
 
-    static UserCollectionDto toDto(UserCollection userCollection) {
+    static UserCollectionDto of(UserCollection userCollection) {
 
         Set<ItemRefDto> itemRefDtos = userCollection.getItemRefs()
                 .stream()
