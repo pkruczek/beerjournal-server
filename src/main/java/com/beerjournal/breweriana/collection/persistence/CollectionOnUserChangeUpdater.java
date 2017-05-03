@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.collection.persistence;
 
 
-import com.beerjournal.breweriana.user.User;
+import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -22,6 +22,10 @@ class CollectionOnUserChangeUpdater implements UpdateListener<User> {
         addEmptyCollection(user.getId());
     }
 
+    @Override
+    public void onDelete(User user) {
+        userCollectionRepository.deleteOneByOwnerId(user.getId());
+    }
 
     private UserCollection addEmptyCollection(ObjectId ownerId) {
         return userCollectionRepository.save(UserCollection.of(ownerId, Collections.emptySet()));

@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.user;
+package com.beerjournal.breweriana.user.persistence;
 
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +28,10 @@ public class User {
     @Builder
     public static User of(String firstName, String lastName, String email, String password) {
         return new User(null, firstName, lastName, email, password);
+    }
+
+    public static User copyWithAssignedId(ObjectId id, User user) {
+        return new User(id, user.firstName, user.lastName, user.email, user.password);
     }
 
 }
