@@ -1,6 +1,6 @@
 package com.beerjournal.infrastructure.security;
 
-import com.beerjournal.breweriana.user.User;
+import com.beerjournal.breweriana.user.persistence.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

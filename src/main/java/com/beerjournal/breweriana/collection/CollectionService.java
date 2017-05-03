@@ -2,7 +2,6 @@ package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.collection.persistence.UserCollection;
 import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
