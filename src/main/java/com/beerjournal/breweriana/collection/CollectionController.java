@@ -1,11 +1,12 @@
 package com.beerjournal.breweriana.collection;
 
-import com.beerjournal.breweriana.item.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,10 +20,12 @@ class CollectionController {
         return new ResponseEntity<>(collectionService.getCollectionByOwnerId(ownerId), HttpStatus.OK);
     }
 
-    @PostMapping("{ownerId}/collection/items")
-    ResponseEntity<ItemDto> addItemToCollection(@PathVariable(value = "ownerId") String ownerId,
-                                                @RequestBody @Validated ItemDto item) {
-        return new ResponseEntity<>(collectionService.addItem(ownerId, item), HttpStatus.CREATED);
+    @GetMapping("{ownerId}/collection/items")
+    ResponseEntity<Collection<ItemRefDto>> getAllItemRefsInUserCollection(
+            @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
+            @PathVariable(value = "ownerId") String id) {
+        Set<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id) : collectionService.getAllItemRefsInUserCollection(id);
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @DeleteMapping("{ownerId}/collection/items/{itemId}")

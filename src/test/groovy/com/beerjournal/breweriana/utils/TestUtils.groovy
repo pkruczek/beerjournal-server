@@ -1,8 +1,8 @@
 package com.beerjournal.breweriana.utils
 
-import com.beerjournal.breweriana.persistence.item.Attribute
-import com.beerjournal.breweriana.persistence.item.Item
-import com.beerjournal.breweriana.persistence.user.User
+import com.beerjournal.breweriana.item.persistence.Attribute
+import com.beerjournal.breweriana.item.persistence.Item
+import com.beerjournal.breweriana.user.persistence.User
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
 import org.bson.types.ObjectId
@@ -28,7 +28,7 @@ final class TestUtils {
                 .name("Butelka Ciechan")
                 .brewery("Ciechan")
                 .country("Polska")
-                .category("butelka")
+                .type("bottle")
                 .style("zwykłe")
                 .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
                 .ownerId(ownerId)

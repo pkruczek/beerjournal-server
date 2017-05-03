@@ -19,7 +19,7 @@ class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    ResponseEntity<Collection<CategoryDto>> getCategories() {
+    ResponseEntity<Collection<String>> getCategories() {
         return new ResponseEntity<>(categoryService.getCategories(), HttpStatus.OK);
     }
 

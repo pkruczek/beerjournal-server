@@ -1,7 +1,7 @@
 package com.beerjournal.infrastructure.security;
 
-import com.beerjournal.breweriana.persistence.UserRepository;
-import com.beerjournal.breweriana.persistence.user.User;
+import com.beerjournal.breweriana.user.persistence.UserRepository;
+import com.beerjournal.breweriana.user.persistence.User;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
