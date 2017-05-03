@@ -41,6 +41,7 @@ class UserCollectionRepositoryTest extends Specification {
             .type("bottle")
             .style("zwykłe")
             .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
+            .ownerId(TestUtils.someObjectId())
             .build()
 
     def setup() {

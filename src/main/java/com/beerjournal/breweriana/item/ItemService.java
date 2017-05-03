@@ -23,16 +23,16 @@ class ItemService {
         Item item = itemRepository.findOneById(ServiceUtils.stringToObjectId(id))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
 
-        return ItemDto.toDto(item);
+        return ItemDto.of(item);
     }
 
     ItemDto addItem(String ownerId, ItemDto itemDto) {
         userRepository.findOneById(ServiceUtils.stringToObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
 
-        Item item = ItemDto.fromDto(itemDto, ownerId);
-        itemRepository.save(item);
-        return itemDto;
+        Item item = ItemDto.asItem(itemDto, ownerId);
+        Item savedItem = itemRepository.save(item);
+        return ItemDto.of(savedItem);
     }
 
     ItemDto deleteItem(String ownerId, String itemId) {
@@ -44,7 +44,7 @@ class ItemService {
         }
 
         Item deletedItem = itemRepository.delete(itemId);
-        return ItemDto.toDto(deletedItem);
+        return ItemDto.of(deletedItem);
     }
 
     ItemDto updateItem(String ownerId, String itemId, ItemDto itemDto) {
@@ -56,8 +56,8 @@ class ItemService {
         }
 
         Item itemToUpdate = Item.copyWithAssignedId(ServiceUtils.stringToObjectId(itemId),
-                ItemDto.fromDto(itemDto, ownerId));
+                ItemDto.asItem(itemDto, ownerId));
         Item updatedItem = itemRepository.update(itemToUpdate);
-        return ItemDto.toDto(updatedItem);
+        return ItemDto.of(updatedItem);
     }
 }

@@ -17,7 +17,10 @@ public enum ErrorInfo {
     ITEM_NOT_FOUND(4003, "Item not found for given id", HttpStatus.NOT_FOUND),
     INCORRECT_USER_ID(4004, "Incorrect user ID", HttpStatus.BAD_REQUEST),
     USER_FORBIDDEN_MODIFICATION(4005, "You do not have permission to modify that user", HttpStatus.FORBIDDEN),
-    COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN);
+    COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN),
+
+    // Server
+    INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.FORBIDDEN);
 
     private final int code;
     private final String description;
