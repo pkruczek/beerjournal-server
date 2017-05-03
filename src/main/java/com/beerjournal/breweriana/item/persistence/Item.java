@@ -43,4 +43,7 @@ public class Item {
                 .build();
     }
 
+    public static Item copyWithAssignedId(ObjectId id, Item item) {
+        return new Item(id, item.ownerId, item.name, item.type, item.country, item.brewery, item.style, item.attributes);
+    }
 }

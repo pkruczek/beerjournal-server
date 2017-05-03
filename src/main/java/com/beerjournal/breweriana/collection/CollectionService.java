@@ -45,5 +45,4 @@ class CollectionService {
                 .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
     }
-
 }

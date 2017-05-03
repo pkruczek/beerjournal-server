@@ -67,10 +67,33 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
+    int deleteItem(Item item) {
+        ItemRef itemRef = item.asItemRef();
+
+        WriteResult writeResult = mongoOperations.updateFirst(
+                new Query(Criteria.where("ownerId").is(item.getOwnerId())),
+                new Update().pull("itemRefs", itemRef),
+                UserCollection.class);
+
+        return writeResult.getN();
+    }
+
+    int updateItem(Item item) {
+        WriteResult writeResult = mongoOperations.updateFirst(
+                new Query(new Criteria().andOperator(
+                        Criteria.where("ownerId").is(item.getOwnerId()),
+                        Criteria.where("itemRefs").elemMatch(Criteria.where("itemId").is(item.getId()))
+                )),
+                new Update().set("itemRefs.$.name", item.getName())
+                            .set("itemRefs.$.type", item.getType()),
+                UserCollection.class);
+
+        return writeResult.getN();
+    }
+
     private List<Item> findAllNotIn(Set<String> userItemsNames) {
         return mongoOperations.find(
                 new Query(Criteria.where("name").not().in(userItemsNames)),
                 Item.class);
     }
-
 }

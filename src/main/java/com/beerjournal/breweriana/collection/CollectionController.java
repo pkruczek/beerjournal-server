@@ -27,5 +27,4 @@ class CollectionController {
         Set<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id) : collectionService.getAllItemRefsInUserCollection(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
-
 }
