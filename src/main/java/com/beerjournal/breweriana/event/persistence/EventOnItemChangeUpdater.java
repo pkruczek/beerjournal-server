@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.event.persistence;
 
 import com.beerjournal.breweriana.event.Action;
-import com.beerjournal.breweriana.event.ContentType;
+import com.beerjournal.breweriana.event.DataType;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class EventOnItemChangeUpdater implements UpdateListener<Item> {
     }
 
     private void saveAsEvent(Item item, Action action) {
-        Event event = Event.of(action, item, ContentType.ITEM);
+        Event event = Event.of(action, item, DataType.ITEM);
         eventRepository.save(event);
     }
 

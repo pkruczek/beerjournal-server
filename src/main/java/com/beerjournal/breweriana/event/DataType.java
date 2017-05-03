@@ -1,5 +1,5 @@
 package com.beerjournal.breweriana.event;
 
-public enum ContentType {
+public enum DataType {
     ITEM, USER
 }

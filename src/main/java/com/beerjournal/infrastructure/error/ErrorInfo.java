@@ -19,7 +19,7 @@ public enum ErrorInfo {
     USER_FORBIDDEN_MODIFICATION(4005, "You do not have permission to modify that user", HttpStatus.FORBIDDEN),
 
     // Server
-    INCORRECT_EVENT_CONTENT_TYPE(5000, "Content type in given event not found", HttpStatus.FORBIDDEN);
+    INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.FORBIDDEN);
 
     private final int code;
     private final String description;
