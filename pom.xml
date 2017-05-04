@@ -127,13 +127,6 @@
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
