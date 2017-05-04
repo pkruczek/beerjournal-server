@@ -28,11 +28,12 @@ public class Item {
     private final String brewery;
     private final String style;
     private final Set<Attribute> attributes;
+    private final Set<String> images;
 
     @Builder
     public static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   Set<Attribute> attributes) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes);
+                   Set<Attribute> attributes, Set<String> images) {
+        return new Item(null, ownerId, name, type, country, brewery, style, attributes, images);
     }
 
     public ItemRef asItemRef() {
@@ -44,6 +45,6 @@ public class Item {
     }
 
     public static Item copyWithAssignedId(ObjectId id, Item item) {
-        return new Item(id, item.ownerId, item.name, item.type, item.country, item.brewery, item.style, item.attributes);
+        return new Item(id, item.ownerId, item.name, item.type, item.country, item.brewery, item.style, item.attributes, item.images);
     }
 }

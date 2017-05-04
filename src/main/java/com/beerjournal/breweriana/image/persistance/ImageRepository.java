@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.image;
+package com.beerjournal.breweriana.image.persistance;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSFile;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class FileRepository {
+public class ImageRepository {
 
     private final GridFsOperations gridFsOperations;
 
@@ -22,10 +22,8 @@ public class FileRepository {
         return file.getFilename();
     }
 
-    public Optional<InputStream> loadFile(String filename) {
-        return Optional.ofNullable(gridFsOperations.findOne(byFilename(filename)))
-                .map(GridFSDBFile::getInputStream);
-
+    public Optional<GridFSDBFile> loadFile(String filename) {
+        return Optional.ofNullable(gridFsOperations.findOne(byFilename(filename)));
     }
 
     public void deleteFile(String filename) {

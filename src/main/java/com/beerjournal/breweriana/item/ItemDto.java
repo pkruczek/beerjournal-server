@@ -26,6 +26,7 @@ class ItemDto {
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
     private final Set<Attribute> attributes;
+    private final Set<String> images;
 
     static ItemDto toDto(Item item){
         return ItemDto.builder()
@@ -37,6 +38,7 @@ class ItemDto {
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
                 .attributes(item.getAttributes())
+                .images(item.getImages())
                 .build();
     }
 
@@ -49,6 +51,7 @@ class ItemDto {
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
                 .attributes(itemDto.getAttributes())
+                .images(itemDto.getImages())
                 .build();
     }
 

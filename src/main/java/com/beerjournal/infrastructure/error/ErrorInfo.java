@@ -17,7 +17,12 @@ public enum ErrorInfo {
     ITEM_NOT_FOUND(4003, "Item not found for given id", HttpStatus.NOT_FOUND),
     INCORRECT_USER_ID(4004, "Incorrect user ID", HttpStatus.BAD_REQUEST),
     USER_FORBIDDEN_MODIFICATION(4005, "You do not have permission to modify that user", HttpStatus.FORBIDDEN),
-    COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN);
+    COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN),
+
+    // Images
+    REPEATED_IMAGE_NAME(4100, "Image name already assigned to item", HttpStatus.CONFLICT),
+    UNSUPPORTED_IMAGE_EXTENSION(4101, "Incorrect image type", HttpStatus.NOT_FOUND),
+    IMAGE_NOT_FOUND(4102, "Image not found", HttpStatus.NOT_FOUND);
 
     private final int code;
     private final String description;

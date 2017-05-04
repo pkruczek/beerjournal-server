@@ -1,6 +1,6 @@
 package com.beerjournal.breweriana.image
 
-import com.beerjournal.breweriana.image.FileRepository
+import com.beerjournal.breweriana.image.persistance.ImageRepository
 import org.apache.commons.io.IOUtils
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,10 +16,10 @@ import spock.lang.Stepwise
 @SpringBootTest
 @ActiveProfiles("test")
 @Stepwise
-class FileRepositoryTest extends Specification {
+class ImageRepositoryTest extends Specification {
 
     @Autowired
-    FileRepository fileRepository
+    ImageRepository imageRepository
 
     @Autowired
     MongoTemplate mongoTemplate
@@ -32,19 +32,19 @@ class FileRepositoryTest extends Specification {
 
     def "should save and read a file"() {
         when:
-        def dbFilename = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
-        def maybeDbStream = fileRepository.loadFile(filename)
+        def dbFilename = imageRepository.saveFile(srcImageInputStream(), filename, "image/png")
+        def maybeDbStream = imageRepository.loadFile(filename)
 
         then:
         dbFilename == filename
         maybeDbStream.isPresent()
-        IOUtils.contentEquals(srcImageInputStream(), maybeDbStream.get())
+        IOUtils.contentEquals(srcImageInputStream(), maybeDbStream.get().getInputStream())
     }
 
     def "should delete a file"() {
         when:
-        fileRepository.deleteFile(filename)
-        def maybeDbStream = fileRepository.loadFile(filename)
+        imageRepository.deleteFile(filename)
+        def maybeDbStream = imageRepository.loadFile(filename)
 
         then:
         !maybeDbStream.isPresent()
@@ -55,7 +55,7 @@ class FileRepositoryTest extends Specification {
     }
 
     def srcImageInputStream() {
-        FileRepositoryTest.class.getResourceAsStream("/static/tyskie.png")
+        ImageRepositoryTest.class.getResourceAsStream("/static/tyskie.png")
     }
 
 }
