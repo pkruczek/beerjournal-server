@@ -17,7 +17,7 @@ class CategoryDto {
     private final String name;
     private final Set<Object> values;
 
-    static CategoryDto toDto(Category category) {
+    static CategoryDto of(Category category) {
         return CategoryDto.builder()
                 .name(category.getName())
                 .values(category.getValues())

@@ -22,7 +22,10 @@ public enum ErrorInfo {
     // Images
     REPEATED_IMAGE_NAME(4100, "Image name already assigned to item", HttpStatus.CONFLICT),
     UNSUPPORTED_IMAGE_EXTENSION(4101, "Incorrect image type", HttpStatus.NOT_FOUND),
-    IMAGE_NOT_FOUND(4102, "Image not found", HttpStatus.NOT_FOUND);
+    IMAGE_NOT_FOUND(4102, "Image not found", HttpStatus.NOT_FOUND),
+
+    // Server
+    INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.FORBIDDEN);
 
     private final int code;
     private final String description;

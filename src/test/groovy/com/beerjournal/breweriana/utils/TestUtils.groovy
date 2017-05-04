@@ -35,6 +35,10 @@ final class TestUtils {
                 .build()
     }
 
+    static def someObjectId() {
+        new ObjectId()
+    }
+
     static def someUsers() {
         [
                 User.builder().firstName("Janusz").lastName("Nowak").email("janusz@wp.pl").build(),

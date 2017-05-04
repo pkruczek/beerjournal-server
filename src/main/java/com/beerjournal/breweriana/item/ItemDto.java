@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-class ItemDto {
+public class ItemDto {
 
     private final String id;
 
@@ -28,7 +28,7 @@ class ItemDto {
     private final Set<Attribute> attributes;
     private final Set<String> images;
 
-    static ItemDto toDto(Item item){
+    public static ItemDto of(Item item){
         return ItemDto.builder()
                 .id(item.getId().toHexString())
                 .ownerId(item.getOwnerId().toHexString())
@@ -42,7 +42,7 @@ class ItemDto {
                 .build();
     }
 
-    static Item fromDto(ItemDto itemDto, String ownerId){
+    static Item asItem(ItemDto itemDto, String ownerId){
         return Item.builder()
                 .ownerId(ServiceUtils.stringToObjectId(ownerId))
                 .name(itemDto.getName())
