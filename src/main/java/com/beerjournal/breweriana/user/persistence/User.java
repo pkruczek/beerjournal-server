@@ -24,6 +24,7 @@ public class User {
     @Indexed(unique = true)
     private final String email;
     private final String password;
+    private ObjectId avatarFileId;
 
     @Builder
     public static User of(String firstName, String lastName, String email, String password) {

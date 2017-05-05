@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.user.persistence;
 
+import com.beerjournal.breweriana.image.persistance.FileRepository;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class UserRepository {
     private final UserCrudRepository crudRepository;
     private final Set<UpdateListener<User>> userUpdateListeners;
     private final MongoOperations mongoOperations;
+    private final FileRepository fileRepository;
 
     public ImmutableSet<User> findAll() {
         return ImmutableSet.<User>builder()
@@ -38,6 +40,7 @@ public class UserRepository {
         User deletedUser = mongoOperations.findAndRemove(
                 new Query(Criteria.where("Id").is(objectId)),
                 User.class);
+        if (deletedUser.getAvatarFileId() != null) fileRepository.deleteFileById(deletedUser.getAvatarFileId());
         userUpdateListeners.forEach(listener -> listener.onDelete(deletedUser));
         return deletedUser;
     }

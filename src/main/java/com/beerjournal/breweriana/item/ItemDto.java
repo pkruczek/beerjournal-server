@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
+import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class ItemDto {
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
     @Singular private final Set<Attribute> attributes;
-    @Singular private final Set<String> images;
+    @Singular private final Set<ObjectId> images;
 
     public static ItemDto of(Item item){
         return ItemDto.builder()

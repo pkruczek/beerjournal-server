@@ -32,19 +32,19 @@ class FileRepositoryTest extends Specification {
 
     def "should save and read a file"() {
         when:
-        def dbFilename = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
-        def maybeDbStream = fileRepository.loadFile(filename)
+        def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
+        def maybeDbStream = fileRepository.loadFileById(dbId)
 
         then:
-        dbFilename == filename
         maybeDbStream.isPresent()
+        maybeDbStream.get().getFilename() == filename
         IOUtils.contentEquals(srcImageInputStream(), maybeDbStream.get().getInputStream())
     }
 
     def "should delete a file"() {
         when:
-        fileRepository.deleteFile(filename)
-        def maybeDbStream = fileRepository.loadFile(filename)
+        fileRepository.deleteFileByFileNAME(filename)
+        def maybeDbStream = fileRepository.loadFileByFilename(filename)
 
         then:
         !maybeDbStream.isPresent()

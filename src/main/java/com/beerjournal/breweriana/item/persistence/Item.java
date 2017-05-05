@@ -28,11 +28,11 @@ public class Item {
     private final String brewery;
     private final String style;
     private final Set<Attribute> attributes;
-    private final Set<String> images;
+    private final Set<ObjectId> images;
 
     @Builder
     public static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   Set<Attribute> attributes, Set<String> images) {
+                   Set<Attribute> attributes, Set<ObjectId> images) {
         return new Item(null, ownerId, name, type, country, brewery, style, attributes, images);
     }
 
