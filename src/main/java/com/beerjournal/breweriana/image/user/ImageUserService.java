@@ -8,7 +8,6 @@ import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.config.ApplicationProperties;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
-import com.google.common.base.Strings;
 import com.mongodb.gridfs.GridFSDBFile;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
