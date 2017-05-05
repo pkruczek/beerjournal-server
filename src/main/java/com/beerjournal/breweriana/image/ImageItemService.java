@@ -1,6 +1,6 @@
 package com.beerjournal.breweriana.image;
 
-import com.beerjournal.breweriana.image.persistance.ImageRepository;
+import com.beerjournal.breweriana.image.persistance.FileRepository;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
 import com.beerjournal.breweriana.utils.ServiceUtils;
@@ -19,10 +19,10 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class ImageItemService {
 
     private final ApplicationProperties properties;
-    private final ImageRepository imageRepository;
+    private final FileRepository fileRepository;
     private final ItemRepository itemRepository;
 
     Set<String> getItemImagesNames(String itemId) {
@@ -36,13 +36,13 @@ public class ImageService {
         if (item.getImages().contains(originalFilename)) throw new BeerJournalException(ErrorInfo.REPEATED_IMAGE_NAME);
         if (!hasImageExtension(originalFilename) || !isImage(multipartFile)) throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
 
-        imageRepository.saveFile(multipartFile.getInputStream(), itemId + multipartFile.getOriginalFilename(), multipartFile.getContentType());
+        fileRepository.saveFile(multipartFile.getInputStream(), itemId + multipartFile.getOriginalFilename(), multipartFile.getContentType());
         item.getImages().add(originalFilename);
         itemRepository.save(item);
     }
 
     GridFSDBFile loadImage(String itemId, String imageName) {
-        return imageRepository
+        return fileRepository
                 .loadFile(itemId + imageName)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.IMAGE_NOT_FOUND));
     }
@@ -53,7 +53,7 @@ public class ImageService {
 
         item.getImages().remove(imageName);
         itemRepository.save(item);
-        imageRepository.deleteFile(itemId + imageName);
+        fileRepository.deleteFile(itemId + imageName);
     }
 
     private boolean hasImageExtension(String fileName) {

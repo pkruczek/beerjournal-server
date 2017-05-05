@@ -13,28 +13,28 @@ import java.io.IOException;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/images")
+@RequestMapping("/api/images/item")
 @RequiredArgsConstructor
-public class ImageController {
+public class ImageItemController {
 
-    private final ImageService imageService;
+    private final ImageItemService imageItemService;
 
     @GetMapping
     public ResponseEntity<Set<String>> getImagesNames(@RequestParam("itemId") String itemId) throws IOException {
-        return new ResponseEntity<>(imageService.getItemImagesNames(itemId), HttpStatus.OK);
+        return new ResponseEntity<>(imageItemService.getItemImagesNames(itemId), HttpStatus.OK);
     }
 
     @PostMapping(value = "{itemId}")
     public ResponseEntity<?> handleImageUpload(@RequestParam("file") MultipartFile file,
                                                @PathVariable("itemId") String itemId) throws IOException {
-        imageService.saveImage(file, itemId);
+        imageItemService.saveImage(file, itemId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "{itemId}")
     public ResponseEntity<InputStreamResource> getImage(@RequestParam("imageName") String imageName,
                                                         @PathVariable("itemId") String itemId) {
-        GridFSDBFile image = imageService.loadImage(itemId, imageName);
+        GridFSDBFile image = imageItemService.loadImage(itemId, imageName);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType((image.getContentType())))
@@ -44,7 +44,7 @@ public class ImageController {
     @DeleteMapping(value = "{itemId}")
     public ResponseEntity<?> deleteImage(@RequestParam("imageName") String imageName,
                                          @PathVariable("itemId") String itemId) {
-        imageService.deleteImage(itemId, imageName);
+        imageItemService.deleteImage(itemId, imageName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

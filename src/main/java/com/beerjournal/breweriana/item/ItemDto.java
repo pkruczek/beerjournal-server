@@ -6,8 +6,10 @@ import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -25,8 +27,8 @@ public class ItemDto {
     @NotEmpty private final String country;
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
-    private final Set<Attribute> attributes;
-    private final Set<String> images;
+    @Singular private final Set<Attribute> attributes;
+    @Singular private final Set<String> images;
 
     public static ItemDto of(Item item){
         return ItemDto.builder()
@@ -37,8 +39,8 @@ public class ItemDto {
                 .country(item.getCountry())
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
-                .attributes(item.getAttributes())
-                .images(item.getImages())
+                .attributes(item.getAttributes() != null ? item.getAttributes() : new HashSet<>())
+                .images(item.getImages() != null ? item.getImages() : new HashSet<>())
                 .build();
     }
 
@@ -50,8 +52,8 @@ public class ItemDto {
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
-                .attributes(itemDto.getAttributes())
-                .images(itemDto.getImages())
+                .attributes(itemDto.getAttributes() != null ? itemDto.getAttributes() : new HashSet<>())
+                .images(itemDto.getImages() != null ? itemDto.getImages() : new HashSet<>())
                 .build();
     }
 
