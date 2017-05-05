@@ -26,7 +26,6 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.IMAGE_FORBIDDEN_MOD
 @RequiredArgsConstructor
 public class ImageItemService {
 
-    private final ApplicationProperties properties;
     private final FileRepository fileRepository;
     private final ItemRepository itemRepository;
     private final SecurityUtils securityUtils;
@@ -41,7 +40,7 @@ public class ImageItemService {
         Item item = getItemInstance(itemId);
         String originalFilename = multipartFile.getOriginalFilename();
 
-        if (!hasImageExtension(originalFilename) || !isImage(multipartFile))
+        if (!fileRepository.hasImageExtension(originalFilename) || !fileRepository.isImage(multipartFile))
             throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
 
         ObjectId id = fileRepository.saveFile(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), multipartFile.getContentType());
@@ -64,14 +63,6 @@ public class ImageItemService {
         item.getImages().remove(id);
         itemRepository.save(item);
         fileRepository.deleteFileById(id);
-    }
-
-    private boolean hasImageExtension(String fileName) {
-        return FilenameUtils.isExtension(fileName.toLowerCase(), properties.getAcceptedImageExtensions());
-    }
-
-    private boolean isImage(MultipartFile file) throws IOException {
-        return ImageIO.read(file.getInputStream()) != null;
     }
 
     private Item getItemInstance(String itemId) {

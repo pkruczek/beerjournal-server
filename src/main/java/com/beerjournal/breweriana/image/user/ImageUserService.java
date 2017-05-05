@@ -26,7 +26,6 @@ public class ImageUserService {
 
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
-    private final ApplicationProperties properties;
     private final SecurityUtils securityUtils;
 
     void saveUserAvatarImage(MultipartFile multipartFile, String userId) throws IOException {
@@ -34,7 +33,7 @@ public class ImageUserService {
 
         User user = getUserInstance(userId);
         String originalFilename = multipartFile.getOriginalFilename();
-        if (!hasImageExtension(originalFilename) || !isImage(multipartFile)) throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
+        if (!fileRepository.hasImageExtension(originalFilename) || !fileRepository.isImage(multipartFile)) throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
         if (user.getAvatarFileId() == null) deleteOldUserAvatarImage(user);
 
         ObjectId id = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
@@ -62,14 +61,6 @@ public class ImageUserService {
 
     private void deleteOldUserAvatarImage(User user) {
         fileRepository.deleteFileById(user.getAvatarFileId());
-    }
-
-    private boolean hasImageExtension(String fileName) {
-        return FilenameUtils.isExtension(fileName.toLowerCase(), properties.getAcceptedImageExtensions());
-    }
-
-    private boolean isImage(MultipartFile file) throws IOException {
-        return ImageIO.read(file.getInputStream()) != null;
     }
 
     private User getUserInstance(String userId) {
