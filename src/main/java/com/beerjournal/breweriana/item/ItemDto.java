@@ -11,7 +11,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.beerjournal.breweriana.utils.Converters.*;
+import static com.beerjournal.breweriana.utils.Converters.toObjectId;
+import static com.beerjournal.breweriana.utils.Converters.toStringIds;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -53,7 +54,6 @@ public class ItemDto {
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
                 .attributes(itemDto.getAttributes())
-                .images(toObjectIds(itemDto.getImageIds()).collect(Collectors.toSet()))
                 .build();
     }
 

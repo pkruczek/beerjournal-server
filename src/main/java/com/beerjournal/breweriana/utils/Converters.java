@@ -45,8 +45,8 @@ public final class Converters {
         return new Date(objectId.getTimestamp() * 1000L).toInstant();
     }
 
-    public static Map<String, String> toMap(ObjectId imageId) {
-        return ImmutableMap.of("imageId", imageId.toHexString());
+    public static Map<String, String> toMap(ObjectId id) {
+        return ImmutableMap.of("id", id.toHexString());
     }
 
 }

@@ -34,8 +34,8 @@ public final class Item {
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> images) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes, images);
+                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
+        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds);
     }
 
     public Set<Attribute> getAttributes() {
