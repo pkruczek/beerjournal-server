@@ -24,15 +24,19 @@ public class User {
     @Indexed(unique = true)
     private final String email;
     private final String password;
-    private ObjectId avatarFileId;
+    private final String avatarFileId;
 
     @Builder
-    public static User of(String firstName, String lastName, String email, String password) {
-        return new User(null, firstName, lastName, email, password);
+    public static User of(String firstName, String lastName, String email, String password, String avatarFileId) {
+        return new User(null, firstName, lastName, email, password, avatarFileId);
     }
 
     public static User copyWithAssignedId(ObjectId id, User user) {
-        return new User(id, user.firstName, user.lastName, user.email, user.password);
+        return new User(id, user.firstName, user.lastName, user.email, user.password, user.avatarFileId);
+    }
+
+    public static User copyWithChangedAvatar(String avatarFileId, User user) {
+        return new User(user.id, user.firstName, user.lastName, user.email, user.password, avatarFileId);
     }
 
 }

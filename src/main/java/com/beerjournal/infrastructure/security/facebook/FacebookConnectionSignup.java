@@ -27,7 +27,7 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
 
     private User createUser(UserProfile userProfile) {
         String generatedPassword = RandomStringUtils.randomAlphanumeric(8);
-        User user = User.of(userProfile.getFirstName(), userProfile.getLastName(), userProfile.getEmail(), generatedPassword);
+        User user = User.of(userProfile.getFirstName(), userProfile.getLastName(), userProfile.getEmail(), generatedPassword, null);
         return userRepository.save(user);
     }
 

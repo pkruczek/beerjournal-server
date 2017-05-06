@@ -33,7 +33,7 @@ class FileRepositoryTest extends Specification {
     def "should save and read a file"() {
         when:
         def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
-        def maybeDbStream = fileRepository.loadFileById(dbId)
+        def maybeDbStream = fileRepository.loadFileById(dbId.toString())
 
         then:
         maybeDbStream.isPresent()
@@ -43,7 +43,7 @@ class FileRepositoryTest extends Specification {
 
     def "should delete a file"() {
         when:
-        fileRepository.deleteFileByFileNAME(filename)
+        fileRepository.deleteFileByFilename(filename)
         def maybeDbStream = fileRepository.loadFileByFilename(filename)
 
         then:

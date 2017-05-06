@@ -14,27 +14,29 @@ import java.io.IOException;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/images/item")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ImageItemController {
 
     private final ImageItemService imageItemService;
 
-    @GetMapping
-    public ResponseEntity<Set<ObjectId>> getImagesIds(@RequestParam("itemId") String itemId) {
+    @GetMapping("items/{itemId}/images")
+    public ResponseEntity<Set<String>> getImagesIds(@RequestParam("itemId") String itemId) {
         return new ResponseEntity<>(imageItemService.getItemImagesIds(itemId), HttpStatus.OK);
     }
 
-    @PostMapping(value = "{itemId}")
-    public ResponseEntity<?> handleImageItemUpload(@PathVariable("itemId") String itemId,
-                                                   @RequestParam("file") MultipartFile file,
-                                                   @RequestParam("userId") String userId) throws IOException {
+    @PostMapping("users/{userId}/collection/items/{itemId}/images")
+    public ResponseEntity<?> handleImageItemUpload(
+            @PathVariable("userId") String userId,
+            @PathVariable("itemId") String itemId,
+            @RequestParam("file") MultipartFile file) throws IOException {
+
         imageItemService.saveImageItem(file, itemId, userId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "{imageId}")
-    public ResponseEntity<InputStreamResource> getImageItem(@PathVariable("imageId") ObjectId imageId) {
+    @GetMapping("images/{imageId}")
+    public ResponseEntity<InputStreamResource> getImageItem(@PathVariable("imageId") String imageId) {
         GridFSDBFile image = imageItemService.loadImageItem(imageId);
         return ResponseEntity
                 .ok()
@@ -42,10 +44,10 @@ public class ImageItemController {
                 .body(new InputStreamResource(image.getInputStream()));
     }
 
-    @DeleteMapping(value = "{itemId}/{imageId}")
-    public ResponseEntity<?> deleteItemImage(@PathVariable("imageId") ObjectId imageId,
+    @DeleteMapping("{userId}/collection/items/{itemId}/images/{imageId}")
+    public ResponseEntity<?> deleteItemImage(@PathVariable("userId") String userId,
                                              @PathVariable("itemId") String itemId,
-                                             @RequestParam("userId") String userId) {
+                                             @PathVariable("imageId") String imageId) {
         imageItemService.deleteImageItem(itemId, imageId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

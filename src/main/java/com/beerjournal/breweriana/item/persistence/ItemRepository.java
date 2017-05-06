@@ -35,7 +35,7 @@ public class ItemRepository {
         Item itemToDelete = crudRepository.findOneById(ServiceUtils.stringToObjectId(itemId))
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
 
-        itemToDelete.getImages().forEach((k) -> fileRepository.deleteFileByFileNAME(itemId + k));
+        itemToDelete.getImages().forEach(fileRepository::deleteFileById);
         itemUpdateListeners.forEach(listener -> listener.onDelete(itemToDelete));
         return itemToDelete;
     }

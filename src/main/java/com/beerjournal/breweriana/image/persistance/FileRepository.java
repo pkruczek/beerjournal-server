@@ -1,20 +1,15 @@
 package com.beerjournal.breweriana.image.persistance;
 
 import com.beerjournal.breweriana.utils.ServiceUtils;
-import com.beerjournal.infrastructure.config.ApplicationProperties;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSFile;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -23,7 +18,6 @@ import java.util.Optional;
 public class FileRepository {
 
     private final GridFsOperations gridFsOperations;
-    private final ApplicationProperties properties;
 
     public ObjectId saveFile(InputStream inputStream, String filename, String contentType) {
         GridFSFile file = gridFsOperations.store(inputStream, filename, contentType);
@@ -34,24 +28,16 @@ public class FileRepository {
         return Optional.ofNullable(gridFsOperations.findOne(byFilename(filename)));
     }
 
-    public Optional<GridFSDBFile> loadFileById(ObjectId id) {
+    public Optional<GridFSDBFile> loadFileById(String id) {
         return Optional.ofNullable(gridFsOperations.findOne(byId(id)));
     }
 
-    public void deleteFileByFileNAME(String filename) {
+    public void deleteFileByFilename(String filename) {
         gridFsOperations.delete(byFilename(filename));
     }
 
-    public void deleteFileById(ObjectId id) {
+    public void deleteFileById(String id) {
         gridFsOperations.delete(byId(id));
-    }
-
-    public boolean hasImageExtension(String fileName) {
-        return FilenameUtils.isExtension(fileName.toLowerCase(), properties.getAcceptedImageExtensions());
-    }
-
-    public boolean isImage(MultipartFile file) throws IOException {
-        return ImageIO.read(file.getInputStream()) != null;
     }
 
     private Query byId(Object id) {

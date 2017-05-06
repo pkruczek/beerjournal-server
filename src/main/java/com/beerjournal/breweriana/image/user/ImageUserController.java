@@ -12,20 +12,20 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/images/user")
+@RequestMapping("/api/users/{userId}/avatar")
 @RequiredArgsConstructor
 public class ImageUserController {
 
     private final ImageUserService imageUserService;
 
-    @PostMapping(value = "{userId}")
+    @PostMapping
     public ResponseEntity<?> handleImageUserUpload(@RequestParam("file") MultipartFile file,
                                                    @PathVariable("userId") String userId) throws IOException {
         imageUserService.saveUserAvatarImage(file, userId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "{userId}")
+    @GetMapping
     public ResponseEntity<InputStreamResource> getImageUser(@PathVariable("userId") String userId) {
         GridFSDBFile image = imageUserService.loadUserAvatarImage(userId);
         return ResponseEntity
@@ -34,7 +34,7 @@ public class ImageUserController {
                 .body(new InputStreamResource(image.getInputStream()));
     }
 
-    @DeleteMapping(value = "{userId}")
+    @DeleteMapping
     public ResponseEntity<?> deleteItemUser(@PathVariable("userId") String userId) {
         imageUserService.deleteUserAvatarImage(userId);
         return new ResponseEntity<>(HttpStatus.OK);

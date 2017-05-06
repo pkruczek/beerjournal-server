@@ -29,7 +29,7 @@ public class ItemDto {
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
     @Singular private final Set<Attribute> attributes;
-    @Singular private final Set<ObjectId> images;
+    @Singular private final Set<String> images;
 
     public static ItemDto of(Item item){
         return ItemDto.builder()
@@ -40,8 +40,8 @@ public class ItemDto {
                 .country(item.getCountry())
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
-                .attributes(item.getAttributes() != null ? item.getAttributes() : new HashSet<>())
-                .images(item.getImages() != null ? item.getImages() : new HashSet<>())
+                .attributes(item.getAttributes())
+                .images(item.getImages())
                 .build();
     }
 
@@ -53,8 +53,8 @@ public class ItemDto {
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
-                .attributes(itemDto.getAttributes() != null ? itemDto.getAttributes() : new HashSet<>())
-                .images(itemDto.getImages() != null ? itemDto.getImages() : new HashSet<>())
+                .attributes(itemDto.getAttributes())
+                .images(itemDto.getImages())
                 .build();
     }
 
