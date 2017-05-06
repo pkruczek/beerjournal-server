@@ -19,6 +19,11 @@ class CategoryOnItemChangeUpdater implements UpdateListener<Item> {
         ensureCategories(item);
     }
 
+    @Override
+    public void onUpdate(Item item) {
+        ensureCategories(item);
+    }
+
     private void ensureCategories(Item item) {
         categories(item)
                 .forEach(categoryRepository::ensureCategory);
