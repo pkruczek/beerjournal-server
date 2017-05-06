@@ -27,8 +27,7 @@ class ItemService {
     }
 
     ItemDto addItem(String ownerId, ItemDto itemDto) {
-        userRepository.findOneById(toObjectId(ownerId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+        verifyUser(ownerId);
 
         Item item = ItemDto.asItem(itemDto, ownerId);
         Item savedItem = itemRepository.save(item);
@@ -36,29 +35,37 @@ class ItemService {
     }
 
     ItemDto deleteItem(String ownerId, String itemId) {
-        userRepository.findOneById(toObjectId(ownerId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
-
-        if (!securityUtils.checkIfAuthorized(ownerId)){
-            throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
-        }
+        verifyUser(ownerId);
+        verifyItem(ownerId, itemId);
 
         Item deletedItem = itemRepository.delete(itemId);
         return ItemDto.of(deletedItem);
     }
 
     ItemDto updateItem(String ownerId, String itemId, ItemDto itemDto) {
-        userRepository.findOneById(toObjectId(ownerId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
-
-        if (!securityUtils.checkIfAuthorized(ownerId)){
-            throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
-        }
+        verifyUser(ownerId);
+        verifyItem(ownerId, itemId);
 
         Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
                 .withId(toObjectId(itemId));
 
         Item updatedItem = itemRepository.update(itemToUpdate);
         return ItemDto.of(updatedItem);
+    }
+
+    private void verifyUser(String ownerId) {
+        userRepository.findOneById(toObjectId(ownerId))
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+        if (!securityUtils.checkIfAuthorized(ownerId)){
+            throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
+        }
+    }
+
+    private void verifyItem(String ownerId, String itemId) {
+        Item item = itemRepository.findOneById(toObjectId(itemId))
+                .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
+        if (!item.getOwnerId().equals(toObjectId(ownerId))) {
+            throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
+        }
     }
 }
