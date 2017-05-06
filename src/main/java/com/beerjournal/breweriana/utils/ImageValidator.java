@@ -12,12 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public final class FileUtils {
+public final class ImageValidator {
 
     private final List<String> acceptedImageExtensions;
 
     @Autowired
-    public FileUtils(@Value("${bj.app.images.extensions}") final String extensions) {
+    public ImageValidator(@Value("${bj.app.images.extensions}") final String extensions) {
         acceptedImageExtensions = Arrays.asList(extensions.split(","));
     }
 

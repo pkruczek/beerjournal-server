@@ -2,15 +2,13 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.item.persistence.Attribute;
 import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.utils.ServiceUtils;
+import com.beerjournal.breweriana.utils.Converters;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
-import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -47,7 +45,7 @@ public class ItemDto {
 
     static Item asItem(ItemDto itemDto, String ownerId){
         return Item.builder()
-                .ownerId(ServiceUtils.stringToObjectId(ownerId))
+                .ownerId(Converters.toObjectId(ownerId))
                 .name(itemDto.getName())
                 .type(itemDto.getType())
                 .country(itemDto.getCountry())

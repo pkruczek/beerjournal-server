@@ -20,9 +20,9 @@ public enum ErrorInfo {
     COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN),
 
     // Images
-    UNSUPPORTED_IMAGE_EXTENSION(4100, "Incorrect image type", HttpStatus.NOT_FOUND),
+    UNSUPPORTED_IMAGE_EXTENSION(4100, "Incorrect file type", HttpStatus.NOT_FOUND),
     IMAGE_NOT_FOUND(4101, "Image not found", HttpStatus.NOT_FOUND),
-    IMAGE_FORBIDDEN_MODIFICATION(4102, "You do not have permission to modify that item's image", HttpStatus.FORBIDDEN ),
+    IMAGE_FORBIDDEN_MODIFICATION(4102, "You do not have permission to modify that item's file", HttpStatus.FORBIDDEN ),
 
     // Server
     INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.FORBIDDEN);

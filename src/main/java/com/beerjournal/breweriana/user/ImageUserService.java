@@ -1,11 +1,11 @@
-package com.beerjournal.breweriana.image.user;
+package com.beerjournal.breweriana.user;
 
-import com.beerjournal.breweriana.image.persistance.FileRepository;
+import com.beerjournal.breweriana.file.persistence.FileRepository;
 import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
-import com.beerjournal.breweriana.utils.FileUtils;
+import com.beerjournal.breweriana.utils.Converters;
+import com.beerjournal.breweriana.utils.ImageValidator;
 import com.beerjournal.breweriana.utils.SecurityUtils;
-import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
 import com.mongodb.gridfs.GridFSDBFile;
@@ -20,25 +20,25 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.USER_FORBIDDEN_MODI
 
 @Service
 @RequiredArgsConstructor
-public class ImageUserService {
+class ImageUserService {
 
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
     private final SecurityUtils securityUtils;
-    private final FileUtils fileUtils;
+    private final ImageValidator imageValidator;
 
     void saveUserAvatarImage(MultipartFile multipartFile, String userId) throws IOException {
         if (!securityUtils.checkIfAuthorized(userId)) throw new BeerJournalException(USER_FORBIDDEN_MODIFICATION);
 
         User user = getUserInstance(userId);
         String originalFilename = multipartFile.getOriginalFilename();
-        if (!fileUtils.hasImageExtension(originalFilename) || !fileUtils.isImage(multipartFile))
+        if (!imageValidator.hasImageExtension(originalFilename) || !imageValidator.isImage(multipartFile))
             throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
         if (user.getAvatarFileId() != null) deleteOldUserAvatarImage(user);
 
         ObjectId id = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
 
-        User userToUpdate = User.copyWithChangedAvatar(id.toString(), user);
+        User userToUpdate = user.withAvatarFileId(id.toString());
         userRepository.update(userToUpdate);
     }
 
@@ -54,7 +54,7 @@ public class ImageUserService {
         User user = getUserInstance(userId);
         if (user.getAvatarFileId() == null) throw new BeerJournalException(ErrorInfo.IMAGE_NOT_FOUND);
 
-        User userToUpdate = User.copyWithChangedAvatar(null, user);
+        User userToUpdate = user.withAvatarFileId(null);
         userRepository.update(userToUpdate);
         fileRepository.deleteFileById(user.getAvatarFileId());
     }
@@ -65,7 +65,7 @@ public class ImageUserService {
 
     private User getUserInstance(String userId) {
         return userRepository
-                .findOneById(ServiceUtils.stringToObjectId(userId))
+                .findOneById(Converters.toObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
     }
 }

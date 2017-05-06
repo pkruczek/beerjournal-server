@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.image.user;
+package com.beerjournal.breweriana.user;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/users/{userId}/avatar")
 @RequiredArgsConstructor
-public class ImageUserController {
+class ImageUserController {
 
     private final ImageUserService imageUserService;
 

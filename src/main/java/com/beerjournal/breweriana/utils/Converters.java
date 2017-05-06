@@ -11,9 +11,9 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.INCORRECT_USER_ID;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public final class ServiceUtils {
+public final class Converters {
 
-    public static ObjectId stringToObjectId(String id) {
+    public static ObjectId toObjectId(String id) {
         ObjectId objectId;
         try {
             objectId = new ObjectId(id);
@@ -23,7 +23,7 @@ public final class ServiceUtils {
         return objectId;
     }
 
-    public static Instant objectIdToDateInstant(ObjectId objectId){
+    public static Instant toInstant(ObjectId objectId){
         return new Date(objectId.getTimestamp() * 1000L).toInstant();
     }
 

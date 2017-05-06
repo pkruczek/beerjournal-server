@@ -20,12 +20,14 @@ public class UserDto {
     @NotEmpty private final String lastName;
     @NotEmpty private final String password;
     @Email @NotEmpty private final String email;
+    private final String avatarFileId;
 
     public static UserDto of(User user){
         return UserDto.builder()
                 .id(user.getId().toHexString())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .avatarFileId(user.getAvatarFileId())
                 .build();
     }
 

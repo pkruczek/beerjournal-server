@@ -2,8 +2,8 @@ package com.beerjournal.breweriana.user;
 
 import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
+import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.breweriana.utils.SecurityUtils;
-import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -37,13 +37,13 @@ class UserService {
     }
 
     UserDto getUserWithId(String userId) {
-        User user = userRepository.findOneById(ServiceUtils.stringToObjectId(userId))
+        User user = userRepository.findOneById(Converters.toObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
         return UserDto.of(user);
     }
 
     UserDto modifyUserWithId(String userId, UserDto userDto) {
-        ObjectId userObjectId = ServiceUtils.stringToObjectId(userId);
+        ObjectId userObjectId = Converters.toObjectId(userId);
         userRepository.findOneById(userObjectId)
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
 
@@ -51,13 +51,13 @@ class UserService {
             throw new BeerJournalException(USER_FORBIDDEN_MODIFICATION);
         }
 
-        User modifiedUser = User.copyWithAssignedId(userObjectId, toUser(userDto));
+        User modifiedUser = toUser(userDto).withId(userObjectId);
         User updatedUser = userRepository.update(modifiedUser);
         return UserDto.of(updatedUser);
     }
 
     UserDto deleteUserWithId(String userId) {
-        ObjectId userObjectId = ServiceUtils.stringToObjectId(userId);
+        ObjectId userObjectId = Converters.toObjectId(userId);
         userRepository.findOneById(userObjectId)
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
 

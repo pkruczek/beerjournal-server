@@ -1,6 +1,6 @@
-package com.beerjournal.breweriana.image.persistance;
+package com.beerjournal.breweriana.file.persistence;
 
-import com.beerjournal.breweriana.utils.ServiceUtils;
+import com.beerjournal.breweriana.utils.Converters;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSFile;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class FileRepository {
 
     public ObjectId saveFile(InputStream inputStream, String filename, String contentType) {
         GridFSFile file = gridFsOperations.store(inputStream, filename, contentType);
-        return ServiceUtils.stringToObjectId(file.getId().toString());
+        return Converters.toObjectId(file.getId().toString());
     }
 
     public Optional<GridFSDBFile> loadFileByFilename(String filename) {

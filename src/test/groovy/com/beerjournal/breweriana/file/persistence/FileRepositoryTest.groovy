@@ -1,6 +1,5 @@
-package com.beerjournal.breweriana.image
+package com.beerjournal.breweriana.file.persistence
 
-import com.beerjournal.breweriana.image.persistance.FileRepository
 import org.apache.commons.io.IOUtils
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +31,7 @@ class FileRepositoryTest extends Specification {
 
     def "should save and read a file"() {
         when:
-        def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
+        def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "file/png")
         def maybeDbStream = fileRepository.loadFileById(dbId.toString())
 
         then:

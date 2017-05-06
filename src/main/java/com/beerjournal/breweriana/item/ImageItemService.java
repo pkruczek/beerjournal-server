@@ -1,11 +1,11 @@
-package com.beerjournal.breweriana.image.item;
+package com.beerjournal.breweriana.item;
 
-import com.beerjournal.breweriana.image.persistance.FileRepository;
+import com.beerjournal.breweriana.file.persistence.FileRepository;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
-import com.beerjournal.breweriana.utils.FileUtils;
+import com.beerjournal.breweriana.utils.Converters;
+import com.beerjournal.breweriana.utils.ImageValidator;
 import com.beerjournal.breweriana.utils.SecurityUtils;
-import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
 import com.mongodb.gridfs.GridFSDBFile;
@@ -22,12 +22,12 @@ import static com.beerjournal.infrastructure.error.ErrorInfo.IMAGE_FORBIDDEN_MOD
 
 @Service
 @RequiredArgsConstructor
-public class ImageItemService {
+class ImageItemService {
 
     private final FileRepository fileRepository;
     private final ItemRepository itemRepository;
     private final SecurityUtils securityUtils;
-    private final FileUtils fileUtils;
+    private final ImageValidator imageValidator;
 
     Set<String> getItemImagesIds(String itemId) {
         return getItemInstance(itemId).getImages();
@@ -39,11 +39,11 @@ public class ImageItemService {
         Item item = getItemInstance(itemId);
         String originalFilename = multipartFile.getOriginalFilename();
 
-        if (!fileUtils.hasImageExtension(originalFilename) || !fileUtils.isImage(multipartFile))
+        if (!imageValidator.hasImageExtension(originalFilename) || !imageValidator.isImage(multipartFile))
             throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
 
         ObjectId imageId = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
-        Item itemToUpdate = Item.copyWithOrWithoutImage(item, imageId.toString(), true);
+        Item itemToUpdate = item.withNewImage(imageId.toString());
         itemRepository.update(itemToUpdate);
     }
 
@@ -59,14 +59,14 @@ public class ImageItemService {
         Item item = getItemInstance(itemId);
         if (!item.getImages().contains(imageId)) throw new BeerJournalException(ErrorInfo.IMAGE_NOT_FOUND);
 
-        Item itemToUpdate = Item.copyWithOrWithoutImage(item, imageId, false);
+        Item itemToUpdate = item.withoutImage(imageId);
         itemRepository.update(itemToUpdate);
         fileRepository.deleteFileById(imageId);
     }
 
     private Item getItemInstance(String itemId) {
         return itemRepository
-                .findOneById(ServiceUtils.stringToObjectId(itemId))
+                .findOneById(Converters.toObjectId(itemId))
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
     }
 }

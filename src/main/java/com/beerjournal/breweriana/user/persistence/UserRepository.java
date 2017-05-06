@@ -1,6 +1,6 @@
 package com.beerjournal.breweriana.user.persistence;
 
-import com.beerjournal.breweriana.image.persistance.FileRepository;
+import com.beerjournal.breweriana.file.persistence.FileRepository;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
@@ -40,21 +40,39 @@ public class UserRepository {
         User deletedUser = mongoOperations.findAndRemove(
                 new Query(Criteria.where("Id").is(objectId)),
                 User.class);
-        if (deletedUser.getAvatarFileId() != null) fileRepository.deleteFileById(deletedUser.getAvatarFileId());
-        userUpdateListeners.forEach(listener -> listener.onDelete(deletedUser));
+        deleteAvatarIfExists(deletedUser);
+        notifyDelete(deletedUser);
         return deletedUser;
     }
 
     public User update(User updatedUser) {
         User savedUser = crudRepository.save(updatedUser);
-        userUpdateListeners.forEach(listener -> listener.onUpdate(updatedUser));
+        notifyUpdate(updatedUser);
         return savedUser;
     }
 
     public User save(User user) {
         User savedUser = crudRepository.save(user);
-        userUpdateListeners.forEach(listener -> listener.onInsert(user));
+        notifyInsert(user);
         return savedUser;
+    }
+
+    private void deleteAvatarIfExists(User deletedUser) {
+        if (deletedUser.getAvatarFileId() != null) {
+            fileRepository.deleteFileById(deletedUser.getAvatarFileId());
+        }
+    }
+
+    private void notifyDelete(User deletedUser) {
+        userUpdateListeners.forEach(listener -> listener.onDelete(deletedUser));
+    }
+
+    private void notifyUpdate(User updatedUser) {
+        userUpdateListeners.forEach(listener -> listener.onUpdate(updatedUser));
+    }
+
+    private void notifyInsert(User user) {
+        userUpdateListeners.forEach(listener -> listener.onInsert(user));
     }
 
 }

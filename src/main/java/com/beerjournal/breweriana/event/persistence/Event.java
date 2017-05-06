@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @EqualsAndHashCode(exclude = "id")
 @RequiredArgsConstructor(access = PRIVATE)
-public class Event {
+public final class Event {
 
     @Id
     private final ObjectId id;

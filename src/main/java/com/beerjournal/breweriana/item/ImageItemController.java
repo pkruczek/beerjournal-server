@@ -1,8 +1,7 @@
-package com.beerjournal.breweriana.image.item;
+package com.beerjournal.breweriana.item;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +15,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class ImageItemController {
+class ImageItemController {
 
     private final ImageItemService imageItemService;
 

@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @EqualsAndHashCode(exclude = "id")
 @RequiredArgsConstructor(access = PRIVATE)
-public class Category {
+public final class Category {
 
     @Id
     private final ObjectId id;

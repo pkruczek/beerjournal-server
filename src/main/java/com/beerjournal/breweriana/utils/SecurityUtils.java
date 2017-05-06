@@ -12,7 +12,7 @@ public final class SecurityUtils {
 
     public boolean checkIfAuthorized(String userId) {
         BjPrincipal currentUser = getCurrentlyLoggedInUser();
-        ObjectId userObjectId = ServiceUtils.stringToObjectId(userId);
+        ObjectId userObjectId = Converters.toObjectId(userId);
         ObjectId currentUserId = currentUser.getDbUser().getId();
         return currentUserId.equals(userObjectId);
     }

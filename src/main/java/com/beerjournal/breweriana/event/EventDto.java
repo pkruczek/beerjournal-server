@@ -5,7 +5,7 @@ import com.beerjournal.breweriana.item.ItemDto;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.user.UserDto;
 import com.beerjournal.breweriana.user.persistence.User;
-import com.beerjournal.breweriana.utils.ServiceUtils;
+import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class EventDto {
     public static EventDto of(Event event) {
         return EventDto.builder()
                 .action(event.getAction())
-                .date(ServiceUtils.objectIdToDateInstant(event.getId()).toString())
+                .date(Converters.toInstant(event.getId()).toString())
                 .dataType(event.getDataType())
                 .data(convertToProperDto(event))
                 .build();

@@ -2,7 +2,7 @@ package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.collection.persistence.UserCollection;
 import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.utils.ServiceUtils;
+import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ class CollectionService {
     }
 
     Set<ItemRefDto> getAllNotInUserCollection(String userId) {
-        return userCollectionRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId))
+        return userCollectionRepository.findAllNotInUserCollection(Converters.toObjectId(userId))
                 .stream()
                 .map(ItemRefDto::toDto)
                 .collect(Collectors.toSet());
@@ -42,7 +42,7 @@ class CollectionService {
 
     private UserCollection getUserCollectionOrThrow(String userId) {
         return userCollectionRepository
-                .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
+                .findOneByOwnerId(Converters.toObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
     }
 }
