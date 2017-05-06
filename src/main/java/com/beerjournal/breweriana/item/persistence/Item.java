@@ -1,23 +1,25 @@
 package com.beerjournal.breweriana.item.persistence;
 
 import com.beerjournal.breweriana.collection.persistence.ItemRef;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import lombok.*;
+import lombok.experimental.Wither;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collections;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @Document
 @Data
+@Wither
 @EqualsAndHashCode(exclude = {"id"})
 @RequiredArgsConstructor(access = PRIVATE)
-public class Item {
+public final class Item {
 
     @Id
     private final ObjectId id;
@@ -28,11 +30,20 @@ public class Item {
     private final String brewery;
     private final String style;
     private final Set<Attribute> attributes;
+    private final Set<ObjectId> imageIds;
 
     @Builder
-    public static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   Set<Attribute> attributes) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes);
+    static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
+                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
+        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds);
+    }
+
+    public Set<Attribute> getAttributes() {
+        return Collections.unmodifiableSet(attributes);
+    }
+
+    public Set<ObjectId> getImageIds() {
+        return Collections.unmodifiableSet(imageIds);
     }
 
     public ItemRef asItemRef() {
@@ -43,7 +54,12 @@ public class Item {
                 .build();
     }
 
-    public static Item copyWithAssignedId(ObjectId id, Item item) {
-        return new Item(id, item.ownerId, item.name, item.type, item.country, item.brewery, item.style, item.attributes);
+    public Item withNewImageId(ObjectId imageId) {
+        return withImageIds(Sets.union(this.imageIds, ImmutableSet.of(imageId)));
     }
+
+    public Item withoutImageId(ObjectId imageId) {
+        return withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
+    }
+
 }

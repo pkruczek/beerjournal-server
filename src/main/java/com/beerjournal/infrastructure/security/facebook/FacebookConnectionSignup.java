@@ -1,7 +1,7 @@
 package com.beerjournal.infrastructure.security.facebook;
 
-import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.user.persistence.User;
+import com.beerjournal.breweriana.user.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.social.connect.Connection;
@@ -26,9 +26,16 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
     }
 
     private User createUser(UserProfile userProfile) {
-        String generatedPassword = RandomStringUtils.randomAlphanumeric(8);
-        User user = User.of(userProfile.getFirstName(), userProfile.getLastName(), userProfile.getEmail(), generatedPassword);
-        return userRepository.save(user);
+        return userRepository.save(User.builder()
+                .firstName(userProfile.getFirstName())
+                .lastName(userProfile.getLastName())
+                .email(userProfile.getEmail())
+                .password(randomPassword())
+                .build());
+    }
+
+    private String randomPassword() {
+        return RandomStringUtils.randomAlphanumeric(8);
     }
 
 }

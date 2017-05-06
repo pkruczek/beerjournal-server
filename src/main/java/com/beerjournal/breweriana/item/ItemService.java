@@ -4,11 +4,11 @@ import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.utils.SecurityUtils;
-import com.beerjournal.breweriana.utils.ServiceUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.beerjournal.breweriana.utils.Converters.toObjectId;
 import static com.beerjournal.infrastructure.error.ErrorInfo.*;
 
 @Service
@@ -20,7 +20,7 @@ class ItemService {
     private final SecurityUtils securityUtils;
 
     ItemDto getItemDetails(String id) {
-        Item item = itemRepository.findOneById(ServiceUtils.stringToObjectId(id))
+        Item item = itemRepository.findOneById(toObjectId(id))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
 
         return ItemDto.of(item);
@@ -46,14 +46,15 @@ class ItemService {
         verifyUser(ownerId);
         verifyItem(ownerId, itemId);
 
-        Item itemToUpdate = Item.copyWithAssignedId(ServiceUtils.stringToObjectId(itemId),
-                ItemDto.asItem(itemDto, ownerId));
+        Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
+                .withId(toObjectId(itemId));
+
         Item updatedItem = itemRepository.update(itemToUpdate);
         return ItemDto.of(updatedItem);
     }
 
     private void verifyUser(String ownerId) {
-        userRepository.findOneById(ServiceUtils.stringToObjectId(ownerId))
+        userRepository.findOneById(toObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
         if (!securityUtils.checkIfAuthorized(ownerId)){
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
@@ -61,9 +62,9 @@ class ItemService {
     }
 
     private void verifyItem(String ownerId, String itemId) {
-        Item item = itemRepository.findOneById(ServiceUtils.stringToObjectId(itemId))
+        Item item = itemRepository.findOneById(toObjectId(itemId))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
-        if (!item.getOwnerId().equals(ServiceUtils.stringToObjectId(ownerId))) {
+        if (!item.getOwnerId().equals(toObjectId(ownerId))) {
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
         }
     }

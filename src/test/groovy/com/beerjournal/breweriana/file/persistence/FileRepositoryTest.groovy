@@ -1,6 +1,5 @@
-package com.beerjournal.breweriana.image
+package com.beerjournal.breweriana.file.persistence
 
-import com.beerjournal.breweriana.image.FileRepository
 import org.apache.commons.io.IOUtils
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,19 +31,19 @@ class FileRepositoryTest extends Specification {
 
     def "should save and read a file"() {
         when:
-        def dbFilename = fileRepository.saveFile(srcImageInputStream(), filename, "image/png")
-        def maybeDbStream = fileRepository.loadFile(filename)
+        def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "file/png")
+        def maybeDbStream = fileRepository.loadFileById(dbId)
 
         then:
-        dbFilename == filename
         maybeDbStream.isPresent()
-        IOUtils.contentEquals(srcImageInputStream(), maybeDbStream.get())
+        maybeDbStream.get().getFilename() == filename
+        IOUtils.contentEquals(srcImageInputStream(), maybeDbStream.get().getInputStream())
     }
 
     def "should delete a file"() {
         when:
-        fileRepository.deleteFile(filename)
-        def maybeDbStream = fileRepository.loadFile(filename)
+        fileRepository.deleteFileByFilename(filename)
+        def maybeDbStream = fileRepository.loadFileByFilename(filename)
 
         then:
         !maybeDbStream.isPresent()

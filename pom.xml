@@ -93,7 +93,11 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${springfox-swagger2.version}</version>
 		</dependency>
-
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
 
 		<!--Test-->
 		<dependency>
@@ -123,17 +127,10 @@
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
-	<repositories>
+    <repositories>
 		<repository>
 			<id>repository.springframework.maven.milestone</id>
 			<name>Spring Framework Maven Milestone Repository</name>

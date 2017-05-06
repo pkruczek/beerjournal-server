@@ -30,7 +30,7 @@ final class TestUtils {
                 .country("Polska")
                 .type("bottle")
                 .style("zwykłe")
-                .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
+                .attributes([Attribute.of("volume", "0.5")] as Set)
                 .ownerId(ownerId)
                 .build()
     }

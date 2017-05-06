@@ -40,7 +40,7 @@ class UserCollectionRepositoryTest extends Specification {
             .country("Polska")
             .type("bottle")
             .style("zwykłe")
-            .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
+            .attributes([Attribute.of("volume", "0.5")] as Set)
             .ownerId(TestUtils.someObjectId())
             .build()
 

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @Data
 @Builder
-public class ItemRef {
+public final class ItemRef {
     private final ObjectId itemId;
     private final String name;
     private final String type;
