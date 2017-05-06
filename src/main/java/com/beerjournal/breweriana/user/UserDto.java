@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import static com.beerjournal.breweriana.utils.Converters.toStringId;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -27,7 +28,7 @@ public class UserDto {
                 .id(user.getId().toHexString())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .avatarFileId(user.getAvatarFileId())
+                .avatarFileId(toStringId(user.getAvatarFileId()))
                 .build();
     }
 

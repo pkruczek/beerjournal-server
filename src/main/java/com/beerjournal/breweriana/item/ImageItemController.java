@@ -20,8 +20,8 @@ class ImageItemController {
     private final ImageItemService imageItemService;
 
     @GetMapping("items/{itemId}/images")
-    public ResponseEntity<Set<String>> getImagesIds(@RequestParam("itemId") String itemId) {
-        return new ResponseEntity<>(imageItemService.getItemImagesIds(itemId), HttpStatus.OK);
+    public ResponseEntity<Set<String>> getImageIds(@RequestParam("itemId") String itemId) {
+        return new ResponseEntity<>(imageItemService.getItemImageIds(itemId), HttpStatus.OK);
     }
 
     @PostMapping("users/{userId}/collection/items/{itemId}/images")

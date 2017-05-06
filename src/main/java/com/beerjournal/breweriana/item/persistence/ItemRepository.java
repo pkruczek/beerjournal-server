@@ -47,7 +47,7 @@ public class ItemRepository {
     }
 
     private void deleteImages(Item item) {
-        item.getImages().forEach(fileRepository::deleteFileById);
+        item.getImageIds().forEach(fileRepository::deleteFileById);
     }
 
     private void notifyInsert(Item item) {

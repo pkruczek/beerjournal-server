@@ -2,7 +2,6 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.item.persistence.Attribute;
 import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.utils.Converters;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,9 @@ import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static com.beerjournal.breweriana.utils.Converters.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -27,7 +28,7 @@ public class ItemDto {
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
     @Singular private final Set<Attribute> attributes;
-    @Singular private final Set<String> images;
+    @Singular private final Set<String> imageIds;
 
     public static ItemDto of(Item item){
         return ItemDto.builder()
@@ -39,20 +40,20 @@ public class ItemDto {
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
                 .attributes(item.getAttributes())
-                .images(item.getImages())
+                .imageIds(toStringIds(item.getImageIds()).collect(Collectors.toSet()))
                 .build();
     }
 
     static Item asItem(ItemDto itemDto, String ownerId){
         return Item.builder()
-                .ownerId(Converters.toObjectId(ownerId))
+                .ownerId(toObjectId(ownerId))
                 .name(itemDto.getName())
                 .type(itemDto.getType())
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
                 .attributes(itemDto.getAttributes())
-                .images(itemDto.getImages())
+                .images(toObjectIds(itemDto.getImageIds()).collect(Collectors.toSet()))
                 .build();
     }
 

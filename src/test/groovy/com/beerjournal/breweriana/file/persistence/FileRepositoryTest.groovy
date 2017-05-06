@@ -32,7 +32,7 @@ class FileRepositoryTest extends Specification {
     def "should save and read a file"() {
         when:
         def dbId = fileRepository.saveFile(srcImageInputStream(), filename, "file/png")
-        def maybeDbStream = fileRepository.loadFileById(dbId.toString())
+        def maybeDbStream = fileRepository.loadFileById(dbId)
 
         then:
         maybeDbStream.isPresent()

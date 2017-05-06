@@ -30,11 +30,11 @@ public final class Item {
     private final String brewery;
     private final String style;
     private final Set<Attribute> attributes;
-    private final Set<String> images;
+    private final Set<ObjectId> imageIds;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   @Singular Set<Attribute> attributes, @Singular Set<String> images) {
+                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> images) {
         return new Item(null, ownerId, name, type, country, brewery, style, attributes, images);
     }
 
@@ -42,8 +42,8 @@ public final class Item {
         return Collections.unmodifiableSet(attributes);
     }
 
-    public Set<String> getImages() {
-        return Collections.unmodifiableSet(images);
+    public Set<ObjectId> getImageIds() {
+        return Collections.unmodifiableSet(imageIds);
     }
 
     public ItemRef asItemRef() {
@@ -54,12 +54,12 @@ public final class Item {
                 .build();
     }
 
-    public Item withNewImage(String imageId) {
-        return withImages(Sets.union(this.images, ImmutableSet.of(imageId)));
+    public Item withNewImageId(ObjectId imageId) {
+        return withImageIds(Sets.union(this.imageIds, ImmutableSet.of(imageId)));
     }
 
-    public Item withoutImage(String imageId) {
-        return withImages(Sets.difference(this.images, ImmutableSet.of(imageId)));
+    public Item withoutImageId(ObjectId imageId) {
+        return withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
     }
 
 }

@@ -28,7 +28,7 @@ public class FileRepository {
         return Optional.ofNullable(gridFsOperations.findOne(byFilename(filename)));
     }
 
-    public Optional<GridFSDBFile> loadFileById(String id) {
+    public Optional<GridFSDBFile> loadFileById(ObjectId id) {
         return Optional.ofNullable(gridFsOperations.findOne(byId(id)));
     }
 
@@ -36,11 +36,11 @@ public class FileRepository {
         gridFsOperations.delete(byFilename(filename));
     }
 
-    public void deleteFileById(String id) {
+    public void deleteFileById(ObjectId id) {
         gridFsOperations.delete(byId(id));
     }
 
-    private Query byId(Object id) {
+    private Query byId(ObjectId id) {
         return new Query().addCriteria(Criteria.where("_id").is(id));
     }
 

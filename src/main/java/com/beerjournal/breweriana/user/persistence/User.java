@@ -26,10 +26,10 @@ public final class User {
     @Indexed(unique = true)
     private final String email;
     private final String password;
-    private final String avatarFileId;
+    private final ObjectId avatarFileId;
 
     @Builder
-    static User of(String firstName, String lastName, String email, String password, String avatarFileId) {
+    static User of(String firstName, String lastName, String email, String password, ObjectId avatarFileId) {
         return new User(null, firstName, lastName, email, password, avatarFileId);
     }
 

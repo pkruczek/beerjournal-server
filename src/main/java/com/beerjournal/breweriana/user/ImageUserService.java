@@ -38,7 +38,7 @@ class ImageUserService {
 
         ObjectId id = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
 
-        User userToUpdate = user.withAvatarFileId(id.toString());
+        User userToUpdate = user.withAvatarFileId(id);
         userRepository.update(userToUpdate);
     }
 
