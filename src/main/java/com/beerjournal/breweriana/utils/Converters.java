@@ -1,15 +1,17 @@
 package com.beerjournal.breweriana.utils;
 
 import com.beerjournal.infrastructure.error.BeerJournalException;
+import com.google.common.collect.ImmutableMap;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.beerjournal.infrastructure.error.ErrorInfo.INCORRECT_USER_ID;
+import static com.beerjournal.infrastructure.error.ErrorInfo.MALFORMED_ID;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -20,7 +22,7 @@ public final class Converters {
         try {
             objectId = new ObjectId(id);
         } catch (IllegalArgumentException e) {
-            throw new BeerJournalException(INCORRECT_USER_ID);
+            throw new BeerJournalException(MALFORMED_ID);
         }
         return objectId;
     }
@@ -31,7 +33,7 @@ public final class Converters {
     }
 
     public static String toStringId(ObjectId objectId) {
-        return objectId.toString();
+        return objectId == null ? null : objectId.toString();
     }
 
     public static Stream<String> toStringIds(Collection<ObjectId> objectIds) {
@@ -41,6 +43,10 @@ public final class Converters {
 
     public static Instant toInstant(ObjectId objectId){
         return new Date(objectId.getTimestamp() * 1000L).toInstant();
+    }
+
+    public static Map<String, String> toMap(ObjectId imageId) {
+        return ImmutableMap.of("imageId", imageId.toHexString());
     }
 
 }

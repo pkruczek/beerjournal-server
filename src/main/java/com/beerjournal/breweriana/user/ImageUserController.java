@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users/{userId}/avatar")
@@ -19,15 +20,14 @@ class ImageUserController {
     private final ImageUserService imageUserService;
 
     @PostMapping
-    public ResponseEntity<?> handleImageUserUpload(@RequestParam("file") MultipartFile file,
-                                                   @PathVariable("userId") String userId) throws IOException {
-        imageUserService.saveUserAvatarImage(file, userId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Map<String, String>> handleUserAvatarUpload(@RequestParam("file") MultipartFile file,
+                                                                      @PathVariable("userId") String userId) throws IOException {
+        return new ResponseEntity<>(imageUserService.saveUserAvatar(file, userId), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> getImageUser(@PathVariable("userId") String userId) {
-        GridFSDBFile image = imageUserService.loadUserAvatarImage(userId);
+    public ResponseEntity<InputStreamResource> getUserAvatar(@PathVariable("userId") String userId) {
+        GridFSDBFile image = imageUserService.loadUserAvatar(userId);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType((image.getContentType())))
@@ -35,8 +35,7 @@ class ImageUserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteItemUser(@PathVariable("userId") String userId) {
-        imageUserService.deleteUserAvatarImage(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Map<String, String>> deleteUserAvatar(@PathVariable("userId") String userId) {
+        return new ResponseEntity<>(imageUserService.deleteUserAvatar(userId), HttpStatus.OK);
     }
 }

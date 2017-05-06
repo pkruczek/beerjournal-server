@@ -8,13 +8,13 @@ import com.beerjournal.breweriana.utils.ImageValidator;
 import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
-import com.mongodb.gridfs.GridFSDBFile;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,27 +35,22 @@ class ImageItemService {
                 .collect(Collectors.toSet());
     }
 
-    void saveImageItem(MultipartFile multipartFile, String itemId, String userId) throws IOException {
+    Map<String, String> saveImageItem(MultipartFile multipartFile, String itemId, String userId) throws IOException {
         if (!securityUtils.checkIfAuthorized(userId)) throw new BeerJournalException(IMAGE_FORBIDDEN_MODIFICATION);
 
         Item item = getItemInstance(itemId);
         String originalFilename = multipartFile.getOriginalFilename();
 
         if (!imageValidator.hasImageExtension(originalFilename) || !imageValidator.isImage(multipartFile))
-            throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_EXTENSION);
+            throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_TYPE);
 
         ObjectId imageId = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
         Item itemToUpdate = item.withNewImageId(imageId);
         itemRepository.update(itemToUpdate);
+        return Converters.toMap(imageId);
     }
 
-    GridFSDBFile loadImageItem(String imageId) {
-        return fileRepository
-                .loadFileById(Converters.toObjectId(imageId))
-                .orElseThrow(() -> new BeerJournalException(ErrorInfo.IMAGE_NOT_FOUND));
-    }
-
-    void deleteImageItem(String itemId, String imageStringId, String userId) {
+    Map<String, String> deleteItemImage(String itemId, String imageStringId, String userId) {
         if (!securityUtils.checkIfAuthorized(userId)) throw new BeerJournalException(IMAGE_FORBIDDEN_MODIFICATION);
 
         ObjectId imageId = Converters.toObjectId(imageStringId);
@@ -65,6 +60,7 @@ class ImageItemService {
         Item itemToUpdate = item.withoutImageId(imageId);
         itemRepository.update(itemToUpdate);
         fileRepository.deleteFileById(imageId);
+        return Converters.toMap(imageId);
     }
 
     private Item getItemInstance(String itemId) {
