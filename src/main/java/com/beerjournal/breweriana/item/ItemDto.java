@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,7 @@ public class ItemDto {
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
-                .attributes(itemDto.getAttributes())
+                .attributes(itemDto.getAttributes() != null ? itemDto.getAttributes() : Collections.emptySet())
                 .build();
     }
 
