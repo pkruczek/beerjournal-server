@@ -2,21 +2,18 @@ package com.beerjournal.breweriana.category.persistence;
 
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class CategoryRepository {
 
     private final CategoryCrudRepository crudRepository;
-    private final MongoOperations mongoOperations;
 
     public Optional<Category> findOneByName(String category) {
         return crudRepository.findOneByName(category);
@@ -29,12 +26,31 @@ public class CategoryRepository {
     }
 
     void ensureCategory(String name, String value) {
-        mongoOperations.findAndModify(
-                new Query().addCriteria(Criteria.where("name").is(name)),
-                new Update().push("values", value),
-                new FindAndModifyOptions().upsert(true),
-                Category.class
-        );
+        Category category = crudRepository.findOneByName(name)
+                .orElse(Category.of(name, Collections.emptySet()));
+
+        if (!containsValue(category, value)) {
+            crudRepository.save(category.withNewValue(value));
+        }
+    }
+
+    private boolean containsValue(Category category, String value) {
+        return unifiedValues(category)
+                .contains(unify(value));
+    }
+
+    private Set<Object> unifiedValues(Category category) {
+        return category.getValues().stream()
+                .map(this::unifyIfString)
+                .collect(Collectors.toSet());
+    }
+
+    private Object unifyIfString(Object value) {
+        return value instanceof String ? unify((String) value) : value;
+    }
+
+    private String unify(String value) {
+        return value.toLowerCase().trim().replaceAll("\\s+", "-");
     }
 
 }
