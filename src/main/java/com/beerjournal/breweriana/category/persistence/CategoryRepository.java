@@ -2,11 +2,11 @@ package com.beerjournal.breweriana.category.persistence;
 
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class CategoryRepository {
 
     private final CategoryCrudRepository crudRepository;
-    private final MongoOperations mongoOperations;
 
     public Optional<Category> findOneByName(String category) {
         return crudRepository.findOneByName(category);
@@ -36,17 +35,18 @@ public class CategoryRepository {
     }
 
     private boolean containsValue(Category category, String value) {
-        return category.getValues().stream()
-                .map(this::unifyIfString)
-                .collect(Collectors.toSet())
+        return unifiedValues(category)
                 .contains(unify(value));
     }
 
+    private Set<Object> unifiedValues(Category category) {
+        return category.getValues().stream()
+                .map(this::unifyIfString)
+                .collect(Collectors.toSet());
+    }
+
     private Object unifyIfString(Object value) {
-        if(value instanceof String) {
-            return unify((String) value);
-        }
-        return value;
+        return value instanceof String ? unify((String) value) : value;
     }
 
     private String unify(String value) {
