@@ -12,7 +12,7 @@ class SlackErrorSender {
 
     private final RestOperations restOperations;
 
-    @Value("${slack.error-notifications.enabled}")
+    @Value("${slack.error-notifications.enabled:false}")
     private boolean notificationsEnabled;
 
     @Value("${slack.webhook}")

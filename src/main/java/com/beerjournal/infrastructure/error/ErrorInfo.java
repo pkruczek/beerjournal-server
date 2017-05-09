@@ -18,6 +18,7 @@ public enum ErrorInfo {
     MALFORMED_ID(4004, "Not a proper id", HttpStatus.BAD_REQUEST),
     USER_FORBIDDEN_MODIFICATION(4005, "You do not have permission to modify that user", HttpStatus.FORBIDDEN),
     COLLECTION_FORBIDDEN_MODIFICATION(4006, "You do not have permission to modify that collection", HttpStatus.FORBIDDEN),
+    USER_DUPLICATE_EMAIL(4007, "The account with given email already exists", HttpStatus.CONFLICT),
 
     // Images
     UNSUPPORTED_IMAGE_TYPE(4100, "Incorrect image type", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
