@@ -7,12 +7,14 @@ import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.beerjournal.infrastructure.error.ErrorInfo.USER_DUPLICATE_EMAIL;
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_FORBIDDEN_MODIFICATION;
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
 
@@ -32,8 +34,12 @@ class UserService {
     }
 
     UserDto createUser(UserDto userDto) {
-        User savedUser = userRepository.save(toUser(userDto));
-        return UserDto.of(savedUser);
+        try {
+            User savedUser = userRepository.save(toUser(userDto));
+            return UserDto.of(savedUser);
+        } catch (DuplicateKeyException ex){
+            throw new BeerJournalException(USER_DUPLICATE_EMAIL);
+        }
     }
 
     UserDto getUserWithId(String userId) {
