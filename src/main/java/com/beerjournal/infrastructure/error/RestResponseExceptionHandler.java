@@ -1,7 +1,9 @@
 package com.beerjournal.infrastructure.error;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor(onConstructor_={@Autowired})
 public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final SlackErrorSender slackErrorSender;
 
     @ExceptionHandler({BeerJournalException.class})
     public ResponseEntity<ErrorInfo> handleBeerJournalException(BeerJournalException bjException) {
@@ -24,6 +29,7 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
             return handleBeerJournalException((BeerJournalException) ex);
         }
         logger.error("Error", ex);
+        slackErrorSender.sendErrorMsg(ex.toString());
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
