@@ -11,10 +11,17 @@ import org.springframework.stereotype.Component;
 public final class SecurityUtils {
 
     public boolean checkIfAuthorized(String userId) {
+        return checkAuthorization(Converters.toObjectId(userId));
+    }
+
+    public boolean checkIfAuthorized(ObjectId userId) {
+        return checkAuthorization(userId);
+    }
+
+    private boolean checkAuthorization(ObjectId userId) {
         BjPrincipal currentUser = getCurrentlyLoggedInUser();
-        ObjectId userObjectId = Converters.toObjectId(userId);
         ObjectId currentUserId = currentUser.getDbUser().getId();
-        return currentUserId.equals(userObjectId);
+        return currentUserId.equals(userId);
     }
 
     private BjPrincipal getCurrentlyLoggedInUser() {

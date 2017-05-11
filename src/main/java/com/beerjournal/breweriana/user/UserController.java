@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.user;
 
+import com.beerjournal.breweriana.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,28 @@ class UserController {
 
     @PutMapping("{userId}")
     ResponseEntity<UserDto> modifyUserWithId(@PathVariable(value = "userId") String userId,
-                                           @RequestBody @Validated UserDto user) {
+                                             @RequestBody @Validated UserDetailsDto user) {
         return new ResponseEntity<>(userService.modifyUserWithId(userId, user), HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")
-    ResponseEntity<UserDto> deleteUserWithId(@PathVariable(value = "userId") String userId) {
-        return new ResponseEntity<>(userService.deleteUserWithId(userId), HttpStatus.OK);
+    ResponseEntity<UserDto> deleteUserWithId(@PathVariable(value = "userId") String userId,
+                                             @RequestBody @Validated UserDeleteDto user) {
+        return new ResponseEntity<>(userService.deleteUserWithId(userId, user), HttpStatus.OK);
+    }
+
+    @PostMapping("{userId}/password")
+    ResponseEntity<?> modifyUserPassword(@PathVariable(value = "userId") String userId,
+                                         @RequestBody @Validated UserPasswordDto user) {
+        userService.modifyUserPassword(userId, user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("{userId}/email")
+    ResponseEntity<?> modifyUserEmail(@PathVariable(value = "userId") String userId,
+                                      @RequestBody @Validated UserEmailDto user) {
+        userService.modifyUserEmail(userId, user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
