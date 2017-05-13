@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.user.dto;
+package com.beerjournal.breweriana.user;
 
 import com.beerjournal.breweriana.user.persistence.User;
 import lombok.Builder;

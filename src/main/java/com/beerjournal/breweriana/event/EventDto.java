@@ -3,7 +3,7 @@ package com.beerjournal.breweriana.event;
 import com.beerjournal.breweriana.event.persistence.Event;
 import com.beerjournal.breweriana.item.ItemDto;
 import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.user.dto.UserDto;
+import com.beerjournal.breweriana.user.UserDto;
 import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
