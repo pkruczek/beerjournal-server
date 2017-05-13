@@ -20,7 +20,7 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
         UserProfile userProfile = connection.fetchUserProfile();
 
         User user = userRepository.findOneByEmail(userProfile.getEmail())
-                .orElse(createUser(userProfile));
+                .orElseGet(() -> createUser(userProfile));
 
         return user.getEmail();
     }
