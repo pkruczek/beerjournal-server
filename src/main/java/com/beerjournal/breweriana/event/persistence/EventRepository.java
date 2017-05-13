@@ -6,8 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Repository
@@ -20,14 +18,13 @@ public class EventRepository {
         return crudRepository.save(event);
     }
 
-    public List<Event> findAll(int page, int size) {
-        Page<Event> eventPage = crudRepository.findAll(
+    public Page<Event> findAll(int page, int size) {
+        return crudRepository.findAll(
                 new PageRequest(
                         page,
                         size,
                         new Sort(DESC, "Id"))
         );
-        return eventPage.getContent();
     }
 
 }
