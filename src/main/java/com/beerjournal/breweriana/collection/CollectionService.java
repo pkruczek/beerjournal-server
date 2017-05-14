@@ -5,10 +5,8 @@ import com.beerjournal.breweriana.collection.persistence.UserCollectionRepositor
 import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
@@ -24,20 +22,16 @@ class CollectionService {
         return UserCollectionDto.of(userCollection);
     }
 
-    Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {
-        UserCollection userCollection = getUserCollectionOrThrow(userId);
-
-        return userCollection.getItemRefs()
-                .stream()
-                .map(ItemRefDto::toDto)
-                .collect(Collectors.toSet());
+    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count) {
+        return userCollectionRepository
+                .findAllInUserCollection(Converters.toObjectId(userId), page, count)
+                .map(ItemRefDto::toDto);
     }
 
-    Set<ItemRefDto> getAllNotInUserCollection(String userId) {
-        return userCollectionRepository.findAllNotInUserCollection(Converters.toObjectId(userId))
-                .stream()
-                .map(ItemRefDto::toDto)
-                .collect(Collectors.toSet());
+    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count) {
+        return userCollectionRepository
+                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count)
+                .map(ItemRefDto::toDto);
     }
 
     private UserCollection getUserCollectionOrThrow(String userId) {

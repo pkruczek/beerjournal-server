@@ -5,12 +5,16 @@ import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,7 +33,20 @@ public class UserCollectionRepository {
         return crudRepository.findOneByOwnerId(ownerId);
     }
 
-    public Set<ItemRef> findAllNotInUserCollection(ObjectId ownerId) {
+    public Page<ItemRef> findAllInUserCollection(ObjectId ownerId, int page, int count) {
+        UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
+                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
+        List<ItemRef> list = new ArrayList<>(userCollection.getItemRefs());
+        return new PageImpl<>(
+                list.stream()
+                        .skip(page * count)
+                        .limit(count)
+                        .collect(Collectors.toList()),
+                new PageRequest(page, count),
+                list.size());
+    }
+
+    public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
@@ -37,10 +54,8 @@ public class UserCollectionRepository {
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
 
-        return findAllNotIn(userItemsNames)
-                .stream()
-                .map(Item::asItemRef)
-                .collect(Collectors.toSet());
+        return findAllNotIn(userItemsNames, new PageRequest(page, count))
+                .map(Item::asItemRef);
     }
 
     UserCollection deleteOneByOwnerId(ObjectId ownerId) {
@@ -85,15 +100,17 @@ public class UserCollectionRepository {
                         Criteria.where("itemRefs").elemMatch(Criteria.where("itemId").is(item.getId()))
                 )),
                 new Update().set("itemRefs.$.name", item.getName())
-                            .set("itemRefs.$.type", item.getType()),
+                        .set("itemRefs.$.type", item.getType()),
                 UserCollection.class);
 
         return writeResult.getN();
     }
 
-    private List<Item> findAllNotIn(Set<String> userItemsNames) {
-        return mongoOperations.find(
-                new Query(Criteria.where("name").not().in(userItemsNames)),
-                Item.class);
+    private Page<Item> findAllNotIn(Set<String> userItemsNames, PageRequest pageRequest) {
+        Query query = new Query(Criteria.where("name").not().in(userItemsNames));
+        long total = mongoOperations.count(query, Item.class);
+        List<Item> items = mongoOperations.find(query.with(pageRequest), Item.class);
+
+        return new PageImpl<>(items, pageRequest, total);
     }
 }

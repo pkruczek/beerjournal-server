@@ -63,10 +63,10 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(someOtherItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id);
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10)
 
         then:
-        missingItems == [someOtherItem.asItemRef()] as Set
+        missingItems.getContent() == [someOtherItem.asItemRef()] as List
     }
 
     def "shouldn't return owned item"() {
@@ -75,10 +75,10 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(savedUsersItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id);
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10)
 
         then:
-        !missingItems.contains(someOtherItem)
+        !missingItems.getContent().contains(someOtherItem)
     }
 
 }

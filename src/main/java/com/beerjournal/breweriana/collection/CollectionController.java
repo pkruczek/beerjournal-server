@@ -1,12 +1,10 @@
 package com.beerjournal.breweriana.collection;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,10 +19,12 @@ class CollectionController {
     }
 
     @GetMapping("{ownerId}/collection/items")
-    ResponseEntity<Collection<ItemRefDto>> getAllItemRefsInUserCollection(
+    ResponseEntity<Page<ItemRefDto>> getAllItemRefsInUserCollection(
             @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
-            @PathVariable(value = "ownerId") String id) {
-        Set<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id) : collectionService.getAllItemRefsInUserCollection(id);
+            @PathVariable(value = "ownerId") String id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "count", defaultValue = "10") int count) {
+        Page<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id, page, count) : collectionService.getAllItemRefsInUserCollection(id, page, count);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 }
