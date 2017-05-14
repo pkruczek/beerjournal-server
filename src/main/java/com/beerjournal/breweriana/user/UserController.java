@@ -31,15 +31,4 @@ class UserController {
         return new ResponseEntity<>(userService.getUserWithId(userId), HttpStatus.OK);
     }
 
-    @PutMapping("{userId}")
-    ResponseEntity<UserDto> modifyUserWithId(@PathVariable(value = "userId") String userId,
-                                           @RequestBody @Validated UserDto user) {
-        return new ResponseEntity<>(userService.modifyUserWithId(userId, user), HttpStatus.OK);
-    }
-
-    @DeleteMapping("{userId}")
-    ResponseEntity<UserDto> deleteUserWithId(@PathVariable(value = "userId") String userId) {
-        return new ResponseEntity<>(userService.deleteUserWithId(userId), HttpStatus.OK);
-    }
-
 }

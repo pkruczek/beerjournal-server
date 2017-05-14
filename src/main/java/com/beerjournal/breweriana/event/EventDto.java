@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-public class EventDto {
+class EventDto {
 
     private final String action;
     private final String date;

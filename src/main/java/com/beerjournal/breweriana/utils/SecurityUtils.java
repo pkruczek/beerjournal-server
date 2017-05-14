@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.utils;
 
+import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.infrastructure.security.BjPrincipal;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.Authentication;
@@ -11,19 +12,27 @@ import org.springframework.stereotype.Component;
 public final class SecurityUtils {
 
     public boolean checkIfAuthorized(String userId) {
-        BjPrincipal currentUser = getCurrentlyLoggedInUser();
-        ObjectId userObjectId = Converters.toObjectId(userId);
-        ObjectId currentUserId = currentUser.getDbUser().getId();
-        return currentUserId.equals(userObjectId);
+        return checkAuthorization(Converters.toObjectId(userId));
     }
 
-    private BjPrincipal getCurrentlyLoggedInUser() {
+    public boolean checkIfAuthorized(ObjectId userId) {
+        return checkAuthorization(userId);
+    }
+
+    public User getCurrentlyLoggedInUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication == null) {
             throw new IllegalStateException("User not found!");
         }
-        return (BjPrincipal) authentication.getPrincipal();
+        BjPrincipal bjPrincipal = (BjPrincipal) authentication.getPrincipal();
+        return bjPrincipal.getDbUser();
+    }
+
+    private boolean checkAuthorization(ObjectId userId) {
+        User currentUser = getCurrentlyLoggedInUser();
+        ObjectId currentUserId = currentUser.getId();
+        return currentUserId.equals(userId);
     }
 
 }
