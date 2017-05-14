@@ -2,13 +2,11 @@ package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.collection.persistence.UserCollection;
 import com.beerjournal.breweriana.collection.persistence.UserCollectionRepository;
-import com.beerjournal.breweriana.utils.ServiceUtils;
+import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
@@ -21,29 +19,24 @@ class CollectionService {
     UserCollectionDto getCollectionByOwnerId(String ownerId) {
         UserCollection userCollection = getUserCollectionOrThrow(ownerId);
 
-        return UserCollectionDto.toDto(userCollection);
+        return UserCollectionDto.of(userCollection);
     }
 
-    Set<ItemRefDto> getAllItemRefsInUserCollection(String userId) {
-        UserCollection userCollection = getUserCollectionOrThrow(userId);
-
-        return userCollection.getItemRefs()
-                .stream()
-                .map(ItemRefDto::toDto)
-                .collect(Collectors.toSet());
+    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count, String filterVariableName, String filterVariableValue) {
+        return userCollectionRepository
+                .findAllInUserCollection(Converters.toObjectId(userId), page, count, filterVariableName, filterVariableValue)
+                .map(ItemRefDto::toDto);
     }
 
-    Set<ItemRefDto> getAllNotInUserCollection(String userId) {
-        return userCollectionRepository.findAllNotInUserCollection(ServiceUtils.stringToObjectId(userId))
-                .stream()
-                .map(ItemRefDto::toDto)
-                .collect(Collectors.toSet());
+    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count, String filterVariableName, String filterVariableValue) {
+        return userCollectionRepository
+                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, filterVariableName, filterVariableValue)
+                .map(ItemRefDto::toDto);
     }
 
     private UserCollection getUserCollectionOrThrow(String userId) {
         return userCollectionRepository
-                .findOneByOwnerId(ServiceUtils.stringToObjectId(userId))
+                .findOneByOwnerId(Converters.toObjectId(userId))
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
     }
-
 }

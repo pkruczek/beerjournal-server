@@ -30,9 +30,28 @@ final class TestUtils {
                 .country("Polska")
                 .type("bottle")
                 .style("zwykłe")
-                .attributes([Attribute.of("volume", 0.5 as Double)] as Set)
+                .attributes([Attribute.of("volume", "0.5")] as Set)
                 .ownerId(ownerId)
                 .build()
+    }
+
+    static def someItems(ownerId, startNameLetter, startTypeLetter) {
+        LinkedList someItems = []
+        for (int i = 0; i < 100; i++) {
+            def item = Item.builder()
+                    .name(startNameLetter + i)
+                    .type(startTypeLetter + i)
+                    .style("style")
+                    .brewery("brewery")
+                    .ownerId(ownerId)
+                    .build()
+            someItems.add(item)
+        }
+        return someItems
+    }
+
+    static def someObjectId() {
+        new ObjectId()
     }
 
     static def someUsers() {

@@ -90,4 +90,25 @@ class CategoryRepositoryTest extends Specification {
         categoryCrudRepository.findAll().size() == 1
     }
 
+    def "should not add new value when similar value exists"() {
+        given:
+        def name = "brewery"
+
+        categoryCrudRepository.save(Category.of(name, [existingValue] as Set))
+
+        when:
+        categoryRepository.ensureCategory(name, providedValue)
+
+        then:
+        def maybeCategory = categoryCrudRepository.findOneByName(name)
+        TestUtils.equalsOptionalValue(maybeCategory, Category.of(name, [existingValue] as Set))
+        categoryCrudRepository.findAll().size() == 1
+
+        where:
+        providedValue   | existingValue
+        "Tyskie"        | "TYSKIE"
+        "   Takie tam " | "TAKIE tAm"
+        "       "       | " "
+    }
+
 }

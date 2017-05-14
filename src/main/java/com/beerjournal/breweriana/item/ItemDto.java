@@ -2,20 +2,24 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.item.persistence.Attribute;
 import com.beerjournal.breweriana.item.persistence.Item;
-import com.beerjournal.breweriana.utils.ServiceUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static com.beerjournal.breweriana.utils.Converters.toObjectId;
+import static com.beerjournal.breweriana.utils.Converters.toStringIds;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-class ItemDto {
+public class ItemDto {
 
     private final String id;
 
@@ -25,9 +29,10 @@ class ItemDto {
     @NotEmpty private final String country;
     @NotEmpty private final String brewery;
     @NotEmpty private final String style;
-    private final Set<Attribute> attributes;
+    @Singular private final Set<Attribute> attributes;
+    @Singular private final Set<String> imageIds;
 
-    static ItemDto toDto(Item item){
+    public static ItemDto of(Item item){
         return ItemDto.builder()
                 .id(item.getId().toHexString())
                 .ownerId(item.getOwnerId().toHexString())
@@ -37,18 +42,19 @@ class ItemDto {
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
                 .attributes(item.getAttributes())
+                .imageIds(toStringIds(item.getImageIds()).collect(Collectors.toSet()))
                 .build();
     }
 
-    static Item fromDto(ItemDto itemDto, String ownerId){
+    static Item asItem(ItemDto itemDto, String ownerId){
         return Item.builder()
-                .ownerId(ServiceUtils.stringToObjectId(ownerId))
+                .ownerId(toObjectId(ownerId))
                 .name(itemDto.getName())
                 .type(itemDto.getType())
                 .country(itemDto.getCountry())
                 .brewery(itemDto.getBrewery())
                 .style(itemDto.getStyle())
-                .attributes(itemDto.getAttributes())
+                .attributes(itemDto.getAttributes() != null ? itemDto.getAttributes() : Collections.emptySet())
                 .build();
     }
 

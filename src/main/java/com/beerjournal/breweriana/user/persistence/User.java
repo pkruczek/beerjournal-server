@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Wither;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,9 +14,10 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Document
 @Data
+@Wither
 @EqualsAndHashCode(exclude = {"id"})
 @RequiredArgsConstructor(access = PRIVATE)
-public class User {
+public final class User {
 
     @Id
     private final ObjectId id;
@@ -24,14 +26,11 @@ public class User {
     @Indexed(unique = true)
     private final String email;
     private final String password;
+    private final ObjectId avatarFileId;
 
     @Builder
-    public static User of(String firstName, String lastName, String email, String password) {
-        return new User(null, firstName, lastName, email, password);
-    }
-
-    public static User copyWithAssignedId(ObjectId id, User user) {
-        return new User(id, user.firstName, user.lastName, user.email, user.password);
+    static User of(String firstName, String lastName, String email, String password, ObjectId avatarFileId) {
+        return new User(null, firstName, lastName, email, password, avatarFileId);
     }
 
 }

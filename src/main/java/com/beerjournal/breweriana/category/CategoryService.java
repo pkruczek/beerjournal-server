@@ -21,7 +21,7 @@ class CategoryService {
         Category category = categoryRepository.findOneByName(name)
                 .orElseThrow(() -> new BeerJournalException(CATEGORY_NOT_FOUND));
 
-        return CategoryDto.toDto(category);
+        return CategoryDto.of(category);
     }
 
     Set<String> getCategories() {
