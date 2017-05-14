@@ -44,12 +44,17 @@ class UserCollectionRepositoryTest extends Specification {
             .ownerId(TestUtils.someObjectId())
             .build()
 
+    LinkedList someOtherItems = []
+    LinkedList savedUserItems = []
+
     def setup() {
         savedUser = userRepository.save(TestUtils.someUser())
         someUserCollection = UserCollection.builder()
                 .ownerId(savedUser.id)
                 .build()
         savedUsersItem = TestUtils.someItem(savedUser.id)
+        someOtherItems = TestUtils.someItems(TestUtils.someObjectId(), "s", "t")
+        savedUserItems = TestUtils.someItems(TestUtils.someObjectId(), "g", "h")
     }
 
     def cleanup() {
@@ -63,7 +68,7 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(someOtherItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10)
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "", "")
 
         then:
         missingItems.getContent() == [someOtherItem.asItemRef()] as List
@@ -75,10 +80,68 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(savedUsersItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10)
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "", "")
 
         then:
         !missingItems.getContent().contains(someOtherItem)
+    }
+
+    def "should return correct page details for not owned items that name starts with 's1'"() {
+        given:
+        crudRepository.save(someUserCollection)
+        itemRepository.save(savedUsersItem)
+        for (item in someOtherItems)
+            itemRepository.save(item as Item)
+
+        when:
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "name", "s1")
+
+        then:
+        missingItems.getTotalElements() == 11 && missingItems.getTotalPages() == 2 && missingItems.getNumberOfElements() == 10
+
+    }
+
+    def "should return correct page details for not owned items that type starts with 't1'"() {
+        given:
+        crudRepository.save(someUserCollection)
+        itemRepository.save(savedUsersItem)
+        for (item in someOtherItems)
+            itemRepository.save(item as Item)
+
+        when:
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, "type", "t1")
+
+        then:
+        missingItems.getTotalElements() == 11 && missingItems.getTotalPages() == 2 && missingItems.getNumberOfElements() == 1
+
+    }
+
+    def "should return correct page details for owned items that name starts with 'g1'"() {
+        given:
+        crudRepository.save(someUserCollection)
+        itemRepository.save(savedUsersItem)
+        for (item in savedUserItems)
+            itemRepository.save(item as Item)
+
+        when:
+        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "name", "g1")
+
+        then:
+        ownedItems.getTotalElements() == 11 && ownedItems.getTotalPages() == 2 && ownedItems.getNumberOfElements() == 10
+    }
+
+    def "should return correct page details for owned items that type starts with 'h1'"() {
+        given:
+        crudRepository.save(someUserCollection)
+        itemRepository.save(savedUsersItem)
+        for (item in savedUserItems)
+            itemRepository.save(item as Item)
+
+        when:
+        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, "type", "h1")
+
+        then:
+        ownedItems.getTotalElements() == 11 && ownedItems.getTotalPages() == 2 && ownedItems.getNumberOfElements() == 1
     }
 
 }

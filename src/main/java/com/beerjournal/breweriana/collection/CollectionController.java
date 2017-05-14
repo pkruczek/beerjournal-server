@@ -20,11 +20,15 @@ class CollectionController {
 
     @GetMapping("{ownerId}/collection/items")
     ResponseEntity<Page<ItemRefDto>> getAllItemRefsInUserCollection(
-            @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
             @PathVariable(value = "ownerId") String id,
+            @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "count", defaultValue = "10") int count) {
-        Page<ItemRefDto> items = lacking ? collectionService.getAllNotInUserCollection(id, page, count) : collectionService.getAllItemRefsInUserCollection(id, page, count);
+            @RequestParam(value = "count", defaultValue = "10") int count,
+            @RequestParam(value = "filterName", defaultValue = "", required = false) String filterVariableName,
+            @RequestParam(value = "filterValue", defaultValue = "", required = false) String filterVariableValue) {
+        Page<ItemRefDto> items = lacking ?
+                collectionService.getAllNotInUserCollection(id, page, count, filterVariableName, filterVariableValue) :
+                collectionService.getAllItemRefsInUserCollection(id, page, count, filterVariableName, filterVariableValue);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 }

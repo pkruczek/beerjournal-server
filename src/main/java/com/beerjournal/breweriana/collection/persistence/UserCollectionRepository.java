@@ -2,6 +2,7 @@ package com.beerjournal.breweriana.collection.persistence;
 
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.infrastructure.error.BeerJournalException;
+import com.google.common.base.Strings;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -18,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
@@ -33,12 +36,18 @@ public class UserCollectionRepository {
         return crudRepository.findOneByOwnerId(ownerId);
     }
 
-    public Page<ItemRef> findAllInUserCollection(ObjectId ownerId, int page, int count) {
+    public Page<ItemRef> findAllInUserCollection(ObjectId ownerId, int page, int count, String filterVariableName, String filterVariableValue) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         List<ItemRef> list = new ArrayList<>(userCollection.getItemRefs());
+
+        Stream<ItemRef> listStream = Strings.isNullOrEmpty(filterVariableValue) ?
+                list.stream() :
+                list.stream().filter(v -> filterVariableName.equals("name") ?
+                        v.getName().startsWith(filterVariableValue) : v.getType().startsWith(filterVariableValue));
+
         return new PageImpl<>(
-                list.stream()
+                listStream
                         .skip(page * count)
                         .limit(count)
                         .collect(Collectors.toList()),
@@ -46,7 +55,7 @@ public class UserCollectionRepository {
                 list.size());
     }
 
-    public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count) {
+    public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count, String filterVariableName, String filterVariableValue) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
@@ -54,7 +63,7 @@ public class UserCollectionRepository {
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
 
-        return findAllNotIn(userItemsNames, new PageRequest(page, count))
+        return findAllNotIn(userItemsNames, new PageRequest(page, count), filterVariableName, filterVariableValue)
                 .map(Item::asItemRef);
     }
 
@@ -106,8 +115,12 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
-    private Page<Item> findAllNotIn(Set<String> userItemsNames, PageRequest pageRequest) {
-        Query query = new Query(Criteria.where("name").not().in(userItemsNames));
+    private Page<Item> findAllNotIn(Set<String> userItemsNames, PageRequest pageRequest, String filterVariableName, String filterVariableValue) {
+        Criteria criteria = Criteria.where("name").not().in(userItemsNames);
+        if (!Strings.isNullOrEmpty(filterVariableValue))
+            criteria = criteria.andOperator(Criteria.where(filterVariableName).regex(Pattern.compile("^" + filterVariableValue)));
+
+        Query query = new Query(criteria);
         long total = mongoOperations.count(query, Item.class);
         List<Item> items = mongoOperations.find(query.with(pageRequest), Item.class);
 

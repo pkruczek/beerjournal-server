@@ -35,6 +35,21 @@ final class TestUtils {
                 .build()
     }
 
+    static def someItems(ownerId, startNameLetter, startTypeLetter) {
+        LinkedList someItems = []
+        for (int i = 0; i < 100; i++) {
+            def item = Item.builder()
+                    .name(startNameLetter + i)
+                    .type(startTypeLetter + i)
+                    .style("style")
+                    .brewery("brewery")
+                    .ownerId(ownerId)
+                    .build()
+            someItems.add(item)
+        }
+        return someItems
+    }
+
     static def someObjectId() {
         new ObjectId()
     }
