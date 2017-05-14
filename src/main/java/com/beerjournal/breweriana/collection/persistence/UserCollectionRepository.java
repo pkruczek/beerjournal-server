@@ -39,11 +39,11 @@ public class UserCollectionRepository {
     public Page<ItemRef> findAllInUserCollection(ObjectId ownerId, int page, int count, String filterVariableName, String filterVariableValue) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
-        List<ItemRef> list = new ArrayList<>(userCollection.getItemRefs());
+        List<ItemRef> userItems = new ArrayList<>(userCollection.getItemRefs());
 
         Stream<ItemRef> listStream = Strings.isNullOrEmpty(filterVariableValue) ?
-                list.stream() :
-                list.stream().filter(v -> filterVariableName.equals("name") ?
+                userItems.stream() :
+                userItems.stream().filter(v -> filterVariableName.equals("name") ?
                         v.getName().startsWith(filterVariableValue) : v.getType().startsWith(filterVariableValue));
 
         return new PageImpl<>(
@@ -52,7 +52,7 @@ public class UserCollectionRepository {
                         .limit(count)
                         .collect(Collectors.toList()),
                 new PageRequest(page, count),
-                list.size());
+                userItems.size());
     }
 
     public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count, String filterVariableName, String filterVariableValue) {
