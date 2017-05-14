@@ -21,6 +21,11 @@ class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtils securityUtils;
 
+    UserDto getLoggedInAccount() {
+        User currentUser = securityUtils.getCurrentlyLoggedInUser();
+        return UserDto.of(currentUser);
+    }
+
     UserDto changeAccountDetails(AccountChangeDetailsDto accountDetails) {
         User currentUser = getUserForModification(accountDetails.getPassword());
         User modifiedUser = currentUser
@@ -80,4 +85,5 @@ class AccountService {
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
+
 }
