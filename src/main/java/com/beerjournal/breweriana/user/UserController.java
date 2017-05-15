@@ -1,12 +1,11 @@
 package com.beerjournal.breweriana.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 
 @RestController
@@ -22,8 +21,11 @@ class UserController {
     }
 
     @GetMapping
-    ResponseEntity<Collection<UserDto>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    ResponseEntity<Page<UserDto>> getUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "count", defaultValue = "10") int count,
+            @RequestParam(value = "firstName", defaultValue = "", required = false) String firstName) {
+        return new ResponseEntity<>(userService.findUsers(page, count, firstName), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")

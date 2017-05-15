@@ -80,9 +80,9 @@ class UserRepositoryTest extends Specification {
         !maybeUser.isPresent()
     }
 
-    def "should return empty set when there is not any user"() {
+    def "should return empty list when there is not any user"() {
         expect:
-        userRepository.findAll().isEmpty()
+        userRepository.findByFirstNameStartsWith(0, 10, "").getContent().isEmpty()
     }
 
     def "should find all users"() {
@@ -90,7 +90,17 @@ class UserRepositoryTest extends Specification {
         userCrudRepository.save(TestUtils.someUsers())
 
         expect:
-        userRepository.findAll() == TestUtils.someUsers()
+        userRepository.findByFirstNameStartsWith(0, 10, "").getContent() as Set == TestUtils.someUsers()
+    }
+
+    def "should find correct page details for users that firstName that starts with 'Ja'"() {
+        setup:
+        userCrudRepository.save(TestUtils.someUsers())
+        userCrudRepository.save(TestUtils.someUser())
+
+        expect:
+        def with = userRepository.findByFirstNameStartsWith(0, 1, "Ja")
+        with.getTotalElements() == 2 && with.getTotalPages() == 2
     }
 
 }
