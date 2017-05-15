@@ -30,12 +30,12 @@ class ExchangeController {
         return new ResponseEntity<>(exchangeService.findExchangesByOwnerId(ownerId), HttpStatus.OK);
     }
 
-    @PutMapping("{id}/accepted")
-    ResponseEntity<Boolean> accept(@PathVariable("id") String exchangeId, @RequestBody boolean accepted) {
-        if(accepted) {
+    @PutMapping("{id}/status")
+    ResponseEntity<EchangeStatusDto> accept(@PathVariable("id") String exchangeId, @RequestBody EchangeStatusDto statusDto) {
+        if(statusDto.isAccepted()) {
             exchangeService.accept(exchangeId);
         }
-        return new ResponseEntity<>(accepted, HttpStatus.OK);
+        return new ResponseEntity<>(statusDto, HttpStatus.OK);
     }
 
 }
