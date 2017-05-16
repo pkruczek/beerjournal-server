@@ -22,15 +22,15 @@ class CollectionService {
         return UserCollectionDto.of(userCollection);
     }
 
-    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count, String filterVariableName, String filterVariableValue) {
+    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count, String name, String category) {
         return userCollectionRepository
-                .findAllInUserCollection(Converters.toObjectId(userId), page, count, filterVariableName, filterVariableValue)
+                .findAllInUserCollection(Converters.toObjectId(userId), page, count, name, category)
                 .map(ItemRefDto::toDto);
     }
 
-    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count, String filterVariableName, String filterVariableValue) {
+    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count, String name, String category) {
         return userCollectionRepository
-                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, filterVariableName, filterVariableValue)
+                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, name, category)
                 .map(ItemRefDto::toDto);
     }
 
