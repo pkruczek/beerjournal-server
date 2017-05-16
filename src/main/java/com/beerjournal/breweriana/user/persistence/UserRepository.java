@@ -23,8 +23,8 @@ public class UserRepository {
     private final MongoOperations mongoOperations;
     private final FileRepository fileRepository;
 
-    public Page<User> findByFirstNameStartsWith(int page, int count, String firstName) {
-        return crudRepository.findByFirstNameStartsWith(firstName, new PageRequest(page, count));
+    public Page<User> findByFirstNameStartsWithAndLastNameStartsWith(String firstName, String lastName, int page, int count) {
+        return crudRepository.findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName, new PageRequest(page, count));
     }
 
     public Optional<User> findOneById(ObjectId objectId) {

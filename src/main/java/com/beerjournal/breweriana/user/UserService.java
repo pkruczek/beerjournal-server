@@ -20,9 +20,9 @@ class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    Page<UserDto> findUsers(int page, int count, String firstName) {
+    Page<UserDto> findUsers(String firstName, String lastName, int page, int count) {
         return userRepository
-                .findByFirstNameStartsWith(page, count, firstName)
+                .findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName,page, count)
                 .map(UserDto::of);
     }
 

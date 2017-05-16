@@ -24,8 +24,9 @@ class UserController {
     ResponseEntity<Page<UserDto>> getUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "count", defaultValue = "10") int count,
-            @RequestParam(value = "firstName", defaultValue = "", required = false) String firstName) {
-        return new ResponseEntity<>(userService.findUsers(page, count, firstName), HttpStatus.OK);
+            @RequestParam(value = "firstname", defaultValue = "", required = false) String firstName,
+            @RequestParam(value = "lastname", defaultValue = "", required = false) String lastName) {
+        return new ResponseEntity<>(userService.findUsers(firstName, lastName, page, count), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")

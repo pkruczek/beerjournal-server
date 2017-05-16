@@ -10,5 +10,5 @@ import java.util.Optional;
 interface UserCrudRepository extends MongoRepository<User, ObjectId> {
     Optional<User> findOneById(ObjectId id);
     Optional<User> findOneByEmail(String email);
-    Page<User> findByFirstNameStartsWith(String firstName, Pageable pageable);
+    Page<User> findByFirstNameStartsWithAndLastNameStartsWith(String firstName, String lastName, Pageable pageable);
 }
