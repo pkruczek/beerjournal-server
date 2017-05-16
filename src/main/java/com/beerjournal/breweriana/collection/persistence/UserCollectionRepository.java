@@ -41,15 +41,15 @@ public class UserCollectionRepository {
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         List<ItemRef> userItems = new ArrayList<>(userCollection.getItemRefs());
 
-        Stream<ItemRef> filtered = Strings.isNullOrEmpty(name) ?
+        Stream<ItemRef> filteredUserItems = Strings.isNullOrEmpty(name) ?
                 userItems.stream() :
                 userItems.stream().filter(v -> v.getName().startsWith(name));
 
-        filtered = Strings.isNullOrEmpty(category) ?
-                filtered :
+        filteredUserItems = Strings.isNullOrEmpty(category) ?
+                filteredUserItems :
                 userItems.stream().filter(v -> v.getType().startsWith(category));
 
-        List<ItemRef> collectedUserItems = filtered.collect(Collectors.toList());
+        List<ItemRef> collectedUserItems = filteredUserItems.collect(Collectors.toList());
 
         return new PageImpl<>(
                 collectedUserItems.stream()
