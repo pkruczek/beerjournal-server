@@ -41,18 +41,20 @@ public class UserCollectionRepository {
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
         List<ItemRef> userItems = new ArrayList<>(userCollection.getItemRefs());
 
-        Stream<ItemRef> listStream = Strings.isNullOrEmpty(filterVariableValue) ?
+        Stream<ItemRef> filteredUserItems = Strings.isNullOrEmpty(filterVariableValue) ?
                 userItems.stream() :
                 userItems.stream().filter(v -> filterVariableName.equals("name") ?
                         v.getName().startsWith(filterVariableValue) : v.getType().startsWith(filterVariableValue));
 
+        List<ItemRef> collectedUserItems = filteredUserItems.collect(Collectors.toList());
+
         return new PageImpl<>(
-                listStream
+                collectedUserItems.stream()
                         .skip(page * count)
                         .limit(count)
                         .collect(Collectors.toList()),
                 new PageRequest(page, count),
-                userItems.size());
+                collectedUserItems.size());
     }
 
     public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count, String filterVariableName, String filterVariableValue) {
