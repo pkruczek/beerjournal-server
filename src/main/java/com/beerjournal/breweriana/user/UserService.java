@@ -6,11 +6,9 @@ import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_DUPLICATE_EMAIL;
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
@@ -22,11 +20,10 @@ class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    Set<UserDto> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(UserDto::of)
-                .collect(Collectors.toSet());
+    Page<UserDto> findUsers(String firstName, String lastName, int page, int count) {
+        return userRepository
+                .findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName,page, count)
+                .map(UserDto::of);
     }
 
     UserDto createUser(UserDto userDto) {
