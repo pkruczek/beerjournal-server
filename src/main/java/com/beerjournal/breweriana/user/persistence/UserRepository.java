@@ -2,9 +2,10 @@ package com.beerjournal.breweriana.user.persistence;
 
 import com.beerjournal.breweriana.file.persistence.FileRepository;
 import com.beerjournal.breweriana.utils.UpdateListener;
-import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -22,10 +23,8 @@ public class UserRepository {
     private final MongoOperations mongoOperations;
     private final FileRepository fileRepository;
 
-    public ImmutableSet<User> findAll() {
-        return ImmutableSet.<User>builder()
-                .addAll(crudRepository.findAll())
-                .build();
+    public Page<User> findByFirstNameStartsWithAndLastNameStartsWith(String firstName, String lastName, int page, int count) {
+        return crudRepository.findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName, new PageRequest(page, count));
     }
 
     public Optional<User> findOneById(ObjectId objectId) {
