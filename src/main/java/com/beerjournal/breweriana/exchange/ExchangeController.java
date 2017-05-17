@@ -31,11 +31,8 @@ class ExchangeController {
     }
 
     @PutMapping("{id}/status")
-    ResponseEntity<EchangeStatusDto> accept(@PathVariable("id") String exchangeId, @RequestBody EchangeStatusDto statusDto) {
-        if(statusDto.isAccepted()) {
-            exchangeService.accept(exchangeId);
-        }
-        return new ResponseEntity<>(statusDto, HttpStatus.OK);
+    ResponseEntity<ExchangeStatusDto> accept(@PathVariable("id") String exchangeId, @RequestBody ExchangeStatusDto statusDto) {
+        return new ResponseEntity<>(exchangeService.updateStatus(exchangeId, statusDto), HttpStatus.OK);
     }
 
 }

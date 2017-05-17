@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Wither
 @EqualsAndHashCode(exclude = {"id"})
 @RequiredArgsConstructor(access = PRIVATE)
-public class ExchangeItemOffer {
+public final class ExchangeItemOffer {
 
     @Id
     private final ObjectId id;
@@ -25,7 +25,7 @@ public class ExchangeItemOffer {
     private final ObjectId ownerId;
     private final ItemRef desiredItem;
     private final Set<ItemRef> offeredItems;
-    private final boolean acceptedByOwner;
+    private final boolean performed;
 
     public Set<ItemRef> getOfferedItems() {
         return Collections.unmodifiableSet(offeredItems);
@@ -33,8 +33,8 @@ public class ExchangeItemOffer {
 
     @Builder
     public static ExchangeItemOffer of(ObjectId offerorId, ObjectId ownerId, ItemRef desiredItem,
-                                       @Singular Set<ItemRef> offeredItems, boolean acceptedByOwner) {
-        return new ExchangeItemOffer(null, offerorId, ownerId, desiredItem, offeredItems, acceptedByOwner);
+                                       @Singular Set<ItemRef> offeredItems, boolean performed) {
+        return new ExchangeItemOffer(null, offerorId, ownerId, desiredItem, offeredItems, performed);
     }
 
 }

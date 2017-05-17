@@ -5,6 +5,7 @@ import com.beerjournal.breweriana.exchange.persitence.ExchangeItemOffer;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,14 +16,14 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-public class ExchangeItemOfferDetailsDto {
+class ExchangeItemOfferDetailsDto {
 
     private final String id;
     private final String offerorId;
     private final String ownerId;
     private final ItemRefDto desiredItem;
-    private final Set<ItemRefDto> offeredItems;
-    private final boolean acceptedByOwner;
+    @Singular  private final Set<ItemRefDto> offeredItems;
+    private final boolean performed;
 
     static ExchangeItemOfferDetailsDto of(ExchangeItemOffer offer) {
         Set<ItemRefDto> offeredItems = offer.getOfferedItems()
@@ -36,7 +37,7 @@ public class ExchangeItemOfferDetailsDto {
                 .ownerId(toStringId(offer.getOwnerId()))
                 .desiredItem(ItemRefDto.toDto(offer.getDesiredItem()))
                 .offeredItems(offeredItems)
-                .acceptedByOwner(offer.isAcceptedByOwner())
+                .performed(offer.isPerformed())
                 .build();
     }
 
