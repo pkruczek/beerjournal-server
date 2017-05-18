@@ -38,7 +38,7 @@ class ItemService {
         verifyUser(ownerId);
         verifyItem(ownerId, itemId);
 
-        Item deletedItem = itemRepository.delete(itemId);
+        Item deletedItem = itemRepository.delete(toObjectId(itemId));
         return ItemDto.of(deletedItem);
     }
 

@@ -1,7 +1,6 @@
 package com.beerjournal.breweriana.item.persistence;
 
 import com.beerjournal.breweriana.file.persistence.FileRepository;
-import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
@@ -31,11 +30,13 @@ public class ItemRepository {
         return savedItem;
     }
 
-    public Item delete(String itemId) {
-        Item itemToDelete = crudRepository.findOneById(Converters.toObjectId(itemId))
+    public Item delete(ObjectId itemId) {
+        Item itemToDelete = crudRepository.findOneById(itemId)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
 
         deleteImages(itemToDelete);
+        crudRepository.delete(itemId);
+
         notifyDelete(itemToDelete);
         return itemToDelete;
     }
