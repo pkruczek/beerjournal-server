@@ -22,7 +22,8 @@ class AccountService {
     private final SecurityUtils securityUtils;
 
     UserDto getLoggedInAccount() {
-        User currentUser = securityUtils.getCurrentlyLoggedInUser();
+        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
+        User currentUser = verifyUser(userObjectId);
         return UserDto.of(currentUser);
     }
 
@@ -56,7 +57,7 @@ class AccountService {
     }
 
     private User getUserForModification(String password) {
-        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUser().getId();
+        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
         User currentUser = verifyUser(userObjectId);
         verifyPasswordEquality(password, currentUser);
         return currentUser;
