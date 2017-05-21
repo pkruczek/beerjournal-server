@@ -32,6 +32,12 @@ class ExchangeService {
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
 
+    ExchangeItemOfferDetailsDto findExchangeById(String id) {
+        ExchangeItemOffer exchangeItemOffer = exchangeRepository.findOneById(toObjectId(id))
+                .orElseThrow(() -> new BeerJournalException(ErrorInfo.EXCHANGE_NOT_FOUND));
+        return ExchangeItemOfferDetailsDto.of(exchangeItemOffer);
+    }
+
     ExchangeItemOfferDetailsDto createExchange(ExchangeItemOfferCreateDto createDto) {
         ExchangeItemOffer exchangeItemOffer = exchangeRepository.save(toExchangeItemOffer(createDto));
         return ExchangeItemOfferDetailsDto.of(exchangeItemOffer);

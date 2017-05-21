@@ -15,6 +15,11 @@ class ExchangeController {
 
     private final ExchangeService exchangeService;
 
+    @GetMapping("{id}")
+    ResponseEntity<ExchangeItemOfferDetailsDto> getExchangeById(@PathVariable String id) {
+        return new ResponseEntity<>(exchangeService.findExchangeById(id), HttpStatus.OK);
+    }
+
     @PostMapping
     ResponseEntity<ExchangeItemOfferDetailsDto> addExchange(@RequestBody @Validated ExchangeItemOfferCreateDto exchangeDto) {
         return new ResponseEntity<>(exchangeService.createExchange(exchangeDto), HttpStatus.CREATED);
