@@ -31,6 +31,10 @@ public enum ErrorInfo {
     // Files
     FILE_NOT_FOUND(4103, "File not found", HttpStatus.NOT_FOUND),
 
+    //Exchanges
+    EXCHANGE_NOT_FOUND(4104, "Exchange not found", HttpStatus.NOT_FOUND),
+    EXCHANGE_FORBIDDEN_MODIFICATION(4105, "You do not have permission to modify that exchange", HttpStatus.FORBIDDEN),
+
     // Server
     INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.INTERNAL_SERVER_ERROR);
 

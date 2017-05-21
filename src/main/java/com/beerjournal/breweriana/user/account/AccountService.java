@@ -21,6 +21,12 @@ class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtils securityUtils;
 
+    UserDto getLoggedInAccount() {
+        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
+        User currentUser = verifyUser(userObjectId);
+        return UserDto.of(currentUser);
+    }
+
     UserDto changeAccountDetails(AccountChangeDetailsDto accountDetails) {
         User currentUser = getUserForModification(accountDetails.getPassword());
         User modifiedUser = currentUser
@@ -51,7 +57,7 @@ class AccountService {
     }
 
     private User getUserForModification(String password) {
-        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUser().getId();
+        ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
         User currentUser = verifyUser(userObjectId);
         verifyPasswordEquality(password, currentUser);
         return currentUser;
@@ -80,4 +86,5 @@ class AccountService {
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
+
 }

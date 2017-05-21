@@ -19,19 +19,18 @@ public final class SecurityUtils {
         return checkAuthorization(userId);
     }
 
-    public User getCurrentlyLoggedInUser() {
+    public ObjectId getCurrentlyLoggedInUserId() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication == null) {
             throw new IllegalStateException("User not found!");
         }
         BjPrincipal bjPrincipal = (BjPrincipal) authentication.getPrincipal();
-        return bjPrincipal.getDbUser();
+        return bjPrincipal.getDbUser().getId();
     }
 
     private boolean checkAuthorization(ObjectId userId) {
-        User currentUser = getCurrentlyLoggedInUser();
-        ObjectId currentUserId = currentUser.getId();
+        ObjectId currentUserId = getCurrentlyLoggedInUserId();
         return currentUserId.equals(userId);
     }
 
