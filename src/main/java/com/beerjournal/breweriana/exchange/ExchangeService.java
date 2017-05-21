@@ -100,7 +100,7 @@ class ExchangeService {
     }
 
     private void changeOwner(ObjectId itemId, ObjectId newOwnerId) {
-        Item item = itemRepository.delete(itemId);
+        Item item = itemRepository.deleteLeavingImages(itemId);
         itemRepository.save(item
                 .withId(null)
                 .withOwnerId(newOwnerId));
