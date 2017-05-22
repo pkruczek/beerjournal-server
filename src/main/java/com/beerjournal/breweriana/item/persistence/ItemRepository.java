@@ -31,10 +31,16 @@ public class ItemRepository {
     }
 
     public Item delete(ObjectId itemId) {
+        Item itemToDelete = deleteLeavingImages(itemId);
+        deleteImages(itemToDelete);
+
+        return itemToDelete;
+    }
+
+    public Item deleteLeavingImages(ObjectId itemId) {
         Item itemToDelete = crudRepository.findOneById(itemId)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
 
-        deleteImages(itemToDelete);
         crudRepository.delete(itemId);
 
         notifyDelete(itemToDelete);
