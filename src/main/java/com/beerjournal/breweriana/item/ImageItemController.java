@@ -18,7 +18,7 @@ class ImageItemController {
     private final ImageItemService imageItemService;
 
     @GetMapping("items/{itemId}/images")
-    public ResponseEntity<Set<String>> getItemImageIds(@RequestParam("itemId") String itemId) {
+    public ResponseEntity<Set<String>> getItemImageIds(@PathVariable("itemId") String itemId) {
         return new ResponseEntity<>(imageItemService.getItemImageIds(itemId), HttpStatus.OK);
     }
 
