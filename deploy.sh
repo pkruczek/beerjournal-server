@@ -10,7 +10,7 @@ ssh -t $SSH_USER@$SSH_HOST << EOF
     cd deploy/server/target/
 	screen -L -dmS server-deploy java -jar -Dspring.profiles.active=prod bj-server-0.0.1-SNAPSHOT.jar
 	curl -X POST -H 'Content-type: application/json' \
-	--data '{"text":"New server version deployed. Check it out under SSH_HOST:8080/swagger-ui.html"}' \
+	--data '{"text":"New server version deployed. Check it out under $SSH_HOST:8081/swagger-ui.html"}' \
  	$SLACK_WEBHOOK
 	echo "Done"
 	exit
