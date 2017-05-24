@@ -6,7 +6,7 @@ cache:
   directories:
   - "$HOME/.m2"
 addons:
-  ssh_known_hosts: $SSH_HOST
+  ssh_known_hosts: vps394659.ovh.net
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_08f8a0b6216a_key -iv $encrypted_08f8a0b6216a_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
 - eval "$(ssh-agent -s)"
