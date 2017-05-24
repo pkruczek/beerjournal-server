@@ -1,10 +1,20 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 services: mongodb
 cache:
   directories:
-    - $HOME/.m2
-notifications:
-  slack:
-    secure: Wi4nJqgTDHLxzQ2kY+dbNE9rnVYzSpKnPlVnRUBIWmvWylNw1KRHq/2sAT//eE829YkslHP1GkNrh2CYKzc6crNQD7N6cDF50uzHG5cnDbU3CqHzvP8HQINx8TQzPpS5l5/AiUGbEsO2gkms09Zfvxlxu/LUl+D+RO+Sc47mVzWnZ21T7y89jTJ+bkCm+YnxwVf9HfwDDQw0YORV/AedOOLNK1mX2SmeCpmK8If5DHi+fRSXs6ZuFH8phhfbzuKLB09mmNNKuq0/rPYmvcwGCB2LYJVyC8mchgcyRV4zihfs3tRpnAvRKSaZVxbdPy3ZZ2NatXGt+DCuSFB8z584bRRxVdPnSd5YIPxkpNALaqiEFK4RcmTRFVBzeM+OWQJdwDpkrWvsGV+Z54p2EQU+Vu9YX9uMkG9SlpMfNXk4OLwl5mEaT3fLDieAtbxvqGj9j6zs7ukdU7iELlHmPE2BBhcPIWeHv8iGf+sQdnsxvmIEUX6ZWosQs7AekD8B5Vzbopna0/DHV4x0BcCF3KypuYQ54CKBgJpKccAsSqJqgfo6gJN2EzxakvSKO913pWu0Sij0ZlfM0q4195ltyLaHKEZYHqDIPO26K/gxgELx7enyC/WIe7ZzXTHO+Ar9xXgfol72djdgcM/ZyEGsS1ACpZagPPPQSLDJcFfZq03xlyE=
+  - "$HOME/.m2"
+addons:
+  ssh_known_hosts: $SSH_HOST
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_08f8a0b6216a_key -iv $encrypted_08f8a0b6216a_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
+deploy:
+  provider: script
+  script: sh deploy.sh
+  skip_cleanup: true
+  on:
+    branch: master
