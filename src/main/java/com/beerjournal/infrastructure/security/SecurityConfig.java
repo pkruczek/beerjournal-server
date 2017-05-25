@@ -64,9 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private void configureCacheHeaders(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/api/files/**").headers().cacheControl().disable()
-                .and()
-                .antMatcher("/api/users/*/avatar").headers().cacheControl().disable();
+                .headers()
+                .cacheControl()
+                .disable();
     }
 
     private void configureLogin(HttpSecurity http) throws Exception {
