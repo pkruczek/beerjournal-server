@@ -51,7 +51,15 @@ public final class Item {
                 .name(name)
                 .type(type)
                 .itemId(id)
+                .imageId(getSingleImageId())
                 .build();
+    }
+
+    public ObjectId getSingleImageId() {
+        return imageIds
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     public Item withNewImageId(ObjectId imageId) {

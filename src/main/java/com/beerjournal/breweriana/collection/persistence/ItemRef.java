@@ -12,5 +12,5 @@ public final class ItemRef {
     private final ObjectId itemId;
     private final String name;
     private final String type;
-    //TODO: picture
+    private final ObjectId imageId;
 }
