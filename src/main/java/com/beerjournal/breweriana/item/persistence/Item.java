@@ -3,7 +3,11 @@ package com.beerjournal.breweriana.item.persistence;
 import com.beerjournal.breweriana.collection.persistence.ItemRef;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.Wither;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -29,13 +33,14 @@ public final class Item {
     private final String country;
     private final String brewery;
     private final String style;
+    private final ObjectId mainImageId;
     private final Set<Attribute> attributes;
     private final Set<ObjectId> imageIds;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds);
+                   ObjectId mainImageId, @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
+        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds);
     }
 
     public Set<Attribute> getAttributes() {
@@ -51,15 +56,8 @@ public final class Item {
                 .name(name)
                 .type(type)
                 .itemId(id)
-                .imageId(getSingleImageId())
+                .imageId(mainImageId)
                 .build();
-    }
-
-    public ObjectId getSingleImageId() {
-        return imageIds
-                .stream()
-                .findFirst()
-                .orElse(null);
     }
 
     public Item withNewImageId(ObjectId imageId) {
@@ -68,6 +66,19 @@ public final class Item {
 
     public Item withoutImageId(ObjectId imageId) {
         return withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
+    }
+
+    public Item withMainImageId() {
+        return withMainImageId(getNewOrExistingMainImageId());
+    }
+
+    private ObjectId getNewOrExistingMainImageId() {
+        if (mainImageId != null) {
+            return mainImageId;
+        } else return imageIds
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 }

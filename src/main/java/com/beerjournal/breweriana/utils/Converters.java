@@ -41,12 +41,15 @@ public final class Converters {
                 .map(Converters::toStringId);
     }
 
-    public static Instant toInstant(ObjectId objectId){
+    public static Instant toInstant(ObjectId objectId) {
         return new Date(objectId.getTimestamp() * 1000L).toInstant();
     }
 
     public static Map<String, String> toMap(ObjectId id) {
-        return ImmutableMap.of("id", id.toHexString());
+        if (id == null) {
+            return null;
+        }
+        return ImmutableMap.of("id", toStringId(id));
     }
 
 }

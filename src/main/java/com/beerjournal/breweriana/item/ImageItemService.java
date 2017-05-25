@@ -35,17 +35,28 @@ class ImageItemService {
                 .collect(Collectors.toSet());
     }
 
+    Map<String, String> getItemMainImageId(String itemId) {
+        return Converters.toMap(getItemInstance(itemId).getMainImageId());
+    }
+
     Map<String, String> saveImageItem(MultipartFile multipartFile, String itemId, String userId) throws IOException {
         if (!securityUtils.checkIfAuthorized(userId)) throw new BeerJournalException(IMAGE_FORBIDDEN_MODIFICATION);
 
         Item item = getItemInstance(itemId);
-        String originalFilename = multipartFile.getOriginalFilename();
+        ObjectId imageId = saveImage(multipartFile);
+        Item itemToUpdate = item
+                .withNewImageId(imageId)
+                .withMainImageId();
+        itemRepository.update(itemToUpdate);
+        return Converters.toMap(imageId);
+    }
 
-        if (!imageValidator.hasImageExtension(originalFilename) || !imageValidator.isImage(multipartFile))
-            throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_TYPE);
+    Map<String, String> saveMainImageItem(MultipartFile multipartFile, String itemId, String userId) throws IOException {
+        if (!securityUtils.checkIfAuthorized(userId)) throw new BeerJournalException(IMAGE_FORBIDDEN_MODIFICATION);
 
-        ObjectId imageId = fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
-        Item itemToUpdate = item.withNewImageId(imageId);
+        Item item = getItemInstance(itemId);
+        ObjectId imageId = saveImage(multipartFile);
+        Item itemToUpdate = item.withMainImageId(imageId);
         itemRepository.update(itemToUpdate);
         return Converters.toMap(imageId);
     }
@@ -63,9 +74,19 @@ class ImageItemService {
         return Converters.toMap(imageId);
     }
 
+    private ObjectId saveImage(MultipartFile multipartFile) throws IOException {
+        String originalFilename = multipartFile.getOriginalFilename();
+
+        if (!imageValidator.hasImageExtension(originalFilename) || !imageValidator.isImage(multipartFile))
+            throw new BeerJournalException(ErrorInfo.UNSUPPORTED_IMAGE_TYPE);
+
+        return fileRepository.saveFile(multipartFile.getInputStream(), originalFilename, multipartFile.getContentType());
+    }
+
     private Item getItemInstance(String itemId) {
         return itemRepository
                 .findOneById(Converters.toObjectId(itemId))
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
     }
+
 }

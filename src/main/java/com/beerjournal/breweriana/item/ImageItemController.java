@@ -22,6 +22,11 @@ class ImageItemController {
         return new ResponseEntity<>(imageItemService.getItemImageIds(itemId), HttpStatus.OK);
     }
 
+    @GetMapping("items/{itemId}/main-image")
+    public ResponseEntity<Map<String, String>> getItemMainImage(@PathVariable("itemId") String itemId) {
+        return new ResponseEntity<>(imageItemService.getItemMainImageId(itemId), HttpStatus.OK);
+    }
+
     @PostMapping("users/{userId}/collection/items/{itemId}/images")
     public ResponseEntity<Map<String, String>> handleItemImageUpload(
             @PathVariable("userId") String userId,
@@ -30,7 +35,15 @@ class ImageItemController {
         return new ResponseEntity<>(imageItemService.saveImageItem(file, itemId, userId), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("{userId}/collection/items/{itemId}/images/{imageId}")
+    @PostMapping("users/{userId}/collection/items/{itemId}/main-image")
+    public ResponseEntity<Map<String, String>> handleItemMainImageUpload(
+            @PathVariable("userId") String userId,
+            @PathVariable("itemId") String itemId,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return new ResponseEntity<>(imageItemService.saveMainImageItem(file, itemId, userId), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("users/{userId}/collection/items/{itemId}/images/{imageId}")
     public ResponseEntity<Map<String, String>> deleteItemImage(@PathVariable("userId") String userId,
                                              @PathVariable("itemId") String itemId,
                                              @PathVariable("imageId") String imageId) {

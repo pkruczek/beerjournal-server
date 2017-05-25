@@ -116,7 +116,7 @@ public class UserCollectionRepository {
                 new Update()
                         .set("itemRefs.$.name", item.getName())
                         .set("itemRefs.$.type", item.getType())
-                        .set("itemRefs.$.imageId", item.getSingleImageId()),
+                        .set("itemRefs.$.imageId", item.getMainImageId()),
                 UserCollection.class);
 
         return writeResult.getN();
