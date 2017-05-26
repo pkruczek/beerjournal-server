@@ -12,8 +12,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.beerjournal.breweriana.utils.Converters.toObjectId;
-import static com.beerjournal.breweriana.utils.Converters.toStringIds;
+import static com.beerjournal.breweriana.utils.Converters.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -34,8 +33,8 @@ public class ItemDto {
 
     public static ItemDto of(Item item){
         return ItemDto.builder()
-                .id(item.getId().toHexString())
-                .ownerId(item.getOwnerId().toHexString())
+                .id(toStringId(item.getId()))
+                .ownerId(toStringId(item.getOwnerId()))
                 .name(item.getName())
                 .type(item.getType())
                 .country(item.getCountry())

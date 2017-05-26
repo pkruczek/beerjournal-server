@@ -15,13 +15,13 @@ public class RatingController {
 
     private final RatingService ratingService;
 
-    @GetMapping("item/{itemId}")
-    ResponseEntity<Collection<RatingDto>> getItemRatings(@PathVariable(value = "itemId") String itemId) {
+    @GetMapping(params = "itemId")
+    ResponseEntity<Collection<RatingDto>> getItemRatings(@RequestParam String itemId) {
         return new ResponseEntity<>(ratingService.getItemRatings(itemId), HttpStatus.OK);
     }
 
-    @GetMapping("user/{userId}")
-    ResponseEntity<Collection<RatingDto>> getUserRatings(@PathVariable(value = "userId") String userId) {
+    @GetMapping(params = "userId")
+    ResponseEntity<Collection<RatingDto>> getUserRatings(@RequestParam String userId) {
         return new ResponseEntity<>(ratingService.getUserRatings(userId), HttpStatus.OK);
     }
 
@@ -31,7 +31,7 @@ public class RatingController {
     }
 
     @DeleteMapping
-    ResponseEntity<RatingDto> deleteRating(@PathVariable(value = "ratingId") String ratingId) {
+    ResponseEntity<RatingDto> deleteRating(@RequestParam String ratingId) {
         return new ResponseEntity<>(ratingService.deleteRating(ratingId), HttpStatus.OK);
     }
 }

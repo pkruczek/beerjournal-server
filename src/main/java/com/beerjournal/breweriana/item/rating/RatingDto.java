@@ -29,7 +29,7 @@ public class RatingDto {
 
     public static RatingDto of(Rating rating) {
         return RatingDto.builder()
-                .id(rating.getId().toHexString())
+                .id(toStringId(rating.getId()))
                 .itemId(toStringId(rating.getItemId()))
                 .raterId(toStringId(rating.getRaterId()))
                 .value(rating.getValue())
