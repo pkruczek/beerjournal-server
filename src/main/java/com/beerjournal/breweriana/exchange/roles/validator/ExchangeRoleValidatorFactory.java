@@ -14,7 +14,7 @@ public class ExchangeRoleValidatorFactory {
     private final Set<ExchangeRoleValidator> validators;
     private final Map<ExchangeRole, ExchangeRoleValidator> validatorMapping;
 
-    public ExchangeRoleValidatorFactory(Set<ExchangeRoleValidator> validators) {
+    private ExchangeRoleValidatorFactory(Set<ExchangeRoleValidator> validators) {
         this.validators = validators;
         this.validatorMapping = validatorMapping();
     }

@@ -6,8 +6,10 @@ import com.beerjournal.breweriana.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = PRIVATE)
 class OwnerValidator implements ExchangeRoleValidator {
 
     private final SecurityUtils securityUtils;

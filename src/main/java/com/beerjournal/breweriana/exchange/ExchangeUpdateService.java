@@ -20,7 +20,7 @@ import static com.beerjournal.breweriana.utils.Converters.toStringId;
 
 @Service
 @RequiredArgsConstructor
-public class ExchangeUpdateService {
+class ExchangeUpdateService {
 
     private final ExchangeRepository exchangeRepository;
     private final UserCollectionRepository userCollectionRepository;
