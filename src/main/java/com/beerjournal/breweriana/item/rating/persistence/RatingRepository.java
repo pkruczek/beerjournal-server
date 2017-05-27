@@ -1,7 +1,9 @@
 package com.beerjournal.breweriana.item.rating.persistence;
 
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
+import com.beerjournal.breweriana.item.rating.ItemIdAndRatings;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
+import com.beerjournal.breweriana.utils.UpdateListener;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.beerjournal.infrastructure.error.ErrorInfo;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class RatingRepository {
     private final RatingCrudRepository ratingCrudRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final Set<UpdateListener<ItemIdAndRatings>> ratingUpdateListeners;
 
     public Set<Rating> findRatingsByItemId(ObjectId itemId) {
         return ratingCrudRepository.findAllByItemId(itemId);
@@ -34,7 +37,10 @@ public class RatingRepository {
                 .findOneByItemIdAndRaterId(rating.getItemId(), rating.getRaterId());
         existingRating.ifPresent(ratingCrudRepository::delete);
 
-        return ratingCrudRepository.save(rating);
+        Rating savedRating = ratingCrudRepository.save(rating);
+
+        notifyUpdate(savedRating.getItemId());
+        return savedRating;
     }
 
     private void validateRating(Rating rating) {
@@ -48,6 +54,15 @@ public class RatingRepository {
         Rating ratingToDelete = ratingCrudRepository.findOneById(ratingId)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.RATING_NOT_FOUND));
         ratingCrudRepository.delete(ratingId);
+
+        notifyUpdate(ratingToDelete.getItemId());
         return ratingToDelete;
+    }
+
+    private void notifyUpdate(ObjectId itemId) {
+        ratingUpdateListeners.forEach(listener -> {
+            Set<Rating> itemRatings = ratingCrudRepository.findAllByItemId(itemId);
+            listener.onUpdate(new ItemIdAndRatings(itemId, itemRatings));
+        });
     }
 }

@@ -46,8 +46,10 @@ class ItemService {
         verifyUser(ownerId);
         verifyItem(ownerId, itemId);
 
+        double averageRating = getItemRating(itemId);
         Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
-                .withId(toObjectId(itemId));
+                .withId(toObjectId(itemId))
+                .withAverageRating(averageRating);
 
         Item updatedItem = itemRepository.update(itemToUpdate);
         return ItemDto.of(updatedItem);
@@ -67,5 +69,11 @@ class ItemService {
         if (!item.getOwnerId().equals(toObjectId(ownerId))) {
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
         }
+    }
+
+    private double getItemRating(String itemId) {
+        Item item = itemRepository.findOneById(toObjectId(itemId))
+                .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
+        return item.getAverageRating();
     }
 }
