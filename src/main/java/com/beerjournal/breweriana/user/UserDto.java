@@ -25,7 +25,7 @@ public class UserDto {
 
     public static UserDto of(User user){
         return UserDto.builder()
-                .id(user.getId().toHexString())
+                .id(toStringId(user.getId()))
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .avatarFileId(toStringId(user.getAvatarFileId()))
