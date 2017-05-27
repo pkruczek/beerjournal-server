@@ -1,7 +1,7 @@
 package com.beerjournal.breweriana.item.rating.persistence;
 
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
-import com.beerjournal.breweriana.item.rating.ItemIdAndRatings;
+import com.beerjournal.breweriana.item.rating.ItemRatings;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.utils.UpdateListener;
 import com.beerjournal.infrastructure.error.BeerJournalException;
@@ -20,7 +20,7 @@ public class RatingRepository {
     private final RatingCrudRepository ratingCrudRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private final Set<UpdateListener<ItemIdAndRatings>> ratingUpdateListeners;
+    private final Set<UpdateListener<ItemRatings>> ratingUpdateListeners;
 
     public Set<Rating> findRatingsByItemId(ObjectId itemId) {
         return ratingCrudRepository.findAllByItemId(itemId);
@@ -60,9 +60,7 @@ public class RatingRepository {
     }
 
     private void notifyUpdate(ObjectId itemId) {
-        ratingUpdateListeners.forEach(listener -> {
-            Set<Rating> itemRatings = ratingCrudRepository.findAllByItemId(itemId);
-            listener.onUpdate(new ItemIdAndRatings(itemId, itemRatings));
-        });
+        Set<Rating> itemRatings = ratingCrudRepository.findAllByItemId(itemId);
+        ratingUpdateListeners.forEach(listener -> listener.onUpdate(new ItemRatings(itemId, itemRatings)));
     }
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Data
-public class ItemIdAndRatings {
+public class ItemRatings {
     private final ObjectId itemId;
     private final Set<Rating> ratings;
 }
