@@ -61,6 +61,6 @@ public class RatingRepository {
 
     private void notifyUpdate(ObjectId itemId) {
         Set<Rating> itemRatings = ratingCrudRepository.findAllByItemId(itemId);
-        ratingUpdateListeners.forEach(listener -> listener.onUpdate(new ItemRatings(itemId, itemRatings)));
+        ratingUpdateListeners.forEach(listener -> listener.onUpdate(ItemRatings.of(itemId, itemRatings)));
     }
 }
