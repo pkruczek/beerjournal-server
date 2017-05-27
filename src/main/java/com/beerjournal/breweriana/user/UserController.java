@@ -25,8 +25,10 @@ class UserController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "count", defaultValue = "10") int count,
             @RequestParam(value = "firstname", defaultValue = "", required = false) String firstName,
-            @RequestParam(value = "lastname", defaultValue = "", required = false) String lastName) {
-        return new ResponseEntity<>(userService.findUsers(firstName, lastName, page, count), HttpStatus.OK);
+            @RequestParam(value = "lastname", defaultValue = "", required = false) String lastName,
+            @RequestParam(value = "sortBy", defaultValue = "jointime") String sortBy,
+            @RequestParam(value = "sortType", defaultValue = "desc") String sortType) {
+        return new ResponseEntity<>(userService.findUsers(firstName, lastName, page, count, sortBy, sortType), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
