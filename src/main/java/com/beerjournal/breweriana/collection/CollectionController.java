@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -24,11 +26,12 @@ class CollectionController {
             @RequestParam(value = "lacking", defaultValue = "false") boolean lacking,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "count", defaultValue = "10") int count,
-            @RequestParam(value = "name", defaultValue = "", required = false) String name,
-            @RequestParam(value = "category", defaultValue = "", required = false) String category) {
+            @RequestParam(value = "sortBy", defaultValue = "createtime") String sortBy,
+            @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
+            @RequestParam(required = false) Map<String,String> filterRequestParams) {
         Page<ItemRefDto> items = lacking ?
-                collectionService.getAllNotInUserCollection(id, page, count, name, category) :
-                collectionService.getAllItemRefsInUserCollection(id, page, count, name, category);
+                collectionService.getAllNotInUserCollection(id, page, count, filterRequestParams, sortBy, sortType) :
+                collectionService.getAllItemRefsInUserCollection(id, page, count, filterRequestParams.get("name"), filterRequestParams.get("category"));
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 }
