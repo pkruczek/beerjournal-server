@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Map;
 
@@ -28,10 +29,10 @@ class CollectionController {
             @RequestParam(value = "count", defaultValue = "10") int count,
             @RequestParam(value = "sortBy", defaultValue = "createtime") String sortBy,
             @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
-            @RequestParam(required = false) Map<String,String> filterRequestParams) {
+            @ApiIgnore @RequestParam(required = false) Map<String,String> filterRequestParams) {
         Page<ItemRefDto> items = lacking ?
                 collectionService.getAllNotInUserCollection(id, page, count, filterRequestParams, sortBy, sortType) :
-                collectionService.getAllItemRefsInUserCollection(id, page, count, filterRequestParams.get("name"), filterRequestParams.get("category"));
+                collectionService.getAllItemRefsInUserCollection(id, page, count, filterRequestParams, sortBy, sortType);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 }

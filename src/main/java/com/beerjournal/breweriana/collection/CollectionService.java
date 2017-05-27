@@ -24,15 +24,25 @@ class CollectionService {
         return UserCollectionDto.of(userCollection);
     }
 
-    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count, String name, String category) {
+    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId,
+                                                    int page,
+                                                    int count,
+                                                    Map<String, String> filterRequestParams,
+                                                    String sortBy,
+                                                    String sortType) {
         return userCollectionRepository
-                .findAllInUserCollection(Converters.toObjectId(userId), page, count, name, category)
+                .findAllInUserCollection(Converters.toObjectId(userId), page, count, filterRequestParams, sortBy, sortType)
                 .map(ItemRefDto::toDto);
     }
 
-    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count, Map<String, String> allRequestParams, String sortBy, String sortType) {
+    Page<ItemRefDto> getAllNotInUserCollection(String userId,
+                                               int page,
+                                               int count,
+                                               Map<String, String> filterRequestParams,
+                                               String sortBy,
+                                               String sortType) {
         return userCollectionRepository
-                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, allRequestParams, sortBy, sortType)
+                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, filterRequestParams, sortBy, sortType)
                 .map(ItemRefDto::toDto);
     }
 
