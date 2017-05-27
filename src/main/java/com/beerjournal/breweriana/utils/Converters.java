@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.utils;
 
+import com.beerjournal.breweriana.exchange.persistence.ExchangeState;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.google.common.collect.ImmutableMap;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.MALFORMED_ID;
+import static com.beerjournal.infrastructure.error.ErrorInfo.MALFORMED_STATE;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -49,4 +51,15 @@ public final class Converters {
         return ImmutableMap.of("id", id.toHexString());
     }
 
+    public static String toStringState(ExchangeState state) {
+        return state.toString();
+    }
+
+    public static ExchangeState toOfferState(String state) {
+        try {
+            return ExchangeState.valueOf(state);
+        } catch (IllegalArgumentException e) {
+            throw new BeerJournalException(MALFORMED_STATE);
+        }
+    }
 }

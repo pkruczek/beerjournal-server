@@ -3,8 +3,8 @@ package com.beerjournal.breweriana.exchange;
 import lombok.Data;
 
 @Data(staticConstructor = "of")
-class ExchangeStatusDto {
+class ExchangeStateDto {
 
-    private final boolean performed;
+    private final String state;
 
 }
