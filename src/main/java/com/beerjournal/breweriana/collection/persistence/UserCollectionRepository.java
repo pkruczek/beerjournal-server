@@ -5,6 +5,7 @@ import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.google.common.base.Strings;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,7 +49,7 @@ public class UserCollectionRepository {
     public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId,
                                                     int page,
                                                     int count,
-                                                    Map<String,String> filterRequestParams,
+                                                    Map<String, String> filterRequestParams,
                                                     String sortBy,
                                                     String sortType) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
@@ -119,8 +120,14 @@ public class UserCollectionRepository {
         List<Criteria> filterCriterias = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
-            if (entry.getKey().matches("name|type|country|brewery|style") && !Strings.isNullOrEmpty(entry.getValue())) {
-                filterCriterias.add(Criteria.where(entry.getKey()).regex(Pattern.compile("^" + entry.getValue())));
+            if (entry.getKey().matches("name|type|country|brewery|style|averagerating") && !Strings.isNullOrEmpty(entry.getValue())) {
+                if (entry.getKey().equals("averagerating")) {
+                    if (NumberUtils.isParsable(entry.getValue()))
+                        filterCriterias.add(Criteria.where("averageRating").is(Double.valueOf(entry.getValue())));
+                } else {
+                    filterCriterias.add(Criteria.where(entry.getKey()).regex(Pattern.compile("^" + entry.getValue())));
+
+                }
             }
         }
 
@@ -131,10 +138,10 @@ public class UserCollectionRepository {
         long total = mongoOperations.count(query, Item.class);
         query.with(pageRequest);
 
-        if (sortBy.matches("name|type|country|brewery|style|createtime")) {
+        if (sortBy.matches("name|type|country|brewery|style|createtime|averagerating")) {
             query.with(new Sort(new Sort.Order(
                     sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                    sortBy.equals("createtime") ? "_id" : sortBy)));
+                    sortBy.equals("createtime") ? "_id" : sortBy.equals("averagerating") ? "averageRating" : sortBy)));
         }
 
         List<Item> items = mongoOperations.find(query, Item.class);
