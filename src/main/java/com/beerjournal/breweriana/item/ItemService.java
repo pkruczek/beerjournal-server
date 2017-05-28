@@ -50,6 +50,7 @@ class ItemService {
         Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
                 .withId(toObjectId(itemId))
                 .withAverageRating(item.getAverageRating())
+                .withImageIds(item.getImageIds())
                 .withMainImageId(item.getMainImageId());
 
         Item updatedItem = itemRepository.update(itemToUpdate);
