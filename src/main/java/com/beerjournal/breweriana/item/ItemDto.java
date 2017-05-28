@@ -12,8 +12,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.beerjournal.breweriana.utils.Converters.toObjectId;
-import static com.beerjournal.breweriana.utils.Converters.toStringIds;
+import static com.beerjournal.breweriana.utils.Converters.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -31,11 +30,12 @@ public class ItemDto {
     @NotEmpty private final String style;
     @Singular private final Set<Attribute> attributes;
     @Singular private final Set<String> imageIds;
+    private final double averageRating;
 
-    public static ItemDto of(Item item){
+    public static ItemDto of(Item item) {
         return ItemDto.builder()
-                .id(item.getId().toHexString())
-                .ownerId(item.getOwnerId().toHexString())
+                .id(toStringId(item.getId()))
+                .ownerId(toStringId(item.getOwnerId()))
                 .name(item.getName())
                 .type(item.getType())
                 .country(item.getCountry())
@@ -43,10 +43,11 @@ public class ItemDto {
                 .style(item.getStyle())
                 .attributes(item.getAttributes())
                 .imageIds(toStringIds(item.getImageIds()).collect(Collectors.toSet()))
+                .averageRating(item.getAverageRating())
                 .build();
     }
 
-    static Item asItem(ItemDto itemDto, String ownerId){
+    static Item asItem(ItemDto itemDto, String ownerId) {
         return Item.builder()
                 .ownerId(toObjectId(ownerId))
                 .name(itemDto.getName())

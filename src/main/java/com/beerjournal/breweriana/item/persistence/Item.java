@@ -31,11 +31,12 @@ public final class Item {
     private final String style;
     private final Set<Attribute> attributes;
     private final Set<ObjectId> imageIds;
+    private final double averageRating;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds);
+                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds, double averageRating) {
+        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds, averageRating);
     }
 
     public Set<Attribute> getAttributes() {
