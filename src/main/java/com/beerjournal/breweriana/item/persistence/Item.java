@@ -29,14 +29,15 @@ public final class Item {
     private final String country;
     private final String brewery;
     private final String style;
+    private final ObjectId mainImageId;
     private final Set<Attribute> attributes;
     private final Set<ObjectId> imageIds;
     private final double averageRating;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds, double averageRating) {
-        return new Item(null, ownerId, name, type, country, brewery, style, attributes, imageIds, averageRating);
+                   ObjectId mainImageId, @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds, double averageRating) {
+        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds, averageRating);
     }
 
     public Set<Attribute> getAttributes() {
@@ -52,6 +53,7 @@ public final class Item {
                 .name(name)
                 .type(type)
                 .itemId(id)
+                .imageId(mainImageId)
                 .build();
     }
 
@@ -61,6 +63,19 @@ public final class Item {
 
     public Item withoutImageId(ObjectId imageId) {
         return withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
+    }
+
+    public Item withMainImageId() {
+        return withMainImageId(getNewOrExistingMainImageId());
+    }
+
+    private ObjectId getNewOrExistingMainImageId() {
+        if (mainImageId != null) {
+            return mainImageId;
+        } else return imageIds
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 }

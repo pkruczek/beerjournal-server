@@ -113,8 +113,10 @@ public class UserCollectionRepository {
                         Criteria.where("ownerId").is(item.getOwnerId()),
                         Criteria.where("itemRefs").elemMatch(Criteria.where("itemId").is(item.getId()))
                 )),
-                new Update().set("itemRefs.$.name", item.getName())
-                        .set("itemRefs.$.type", item.getType()),
+                new Update()
+                        .set("itemRefs.$.name", item.getName())
+                        .set("itemRefs.$.type", item.getType())
+                        .set("itemRefs.$.imageId", item.getMainImageId()),
                 UserCollection.class);
 
         return writeResult.getN();
