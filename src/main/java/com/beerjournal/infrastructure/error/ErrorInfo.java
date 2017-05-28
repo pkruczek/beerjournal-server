@@ -34,6 +34,10 @@ public enum ErrorInfo {
     //Exchanges
     EXCHANGE_NOT_FOUND(4104, "Exchange not found", HttpStatus.NOT_FOUND),
     EXCHANGE_FORBIDDEN_MODIFICATION(4105, "You do not have permission to modify that exchange", HttpStatus.FORBIDDEN),
+    MALFORMED_STATE(4106, "Bad offer state name", HttpStatus.BAD_REQUEST),
+    EXCHANGE_FORBIDDEN_STATE_MODIFICATION(4107, "You do not have permission to modify exchange state", HttpStatus.FORBIDDEN),
+    EXCHANGE_BAD_NEXT_STATE(4108, "Bad next exchange state", HttpStatus.CONFLICT),
+    EXCHANGE_NOT_MODIFIABLE(4109, "Given offer is not midifiable", HttpStatus.CONFLICT),
 
     // Server
     INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.INTERNAL_SERVER_ERROR);

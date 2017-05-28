@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.exchange.persitence;
+package com.beerjournal.breweriana.exchange.persistence;
 
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -13,19 +13,19 @@ public class ExchangeRepository {
 
     private final ExchangeCrudRepository crudRepository;
 
-    public Optional<ExchangeItemOffer> findOneById(ObjectId id) {
+    public Optional<ExchangeOffer> findOneById(ObjectId id) {
         return crudRepository.findOneById(id);
     }
 
-    public ExchangeItemOffer save(ExchangeItemOffer exchangeItemOffer) {
-        return crudRepository.save(exchangeItemOffer);
+    public ExchangeOffer save(ExchangeOffer exchangeOffer) {
+        return crudRepository.save(exchangeOffer);
     }
 
-    public Stream<ExchangeItemOffer> findAllByOwnerId(ObjectId ownerId) {
+    public Stream<ExchangeOffer> findAllByOwnerId(ObjectId ownerId) {
         return crudRepository.findAllByOwnerId(ownerId);
     }
 
-    public Stream<ExchangeItemOffer> findAllByOfferorId(ObjectId ownerId) {
+    public Stream<ExchangeOffer> findAllByOfferorId(ObjectId ownerId) {
         return crudRepository.findAllByOfferorId(ownerId);
     }
 

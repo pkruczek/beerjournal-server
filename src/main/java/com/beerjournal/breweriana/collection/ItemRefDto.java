@@ -12,13 +12,15 @@ public class ItemRefDto {
 
     private final String itemId;
     private final String name;
-    private final String category;
+    private final String type;
+    private final String imageId;
 
     public static ItemRefDto toDto(ItemRef itemRef){
         return ItemRefDto.builder()
                 .itemId(toStringId(itemRef.getItemId()))
                 .name(itemRef.getName())
-                .category(itemRef.getType())
+                .type(itemRef.getType())
+                .imageId(toStringId(itemRef.getImageId()))
                 .build();
     }
 

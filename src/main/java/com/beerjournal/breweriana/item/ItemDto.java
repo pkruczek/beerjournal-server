@@ -2,6 +2,7 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.item.persistence.Attribute;
 import com.beerjournal.breweriana.item.persistence.Item;
+import com.beerjournal.breweriana.utils.Converters;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ItemDto {
     @Singular private final Set<Attribute> attributes;
     @Singular private final Set<String> imageIds;
     private final double averageRating;
+    private final String mainImageId;
 
     public static ItemDto of(Item item) {
         return ItemDto.builder()
@@ -41,6 +43,7 @@ public class ItemDto {
                 .country(item.getCountry())
                 .brewery(item.getBrewery())
                 .style(item.getStyle())
+                .mainImageId(Converters.toStringId(item.getMainImageId()))
                 .attributes(item.getAttributes())
                 .imageIds(toStringIds(item.getImageIds()).collect(Collectors.toSet()))
                 .averageRating(item.getAverageRating())
@@ -50,12 +53,12 @@ public class ItemDto {
     static Item asItem(ItemDto itemDto, String ownerId) {
         return Item.builder()
                 .ownerId(toObjectId(ownerId))
-                .name(itemDto.getName())
-                .type(itemDto.getType())
-                .country(itemDto.getCountry())
-                .brewery(itemDto.getBrewery())
-                .style(itemDto.getStyle())
-                .attributes(itemDto.getAttributes() != null ? itemDto.getAttributes() : Collections.emptySet())
+                .name(itemDto.name)
+                .type(itemDto.type)
+                .country(itemDto.country)
+                .brewery(itemDto.brewery)
+                .style(itemDto.style)
+                .attributes(itemDto.attributes != null ? itemDto.attributes : Collections.emptySet())
                 .build();
     }
 

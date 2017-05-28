@@ -13,11 +13,11 @@ import static lombok.AccessLevel.PRIVATE;
 @Data(staticConstructor = "of")
 @Builder
 @RequiredArgsConstructor(access = PRIVATE)
-class ExchangeItemOfferCreateDto {
+class ExchangeOfferCreateDto {
 
     @NotNull private final String offerorId;
     @NotNull private final String ownerId;
-    @NotNull private final String desiredItemId;
+    @NotNull @Singular private final Set<String> desiredItemIds;
     @NotNull @Singular private final Set<String> offeredItemIds;
 
 }

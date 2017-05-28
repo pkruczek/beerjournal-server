@@ -13,31 +13,40 @@ import java.util.Collection;
 @RequiredArgsConstructor
 class ExchangeController {
 
-    private final ExchangeService exchangeService;
+    private final ExchangeFindService exchangeFindService;
+    private final ExchangeStateService exchangeStateService;
+    private final ExchangeUpdateService exchangeUpdateService;
 
     @GetMapping("{id}")
-    ResponseEntity<ExchangeItemOfferDetailsDto> getExchangeById(@PathVariable String id) {
-        return new ResponseEntity<>(exchangeService.findExchangeById(id), HttpStatus.OK);
+    ResponseEntity<ExchangeOfferDetailsDto> getExchangeById(@PathVariable String id) {
+        return new ResponseEntity<>(exchangeFindService.findExchangeById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    ResponseEntity<ExchangeItemOfferDetailsDto> addExchange(@RequestBody @Validated ExchangeItemOfferCreateDto exchangeDto) {
-        return new ResponseEntity<>(exchangeService.createExchange(exchangeDto), HttpStatus.CREATED);
+    ResponseEntity<ExchangeOfferDetailsDto> addExchange(@RequestBody @Validated ExchangeOfferCreateDto createDto) {
+        return new ResponseEntity<>(exchangeUpdateService.createExchange(createDto), HttpStatus.CREATED);
     }
 
     @GetMapping(params = {"offerorId"})
-    ResponseEntity<Collection<ExchangeItemOfferDetailsDto>> getExchangesByOfferor(@RequestParam String offerorId) {
-        return new ResponseEntity<>(exchangeService.findExchangesByOfferor(offerorId), HttpStatus.OK);
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOfferor(@RequestParam String offerorId) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferor(offerorId), HttpStatus.OK);
     }
 
     @GetMapping(params = {"ownerId"})
-    ResponseEntity<Collection<ExchangeItemOfferDetailsDto>> getExchangesByOwner(@RequestParam String ownerId) {
-        return new ResponseEntity<>(exchangeService.findExchangesByOwnerId(ownerId), HttpStatus.OK);
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOwner(@RequestParam String ownerId) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOwnerId(ownerId), HttpStatus.OK);
     }
 
-    @PutMapping("{id}/status")
-    ResponseEntity<ExchangeStatusDto> accept(@PathVariable("id") String exchangeId, @RequestBody ExchangeStatusDto statusDto) {
-        return new ResponseEntity<>(exchangeService.updateStatus(exchangeId, statusDto), HttpStatus.OK);
+    @PutMapping("{id}")
+    ResponseEntity<ExchangeOfferDetailsDto> updateExchange(@RequestParam String exchangeId,
+                                                           @RequestBody @Validated ExchangeUpdateDto updateDto) {
+        return new ResponseEntity<>(exchangeUpdateService.updateExchange(exchangeId, updateDto), HttpStatus.OK);
+    }
+
+    @PutMapping("{id}/state")
+    ResponseEntity<ExchangeStateDto> changeState(@PathVariable("id") String exchangeId,
+                                                 @RequestBody ExchangeStateDto stateDto) {
+        return new ResponseEntity<>(exchangeStateService.updateState(exchangeId, stateDto), HttpStatus.OK);
     }
 
 }

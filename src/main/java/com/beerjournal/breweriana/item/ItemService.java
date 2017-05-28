@@ -2,14 +2,12 @@ package com.beerjournal.breweriana.item;
 
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
+import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
-import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 import static com.beerjournal.breweriana.utils.Converters.toObjectId;
 import static com.beerjournal.infrastructure.error.ErrorInfo.*;
@@ -47,37 +45,34 @@ class ItemService {
 
     ItemDto updateItem(String ownerId, String itemId, ItemDto itemDto) {
         verifyUser(ownerId);
-        verifyItem(ownerId, itemId);
+        Item item = verifyItem(ownerId, itemId);
 
-        double averageRating = getItemRating(itemId);
         Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
                 .withId(toObjectId(itemId))
-                .withImageIds(Converters.toObjectIds(itemDto.getImageIds()).collect(Collectors.toSet()))
-                .withAverageRating(averageRating);
+                .withAverageRating(item.getAverageRating())
+                .withImageIds(item.getImageIds())
+                .withMainImageId(item.getMainImageId());
 
         Item updatedItem = itemRepository.update(itemToUpdate);
         return ItemDto.of(updatedItem);
     }
 
-    private void verifyUser(String ownerId) {
-        userRepository.findOneById(toObjectId(ownerId))
+    private User verifyUser(String ownerId) {
+        User user = userRepository.findOneById(toObjectId(ownerId))
                 .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
         if (!securityUtils.checkIfAuthorized(ownerId)){
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
         }
+        return user;
     }
 
-    private void verifyItem(String ownerId, String itemId) {
+    private Item verifyItem(String ownerId, String itemId) {
         Item item = itemRepository.findOneById(toObjectId(itemId))
                 .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
         if (!item.getOwnerId().equals(toObjectId(ownerId))) {
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
         }
+        return item;
     }
 
-    private double getItemRating(String itemId) {
-        Item item = itemRepository.findOneById(toObjectId(itemId))
-                .orElseThrow(() -> new BeerJournalException(ITEM_NOT_FOUND));
-        return item.getAverageRating();
-    }
 }

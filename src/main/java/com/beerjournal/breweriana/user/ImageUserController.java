@@ -3,6 +3,7 @@ package com.beerjournal.breweriana.user;
 import com.mongodb.gridfs.GridFSDBFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ class ImageUserController {
         GridFSDBFile image = imageUserService.loadUserAvatar(userId);
         return ResponseEntity
                 .ok()
+                .cacheControl(CacheControl.noCache())
+                .eTag(image.getId().toString())
                 .contentType(MediaType.parseMediaType((image.getContentType())))
                 .body(new InputStreamResource(image.getInputStream()));
     }
