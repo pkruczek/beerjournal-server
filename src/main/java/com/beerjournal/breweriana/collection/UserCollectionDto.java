@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.beerjournal.breweriana.utils.Converters.toStringId;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -27,8 +28,8 @@ class UserCollectionDto {
                 .collect(Collectors.toSet());
 
         return UserCollectionDto.builder()
-                .id(userCollection.getId().toHexString())
-                .ownerId(userCollection.getOwnerId().toHexString())
+                .id(toStringId(userCollection.getId()))
+                .ownerId(toStringId(userCollection.getOwnerId()))
                 .itemRefs(itemRefDtos)
                 .build();
     }

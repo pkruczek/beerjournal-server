@@ -3,11 +3,7 @@ package com.beerjournal.breweriana.item.persistence;
 import com.beerjournal.breweriana.collection.persistence.ItemRef;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 import lombok.experimental.Wither;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -36,11 +32,12 @@ public final class Item {
     private final ObjectId mainImageId;
     private final Set<Attribute> attributes;
     private final Set<ObjectId> imageIds;
+    private final double averageRating;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
-                   ObjectId mainImageId, @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds) {
-        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds);
+                   ObjectId mainImageId, @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds, double averageRating) {
+        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds, averageRating);
     }
 
     public Set<Attribute> getAttributes() {

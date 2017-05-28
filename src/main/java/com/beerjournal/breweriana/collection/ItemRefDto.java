@@ -1,9 +1,10 @@
 package com.beerjournal.breweriana.collection;
 
 import com.beerjournal.breweriana.collection.persistence.ItemRef;
-import com.beerjournal.breweriana.utils.Converters;
 import lombok.Builder;
 import lombok.Data;
+
+import static com.beerjournal.breweriana.utils.Converters.toStringId;
 
 @Data
 @Builder
@@ -16,10 +17,10 @@ public class ItemRefDto {
 
     public static ItemRefDto toDto(ItemRef itemRef){
         return ItemRefDto.builder()
-                .itemId(Converters.toStringId(itemRef.getItemId()))
+                .itemId(toStringId(itemRef.getItemId()))
                 .name(itemRef.getName())
                 .type(itemRef.getType())
-                .imageId(Converters.toStringId(itemRef.getImageId()))
+                .imageId(toStringId(itemRef.getImageId()))
                 .build();
     }
 
