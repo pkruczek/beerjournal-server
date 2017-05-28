@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.exchange.persistence
 
+import com.beerjournal.breweriana.collection.persistence.ItemRef
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -26,8 +27,9 @@ class ExchangeRepositoryTest extends Specification {
 
     def someItemId = new ObjectId()
     def someUserId = new ObjectId()
+    def anId = new ObjectId()
 
-    def someExchange = ExchangeOffer.of(someUserId, new ObjectId(), [simpleItemRef(someItemId)] as Set, [simpleItemRef()] as Set,
+    def someExchange = ExchangeOffer.of(someUserId, new ObjectId(), [simpleItemRef(someItemId)] as Set, [ItemRef.builder().itemId(anId).name("dddd").build()] as Set,
             ExchangeState.WAITING_FOR_OFFEROR)
 
     def someExchanges = [
@@ -56,6 +58,36 @@ class ExchangeRepositoryTest extends Specification {
     def "should return empty list for itemId in exchange but not correct offerorId"() {
         when:
         def result = exchangeRepository.findAllByOfferorIdAndItemId(new ObjectId(), someItemId).collect(Collectors.toSet())
+
+        then:
+        result.isEmpty()
+    }
+
+    def "should find similar exchange"() {
+        given:
+        def offerorId = someExchange.offerorId
+        def ownerId = someExchange.ownerId
+        def desiredItemIds = someExchange.desiredItems.collect {it.itemId}.toSet()
+        def offeredItemIds = someExchange.offeredItems.collect {it.itemId}.toSet()
+
+        when:
+        def result = exchangeRepository.findMatchingExchange(offerorId, ownerId, desiredItemIds, offeredItemIds)
+                .collect(Collectors.toSet())
+
+        then:
+        result == [someExchange] as Set
+    }
+
+    def "should return empty list when exchanges differ"() {
+        given:
+        def offerorId = someExchange.offerorId
+        def ownerId = someExchange.ownerId
+        def desiredItemIds = someExchange.desiredItems.collect {it.itemId}.toSet() + [new ObjectId()]
+        def offeredItemIds = someExchange.offeredItems.collect {it.itemId}.toSet()
+
+        when:
+        def result = exchangeRepository.findMatchingExchange(offerorId, ownerId, desiredItemIds, offeredItemIds)
+                .collect(Collectors.toSet())
 
         then:
         result.isEmpty()

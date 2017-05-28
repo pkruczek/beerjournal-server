@@ -36,7 +36,7 @@ public final class ExchangeOffer {
     }
 
     @Builder
-    public static ExchangeOffer of(ObjectId offerorId, ObjectId ownerId, Set<ItemRef> desiredItems,
+    public static ExchangeOffer of(ObjectId offerorId, ObjectId ownerId, @Singular  Set<ItemRef> desiredItems,
                                    @Singular Set<ItemRef> offeredItems, ExchangeState state) {
         return new ExchangeOffer(null, offerorId, ownerId, desiredItems, offeredItems, state);
     }

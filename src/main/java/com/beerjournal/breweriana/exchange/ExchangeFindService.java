@@ -10,10 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.beerjournal.breweriana.utils.Converters.toObjectId;
+import static com.beerjournal.breweriana.utils.Converters.toObjectIds;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +53,22 @@ class ExchangeFindService {
                 .collect(Collectors.toSet());
     }
 
+    Set<ExchangeOfferDetailsDto> findSimilarExchanges(String offerorId, String ownerId, List<String> offeredItemIds,
+                                                      List<String> desiredItemIds) {
+        Stream<ExchangeOffer> exchanges = exchangeRepository.findMatchingExchange(
+                toObjectId(offerorId),
+                toObjectId(ownerId),
+                toObjectIds(desiredItemIds).collect(Collectors.toSet()),
+                toObjectIds(offeredItemIds).collect(Collectors.toSet()));
+
+        return exchanges
+                .map(ExchangeOfferDetailsDto::of)
+                .collect(Collectors.toSet());
+    }
+
     private User findUserOrThrow(ObjectId userId) {
         return userRepository.findOneById(userId)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
     }
+
 }
