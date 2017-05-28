@@ -36,10 +36,16 @@ class ExchangeFindService {
                 .collect(Collectors.toSet());
     }
 
-    Set<ExchangeOfferDetailsDto> findExchangesByOwnerId(String ownerStringId) {
+    Set<ExchangeOfferDetailsDto> findExchangesByOwner(String ownerStringId) {
         ObjectId ownerId = toObjectId(ownerStringId);
         findUserOrThrow(ownerId);
         return exchangeRepository.findAllByOwnerId(ownerId)
+                .map(ExchangeOfferDetailsDto::of)
+                .collect(Collectors.toSet());
+    }
+
+    Set<ExchangeOfferDetailsDto> findExchangesByOfferorAndItemId(String offerorId, String itemId) {
+        return exchangeRepository.findAllByOfferorIdAndItemId(toObjectId(offerorId), toObjectId(itemId))
                 .map(ExchangeOfferDetailsDto::of)
                 .collect(Collectors.toSet());
     }
@@ -48,5 +54,4 @@ class ExchangeFindService {
         return userRepository.findOneById(userId)
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
     }
-
 }
