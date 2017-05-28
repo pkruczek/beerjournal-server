@@ -1,4 +1,4 @@
-package com.beerjournal.breweriana.exchange.persitence;
+package com.beerjournal.breweriana.exchange.persistence;
 
 import com.beerjournal.breweriana.collection.persistence.ItemRef;
 import lombok.*;
@@ -17,24 +17,28 @@ import static lombok.AccessLevel.PRIVATE;
 @Wither
 @EqualsAndHashCode(exclude = {"id"})
 @RequiredArgsConstructor(access = PRIVATE)
-public final class ExchangeItemOffer {
+public final class ExchangeOffer {
 
     @Id
     private final ObjectId id;
     private final ObjectId offerorId;
     private final ObjectId ownerId;
-    private final ItemRef desiredItem;
+    private final Set<ItemRef> desiredItems;
     private final Set<ItemRef> offeredItems;
-    private final boolean performed;
+    private final ExchangeState state;
 
     public Set<ItemRef> getOfferedItems() {
         return Collections.unmodifiableSet(offeredItems);
     }
 
+    public Set<ItemRef> getDesiredItems() {
+        return Collections.unmodifiableSet(desiredItems);
+    }
+
     @Builder
-    public static ExchangeItemOffer of(ObjectId offerorId, ObjectId ownerId, ItemRef desiredItem,
-                                       @Singular Set<ItemRef> offeredItems, boolean performed) {
-        return new ExchangeItemOffer(null, offerorId, ownerId, desiredItem, offeredItems, performed);
+    public static ExchangeOffer of(ObjectId offerorId, ObjectId ownerId, Set<ItemRef> desiredItems,
+                                   @Singular Set<ItemRef> offeredItems, ExchangeState state) {
+        return new ExchangeOffer(null, offerorId, ownerId, desiredItems, offeredItems, state);
     }
 
 }
