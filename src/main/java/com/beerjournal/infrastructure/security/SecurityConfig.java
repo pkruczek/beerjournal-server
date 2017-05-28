@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic();
         configureRequestAuthorization(http);
+        configureCacheHeaders(http);
         configureLogin(http);
         configureLogout(http);
         configureMisc(http);
@@ -59,6 +60,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .anyRequest().hasAnyRole("USER", "FACEBOOK_USER");
+    }
+
+    private void configureCacheHeaders(HttpSecurity http) throws Exception {
+        http
+                .headers()
+                .cacheControl()
+                .disable();
     }
 
     private void configureLogin(HttpSecurity http) throws Exception {
