@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -23,8 +24,17 @@ public class UserRepository {
     private final MongoOperations mongoOperations;
     private final FileRepository fileRepository;
 
-    public Page<User> findByFirstNameStartsWithAndLastNameStartsWith(String firstName, String lastName, int page, int count) {
-        return crudRepository.findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName, new PageRequest(page, count));
+    public Page<User> findByFirstNameStartsWithAndLastNameStartsWith(String firstName,
+                                                                     String lastName,
+                                                                     int page,
+                                                                     int count,
+                                                                     String sortBy,
+                                                                     String sortType) {
+        Sort sort = sortBy.matches("firstName|lastName") ?
+                new Sort(new Sort.Order(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy)) :
+                new Sort(new Sort.Order(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "_id" ));
+
+        return crudRepository.findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName, new PageRequest(page, count, sort));
     }
 
     public Optional<User> findOneById(ObjectId objectId) {
