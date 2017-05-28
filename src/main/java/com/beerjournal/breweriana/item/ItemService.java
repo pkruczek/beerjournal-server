@@ -3,10 +3,13 @@ package com.beerjournal.breweriana.item;
 import com.beerjournal.breweriana.item.persistence.Item;
 import com.beerjournal.breweriana.item.persistence.ItemRepository;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
+import com.beerjournal.breweriana.utils.Converters;
 import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 import static com.beerjournal.breweriana.utils.Converters.toObjectId;
 import static com.beerjournal.infrastructure.error.ErrorInfo.*;
@@ -49,6 +52,7 @@ class ItemService {
         double averageRating = getItemRating(itemId);
         Item itemToUpdate = ItemDto.asItem(itemDto, ownerId)
                 .withId(toObjectId(itemId))
+                .withImageIds(Converters.toObjectIds(itemDto.getImageIds()).collect(Collectors.toSet()))
                 .withAverageRating(averageRating);
 
         Item updatedItem = itemRepository.update(itemToUpdate);
