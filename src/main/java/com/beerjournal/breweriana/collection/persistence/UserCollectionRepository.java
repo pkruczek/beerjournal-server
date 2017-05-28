@@ -5,23 +5,21 @@ import com.beerjournal.infrastructure.error.BeerJournalException;
 import com.google.common.base.Strings;
 import com.mongodb.WriteResult;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
@@ -36,31 +34,24 @@ public class UserCollectionRepository {
         return crudRepository.findOneByOwnerId(ownerId);
     }
 
-    public Page<ItemRef> findAllInUserCollection(ObjectId ownerId, int page, int count, String name, String category) {
-        UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
-                .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
-        List<ItemRef> userItems = new ArrayList<>(userCollection.getItemRefs());
+    public Page<ItemRef> findAllInUserCollection(ObjectId ownerId,
+                                                 int page,
+                                                 int count,
+                                                 Map<String, String> filterRequestParams,
+                                                 String sortBy,
+                                                 String sortType) {
+        Criteria criteria = Criteria.where("ownerId").is(ownerId);
 
-        Stream<ItemRef> filteredUserItems = Strings.isNullOrEmpty(name) ?
-                userItems.stream() :
-                userItems.stream().filter(v -> v.getName().startsWith(name));
-
-        filteredUserItems = Strings.isNullOrEmpty(category) ?
-                filteredUserItems :
-                userItems.stream().filter(v -> v.getType().startsWith(category));
-
-        List<ItemRef> collectedUserItems = filteredUserItems.collect(Collectors.toList());
-
-        return new PageImpl<>(
-                collectedUserItems.stream()
-                        .skip(page * count)
-                        .limit(count)
-                        .collect(Collectors.toList()),
-                new PageRequest(page, count),
-                collectedUserItems.size());
+        return findAllByParams(criteria, new PageRequest(page, count), filterRequestParams, sortBy, sortType).map(Item::asItemRef);
     }
 
-    public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId, int page, int count, String name, String category) {
+
+    public Page<ItemRef> findAllNotInUserCollection(ObjectId ownerId,
+                                                    int page,
+                                                    int count,
+                                                    Map<String, String> filterRequestParams,
+                                                    String sortBy,
+                                                    String sortType) {
         UserCollection userCollection = crudRepository.findOneByOwnerId(ownerId)
                 .orElseThrow(() -> new BeerJournalException(USER_COLLECTION_NOT_FOUND));
 
@@ -68,8 +59,9 @@ public class UserCollectionRepository {
                 .map(ItemRef::getName)
                 .collect(Collectors.toSet());
 
-        return findAllNotIn(userItemsNames, new PageRequest(page, count), name, category)
-                .map(Item::asItemRef);
+        Criteria criteria = Criteria.where("name").not().in(userItemsNames);
+
+        return findAllByParams(criteria, new PageRequest(page, count), filterRequestParams, sortBy, sortType).map(Item::asItemRef);
     }
 
     UserCollection deleteOneByOwnerId(ObjectId ownerId) {
@@ -122,16 +114,39 @@ public class UserCollectionRepository {
         return writeResult.getN();
     }
 
-    private Page<Item> findAllNotIn(Set<String> userItemsNames, PageRequest pageRequest, String name, String category) {
-        Criteria criteria = Criteria.where("name").not().in(userItemsNames);
-        if (!Strings.isNullOrEmpty(name))
-            criteria = criteria.andOperator(Criteria.where("name").regex(Pattern.compile("^" + name)));
-        if (!Strings.isNullOrEmpty(category))
-            criteria = criteria.andOperator(Criteria.where("type").regex(Pattern.compile("^" + category)));
+    private Page<Item> findAllByParams(Criteria criteria,
+                                       PageRequest pageRequest,
+                                       Map<String, String> allRequestParams,
+                                       String sortBy,
+                                       String sortType) {
+        List<Criteria> filterCriterias = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
+            if (entry.getKey().matches("name|type|country|brewery|style|averagerating") && !Strings.isNullOrEmpty(entry.getValue())) {
+                if (entry.getKey().equals("averagerating")) {
+                    if (NumberUtils.isParsable(entry.getValue()))
+                        filterCriterias.add(Criteria.where("averageRating").is(Double.valueOf(entry.getValue())));
+                } else {
+                    filterCriterias.add(Criteria.where(entry.getKey()).regex(Pattern.compile("^" + entry.getValue())));
+
+                }
+            }
+        }
+
+        if (!filterCriterias.isEmpty())
+            criteria.andOperator(filterCriterias.toArray(new Criteria[filterCriterias.size()]));
 
         Query query = new Query(criteria);
         long total = mongoOperations.count(query, Item.class);
-        List<Item> items = mongoOperations.find(query.with(pageRequest), Item.class);
+        query.with(pageRequest);
+
+        if (sortBy.matches("name|type|country|brewery|style|createtime|averagerating")) {
+            query.with(new Sort(new Sort.Order(
+                    sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                    sortBy.equals("createtime") ? "_id" : sortBy.equals("averagerating") ? "averageRating" : sortBy)));
+        }
+
+        List<Item> items = mongoOperations.find(query, Item.class);
 
         return new PageImpl<>(items, pageRequest, total);
     }

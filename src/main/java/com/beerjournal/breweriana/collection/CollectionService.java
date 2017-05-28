@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_COLLECTION_NOT_FOUND;
 
 @Service
@@ -22,15 +24,25 @@ class CollectionService {
         return UserCollectionDto.of(userCollection);
     }
 
-    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId, int page, int count, String name, String category) {
+    Page<ItemRefDto> getAllItemRefsInUserCollection(String userId,
+                                                    int page,
+                                                    int count,
+                                                    Map<String, String> filterRequestParams,
+                                                    String sortBy,
+                                                    String sortType) {
         return userCollectionRepository
-                .findAllInUserCollection(Converters.toObjectId(userId), page, count, name, category)
+                .findAllInUserCollection(Converters.toObjectId(userId), page, count, filterRequestParams, sortBy, sortType)
                 .map(ItemRefDto::toDto);
     }
 
-    Page<ItemRefDto> getAllNotInUserCollection(String userId, int page, int count, String name, String category) {
+    Page<ItemRefDto> getAllNotInUserCollection(String userId,
+                                               int page,
+                                               int count,
+                                               Map<String, String> filterRequestParams,
+                                               String sortBy,
+                                               String sortType) {
         return userCollectionRepository
-                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, name, category)
+                .findAllNotInUserCollection(Converters.toObjectId(userId), page, count, filterRequestParams, sortBy, sortType)
                 .map(ItemRefDto::toDto);
     }
 

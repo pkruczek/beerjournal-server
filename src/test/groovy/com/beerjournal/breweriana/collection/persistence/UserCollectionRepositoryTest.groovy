@@ -68,7 +68,7 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(someOtherItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "", "")
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [:], "", "")
 
         then:
         missingItems.getContent() == [someOtherItem.asItemRef()] as List
@@ -80,7 +80,7 @@ class UserCollectionRepositoryTest extends Specification {
         itemRepository.save(savedUsersItem)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "", "")
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [:], "", "")
 
         then:
         !missingItems.getContent().contains(someOtherItem)
@@ -94,7 +94,7 @@ class UserCollectionRepositoryTest extends Specification {
             itemRepository.save(item as Item)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "s1", "")
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [name:'s1'], "", "")
 
         then:
         missingItems.getTotalElements() == 11 && missingItems.getTotalPages() == 2 && missingItems.getNumberOfElements() == 10
@@ -109,7 +109,7 @@ class UserCollectionRepositoryTest extends Specification {
             itemRepository.save(item as Item)
 
         when:
-        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, "", "t1")
+        def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, [type:'t1'],"", "t1")
 
         then:
         missingItems.getTotalElements() == 11 && missingItems.getTotalPages() == 2 && missingItems.getNumberOfElements() == 1
@@ -124,7 +124,7 @@ class UserCollectionRepositoryTest extends Specification {
             itemRepository.save(item as Item)
 
         when:
-        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, "g1", "")
+        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [name:'g1'], "", "")
 
         then:
         ownedItems.getTotalElements() == 11 && ownedItems.getTotalPages() == 2 && ownedItems.getNumberOfElements() == 10
@@ -138,7 +138,7 @@ class UserCollectionRepositoryTest extends Specification {
             itemRepository.save(item as Item)
 
         when:
-        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, "", "h1")
+        def ownedItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 1, 10, [type:'h1'],"", "")
 
         then:
         ownedItems.getTotalElements() == 11 && ownedItems.getTotalPages() == 2 && ownedItems.getNumberOfElements() == 1
