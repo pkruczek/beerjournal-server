@@ -30,8 +30,8 @@ public class UserRepository {
                                                                      int count,
                                                                      String sortBy,
                                                                      String sortType) {
-        Sort sort = sortBy.matches("firstName|lastName") ?
-                new Sort(new Sort.Order(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy)) :
+        Sort sort = sortBy.matches("firstname|lastname") ?
+                new Sort(new Sort.Order(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.equals("firstname") ? "firstName" : "lastName")) :
                 new Sort(new Sort.Order(sortType.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "_id" ));
 
         return crudRepository.findByFirstNameStartsWithAndLastNameStartsWith(firstName, lastName, new PageRequest(page, count, sort));
