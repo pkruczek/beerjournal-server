@@ -1,5 +1,6 @@
 package com.beerjournal.breweriana.utils
 
+import com.beerjournal.breweriana.collection.persistence.ItemRef
 import com.beerjournal.breweriana.item.persistence.Attribute
 import com.beerjournal.breweriana.item.persistence.Item
 import com.beerjournal.breweriana.user.persistence.User
@@ -60,6 +61,14 @@ final class TestUtils {
                 User.builder().firstName("Grazyna").lastName("Nowak").email("grazyna@onet.pl").build(),
                 User.builder().firstName("Sebastian").lastName("Kowalski").email("seba@gmail.com").build()
         ] as Set
+    }
+
+    static def simpleItemRef(itemId) {
+        ItemRef.builder().itemId(itemId).build()
+    }
+
+    static def simpleItemRef() {
+        simpleItemRef(new ObjectId())
     }
 
     static void equalsOptionalValue(optional, value) {

@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/exchanges")
@@ -34,7 +35,21 @@ class ExchangeController {
 
     @GetMapping(params = {"ownerId"})
     ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOwner(@RequestParam String ownerId) {
-        return new ResponseEntity<>(exchangeFindService.findExchangesByOwnerId(ownerId), HttpStatus.OK);
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOwner(ownerId), HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"offerorId", "itemId"})
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOferrorAndItemId(@RequestParam String offerorId,
+                                                                                       @RequestParam String itemId) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndItemId(offerorId, itemId), HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"offerorId", "ownerId", "offeredItemIds", "desiredItemIds"})
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> findSimilarExchange(@RequestParam String offerorId,
+                                                                            @RequestParam String ownerId,
+                                                                            @RequestParam List<String> offeredItemIds,
+                                                                            @RequestParam List<String> desiredItemIds) {
+        return new ResponseEntity<>(exchangeFindService.findSimilarExchanges(offerorId, ownerId, offeredItemIds, desiredItemIds), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
