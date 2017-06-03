@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Document
 @Data
 @Wither
-@EqualsAndHashCode(exclude = {"id"})
+@EqualsAndHashCode(exclude = {"id", "created"})
 @RequiredArgsConstructor(access = PRIVATE)
 public final class Item {
 
@@ -33,11 +34,12 @@ public final class Item {
     private final Set<Attribute> attributes;
     private final Set<ObjectId> imageIds;
     private final double averageRating;
+    private final LocalDateTime created;
 
     @Builder
     static Item of(ObjectId ownerId, String name, String type, String country, String brewery, String style,
                    ObjectId mainImageId, @Singular Set<Attribute> attributes, @Singular Set<ObjectId> imageIds, double averageRating) {
-        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds, averageRating);
+        return new Item(null, ownerId, name, type, country, brewery, style, mainImageId, attributes, imageIds, averageRating, null);
     }
 
     public Set<Attribute> getAttributes() {

@@ -37,7 +37,7 @@ class ExchangeUpdateService {
         validateModifiability(exchangeOffer.getState());
         exchangeUpdatePermissionService.validateExchangeUpdater(exchangeOffer);
 
-        ExchangeOffer updatedOffer = exchangeRepository.save(exchangeOffer
+        ExchangeOffer updatedOffer = exchangeRepository.update(exchangeOffer
                 .withDesiredItems(findItemsOrThrow(updateDto.getDesiredItemIds(), exchangeOffer.getOwnerId()))
                 .withOfferedItems(findItemsOrThrow(updateDto.getOfferedItemIds(), exchangeOffer.getOfferorId())));
 

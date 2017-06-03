@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 import static com.beerjournal.infrastructure.error.ErrorInfo.INCORRECT_EVENT_DATA_TYPE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -23,6 +25,8 @@ class EventDto {
     private final String date;
     private final String dataType;
     private final Object data;
+    private final LocalDateTime created;
+
 
     public static EventDto of(Event event) {
         return EventDto.builder()
@@ -30,6 +34,7 @@ class EventDto {
                 .date(Converters.toInstant(event.getId()).toString())
                 .dataType(event.getDataType())
                 .data(convertToProperDto(event))
+                .created(event.getCreated())
                 .build();
     }
 

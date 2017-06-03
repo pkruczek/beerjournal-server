@@ -33,7 +33,7 @@ class UserCollectionRepositoryTest extends Specification {
     def savedUser
     def someUserCollection
 
-    def savedUsersItem
+    def userItemToSave
     def someOtherItem = Item.builder()
             .name("Butelka Tyskie")
             .brewery("tyskie")
@@ -52,7 +52,7 @@ class UserCollectionRepositoryTest extends Specification {
         someUserCollection = UserCollection.builder()
                 .ownerId(savedUser.id)
                 .build()
-        savedUsersItem = TestUtils.someItem(savedUser.id)
+        userItemToSave = TestUtils.someItem(savedUser.id)
         someOtherItems = TestUtils.someItems(TestUtils.someObjectId(), "s", "t")
         savedUserItems = TestUtils.someItems(TestUtils.someObjectId(), "g", "h")
     }
@@ -64,20 +64,20 @@ class UserCollectionRepositoryTest extends Specification {
     def "should return not owned items"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
-        itemRepository.save(someOtherItem)
+        itemRepository.save(userItemToSave)
+        def savedOtherItem = itemRepository.save(someOtherItem)
 
         when:
         def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [:], "", "")
 
         then:
-        missingItems.getContent() == [someOtherItem.asItemRef()] as List
+        missingItems.getContent() == [savedOtherItem.asItemRef()] as List
     }
 
     def "shouldn't return owned item"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
+        itemRepository.save(userItemToSave)
 
         when:
         def missingItems = userCollectionRepository.findAllNotInUserCollection(savedUser.id, 0, 10, [:], "", "")
@@ -89,7 +89,7 @@ class UserCollectionRepositoryTest extends Specification {
     def "should return correct page details for not owned items that name starts with 's1'"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
+        itemRepository.save(userItemToSave)
         for (item in someOtherItems)
             itemRepository.save(item as Item)
 
@@ -104,7 +104,7 @@ class UserCollectionRepositoryTest extends Specification {
     def "should return correct page details for not owned items that type starts with 't1'"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
+        itemRepository.save(userItemToSave)
         for (item in someOtherItems)
             itemRepository.save(item as Item)
 
@@ -119,7 +119,7 @@ class UserCollectionRepositoryTest extends Specification {
     def "should return correct page details for owned items that name starts with 'g1'"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
+        itemRepository.save(userItemToSave)
         for (item in savedUserItems)
             itemRepository.save(item as Item)
 
@@ -133,7 +133,6 @@ class UserCollectionRepositoryTest extends Specification {
     def "should return correct page details for owned items that type starts with 'h1'"() {
         given:
         crudRepository.save(someUserCollection)
-        itemRepository.save(savedUsersItem)
         for (item in savedUserItems)
             itemRepository.save(item as Item)
 

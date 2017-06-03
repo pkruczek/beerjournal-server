@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class ItemDto {
     @Singular private final Set<String> imageIds;
     private final double averageRating;
     private final String mainImageId;
+    private final LocalDateTime created;
 
     public static ItemDto of(Item item) {
         return ItemDto.builder()
@@ -47,6 +49,7 @@ public class ItemDto {
                 .attributes(item.getAttributes())
                 .imageIds(toStringIds(item.getImageIds()).collect(Collectors.toSet()))
                 .averageRating(item.getAverageRating())
+                .created(item.getCreated())
                 .build();
     }
 
