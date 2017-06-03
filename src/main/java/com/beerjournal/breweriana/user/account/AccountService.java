@@ -6,10 +6,15 @@ import com.beerjournal.breweriana.user.persistence.User;
 import com.beerjournal.breweriana.user.persistence.UserRepository;
 import com.beerjournal.breweriana.utils.SecurityUtils;
 import com.beerjournal.infrastructure.error.BeerJournalException;
+import com.beerjournal.infrastructure.mail.MailModel;
+import com.beerjournal.infrastructure.mail.MailService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.*;
 
@@ -19,11 +24,12 @@ class AccountService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
     private final SecurityUtils securityUtils;
 
     UserDto getLoggedInAccount() {
         ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
-        User currentUser = verifyUser(userObjectId);
+        User currentUser = verifyUserById(userObjectId);
         return UserDto.of(currentUser);
     }
 
@@ -58,15 +64,21 @@ class AccountService {
 
     private User getUserForModification(String password) {
         ObjectId userObjectId = securityUtils.getCurrentlyLoggedInUserId();
-        User currentUser = verifyUser(userObjectId);
+        User currentUser = verifyUserById(userObjectId);
         verifyPasswordEquality(password, currentUser);
         return currentUser;
     }
 
-    private User verifyUser(ObjectId userObjectId) {
+    private User verifyUserById(ObjectId userObjectId) {
         return userRepository
                 .findOneById(userObjectId)
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND_BY_ID));
+    }
+
+    private User verifyUserByMail(String mail) {
+        return userRepository
+                .findOneByEmail(mail)
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND_BY_MAIL));
     }
 
     private void verifyEmailEquality(String email, User currentUser) {
@@ -87,4 +99,22 @@ class AccountService {
         return passwordEncoder.encode(password);
     }
 
+    void resetPassword(AccountResetPasswordDto account) {
+        User currentUser = verifyUserByMail(account.getEmail());
+        String generatedPassword = RandomStringUtils.randomAlphabetic(1).toUpperCase() + UUID.randomUUID().toString();
+        User modifiedUser = currentUser.withPassword(encodePassword(generatedPassword));
+        notifyChangePassword(modifiedUser, generatedPassword);
+        userRepository.update(modifiedUser);
+    }
+
+    private void notifyChangePassword(User user, String password) {
+        MailModel mailModel = MailModel.builder()
+                .body("<p>Your password was reset to </p></br><h3>" + password + "</h3>")
+                .to(user.getEmail())
+                .subject("Password change")
+                .html(true)
+                .build();
+
+        mailService.sendMail(mailModel);
+    }
 }

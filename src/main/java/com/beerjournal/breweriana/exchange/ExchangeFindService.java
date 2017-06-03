@@ -68,7 +68,7 @@ class ExchangeFindService {
 
     private User findUserOrThrow(ObjectId userId) {
         return userRepository.findOneById(userId)
-                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND_BY_ID));
     }
 
 }

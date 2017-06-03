@@ -45,7 +45,7 @@ public class RatingRepository {
 
     private void validateRating(Rating rating) {
         userRepository.findOneById(rating.getRaterId())
-                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND_BY_ID));
         itemRepository.findOneById(rating.getItemId())
                 .orElseThrow(() -> new BeerJournalException(ErrorInfo.ITEM_NOT_FOUND));
     }

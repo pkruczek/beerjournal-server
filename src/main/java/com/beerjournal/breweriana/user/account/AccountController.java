@@ -1,10 +1,7 @@
 package com.beerjournal.breweriana.user.account;
 
 import com.beerjournal.breweriana.user.UserDto;
-import com.beerjournal.breweriana.user.account.dto.AccountChangeDetailsDto;
-import com.beerjournal.breweriana.user.account.dto.AccountChangeEmailDto;
-import com.beerjournal.breweriana.user.account.dto.AccountChangePasswordDto;
-import com.beerjournal.breweriana.user.account.dto.AccountDeleteDto;
+import com.beerjournal.breweriana.user.account.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +28,12 @@ public class AccountController {
     @PutMapping("password")
     ResponseEntity<?> modifyAccountPassword(@RequestBody @Validated AccountChangePasswordDto account) {
         accountService.changeAccountPassword(account);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("password/reset")
+    ResponseEntity<?> resetAccountPassword(@RequestBody @Validated AccountResetPasswordDto account) {
+        accountService.resetPassword(account);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
