@@ -33,7 +33,7 @@ public class MailService {
             helper.setText(mailModel.getBody(), mailModel.isHtml());
             helper.setSubject(mailModel.getSubject());
         } catch (MessagingException e) {
-            throw new BeerJournalException(ErrorInfo.MAIL_NOT_SEND);
+            throw new BeerJournalException(ErrorInfo.MAIL_NOT_SENT);
         }
     }
 }

@@ -41,7 +41,7 @@ public enum ErrorInfo {
     EXCHANGE_NOT_MODIFIABLE(4109, "Given offer is not midifiable", HttpStatus.CONFLICT),
 
     // Mail
-    MAIL_NOT_SEND(4200, "Mail was not sent", HttpStatus.CONFLICT),
+    MAIL_NOT_SENT(4200, "Mail was not sent", HttpStatus.CONFLICT),
 
     // Server
     INCORRECT_EVENT_DATA_TYPE(5000, "Data type in given event not found", HttpStatus.INTERNAL_SERVER_ERROR);
