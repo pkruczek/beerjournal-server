@@ -16,4 +16,8 @@ interface ExchangeCrudRepository extends MongoRepository<ExchangeOffer, ObjectId
 
     Stream<ExchangeOffer> findAllByOfferorIdAndOwnerId(ObjectId offerorId, ObjectId ownerId);
 
+    Stream<ExchangeOffer> findAllByOfferorIdAndState(ObjectId offerorId, ExchangeState state);
+
+    Stream<ExchangeOffer> findAllByOwnerIdAndState(ObjectId ownerId, ExchangeState state);
+
 }

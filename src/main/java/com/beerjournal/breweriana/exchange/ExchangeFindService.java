@@ -15,8 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.beerjournal.breweriana.utils.Converters.toObjectId;
-import static com.beerjournal.breweriana.utils.Converters.toObjectIds;
+import static com.beerjournal.breweriana.utils.Converters.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +46,8 @@ class ExchangeFindService {
                 .collect(Collectors.toSet());
     }
 
-    Set<ExchangeOfferDetailsDto> findExchangesByOfferorAndItemId(String offerorId, String itemId) {
-        return exchangeRepository.findAllByOfferorIdAndItemId(toObjectId(offerorId), toObjectId(itemId))
+    Set<ExchangeOfferDetailsDto> findExchangesByOfferorAndDesiredItemId(String offerorId, String itemId) {
+        return exchangeRepository.findAllByOfferorIdAndDesiredItemId(toObjectId(offerorId), toObjectId(itemId))
                 .map(ExchangeOfferDetailsDto::of)
                 .collect(Collectors.toSet());
     }
@@ -65,6 +64,19 @@ class ExchangeFindService {
                 .map(ExchangeOfferDetailsDto::of)
                 .collect(Collectors.toSet());
     }
+
+    Set<ExchangeOfferDetailsDto> findExchangesByOfferorAndState(String offerorId, String state) {
+        return exchangeRepository.findAllByOfferorAndState(toObjectId(offerorId), toOfferState(state))
+                .map(ExchangeOfferDetailsDto::of)
+                .collect(Collectors.toSet());
+    }
+
+    Set<ExchangeOfferDetailsDto> findExchangesByOwnerAndState(String ownerId, String state) {
+        return exchangeRepository.findAllByOwnerAndState(toObjectId(ownerId), toOfferState(state))
+                .map(ExchangeOfferDetailsDto::of)
+                .collect(Collectors.toSet());
+    }
+
 
     private User findUserOrThrow(ObjectId userId) {
         return userRepository.findOneById(userId)

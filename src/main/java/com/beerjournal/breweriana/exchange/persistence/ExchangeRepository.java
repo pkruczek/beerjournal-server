@@ -37,7 +37,7 @@ public class ExchangeRepository {
         return crudRepository.findAllByOfferorId(ownerId);
     }
 
-    public Stream<ExchangeOffer> findAllByOfferorIdAndItemId(ObjectId offerorId, ObjectId itemId) {
+    public Stream<ExchangeOffer> findAllByOfferorIdAndDesiredItemId(ObjectId offerorId, ObjectId itemId) {
         List<ExchangeOffer> exchangeOffers = mongoOperations.find(
                 new Query(
                         new Criteria().andOperator(
@@ -53,6 +53,14 @@ public class ExchangeRepository {
         return crudRepository.findAllByOfferorIdAndOwnerId(offerorId, ownerId)
                 .filter(e -> itemRefIdsEquals(e.getDesiredItems(), desiredItemIds))
                 .filter(e -> itemRefIdsEquals(e.getOfferedItems(), offeredItemIds));
+    }
+
+    public Stream<ExchangeOffer> findAllByOfferorAndState(ObjectId offerorId, ExchangeState state) {
+        return crudRepository.findAllByOfferorIdAndState(offerorId, state);
+    }
+
+    public Stream<ExchangeOffer> findAllByOwnerAndState(ObjectId ownerId, ExchangeState state) {
+        return crudRepository.findAllByOwnerIdAndState(ownerId, state);
     }
 
     private boolean itemRefIdsEquals(Set<ItemRef> itemRefs, Set<ObjectId> ids) {

@@ -38,10 +38,22 @@ class ExchangeController {
         return new ResponseEntity<>(exchangeFindService.findExchangesByOwner(ownerId), HttpStatus.OK);
     }
 
-    @GetMapping(params = {"offerorId", "itemId"})
-    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOferrorAndItemId(@RequestParam String offerorId,
-                                                                                       @RequestParam String itemId) {
-        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndItemId(offerorId, itemId), HttpStatus.OK);
+    @GetMapping(params = {"offerorId", "state"})
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOfferorAndState(@RequestParam String offerorId,
+                                                                                      @RequestParam String state) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndState(offerorId, state), HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"ownerId", "state"})
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOwnerAndState(@RequestParam String ownerId,
+                                                                                    @RequestParam String state) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOwnerAndState(ownerId, state), HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"offerorId", "desiredItemId"})
+    ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOferrorAndDesiredItemId(@RequestParam String offerorId,
+                                                                                              @RequestParam String itemId) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndDesiredItemId(offerorId, itemId), HttpStatus.OK);
     }
 
     @GetMapping(params = {"offerorId", "ownerId", "offeredItemIds", "desiredItemIds"})

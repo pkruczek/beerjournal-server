@@ -28,14 +28,16 @@ class ExchangeRepositoryTest extends Specification {
     def someItemId = new ObjectId()
     def someUserId = new ObjectId()
     def anId = new ObjectId()
+    def canceledExchange = ExchangeOffer.of(someUserId, new ObjectId(), [simpleItemRef()] as Set, [simpleItemRef()] as Set, ExchangeState.CANCELED)
+    def rejectedOffer = ExchangeOffer.of(new ObjectId(), new ObjectId(), [simpleItemRef()] as Set, [simpleItemRef()] as Set, ExchangeState.REJECTED)
 
     def someExchange = ExchangeOffer.of(someUserId, new ObjectId(), [simpleItemRef(someItemId)] as Set, [ItemRef.builder().itemId(anId).name("dddd").build()] as Set,
             ExchangeState.WAITING_FOR_OFFEROR)
 
     def someExchanges = [
             someExchange,
-            ExchangeOffer.of(someUserId, new ObjectId(), [simpleItemRef()] as Set, [simpleItemRef()] as Set, ExchangeState.WAITING_FOR_OFFEROR),
-            ExchangeOffer.of(new ObjectId(), new ObjectId(), [simpleItemRef()] as Set, [simpleItemRef()] as Set, ExchangeState.WAITING_FOR_OFFEROR)
+            canceledExchange,
+            rejectedOffer
     ] as Set
 
     def setup() {
@@ -48,7 +50,7 @@ class ExchangeRepositoryTest extends Specification {
 
     def "should find exchange by offerorId and desiredItemId"() {
         when:
-        def result = exchangeRepository.findAllByOfferorIdAndItemId(someUserId, someItemId).collect(Collectors.toSet())
+        def result = exchangeRepository.findAllByOfferorIdAndDesiredItemId(someUserId, someItemId).collect(Collectors.toSet())
 
         then:
         result.size() == 1
@@ -57,7 +59,7 @@ class ExchangeRepositoryTest extends Specification {
 
     def "should return empty list for itemId in exchange but not correct offerorId"() {
         when:
-        def result = exchangeRepository.findAllByOfferorIdAndItemId(new ObjectId(), someItemId).collect(Collectors.toSet())
+        def result = exchangeRepository.findAllByOfferorIdAndDesiredItemId(new ObjectId(), someItemId).collect(Collectors.toSet())
 
         then:
         result.isEmpty()
@@ -91,6 +93,32 @@ class ExchangeRepositoryTest extends Specification {
 
         then:
         result.isEmpty()
+    }
+
+    def "should find exchanges by offerorId and state"() {
+        given:
+        def offerorId = someExchange.offerorId
+        def state = ExchangeState.CANCELED
+
+        when:
+        def result = exchangeRepository.findAllByOfferorAndState(offerorId, state)
+                .collect(Collectors.toSet())
+
+        then:
+        result == [canceledExchange] as Set
+    }
+
+    def "should find exchanges by OwnerId and state"() {
+        given:
+        def ownerId = rejectedOffer.ownerId
+        def state = ExchangeState.REJECTED
+
+        when:
+        def result = exchangeRepository.findAllByOwnerAndState(ownerId, state)
+                .collect(Collectors.toSet())
+
+        then:
+        result == [rejectedOffer] as Set
     }
 
 }
