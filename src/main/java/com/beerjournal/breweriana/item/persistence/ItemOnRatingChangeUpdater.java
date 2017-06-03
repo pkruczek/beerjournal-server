@@ -25,6 +25,6 @@ public class ItemOnRatingChangeUpdater implements UpdateListener<ItemRatings> {
                 .mapToDouble(Rating::getValue).average()
                 .orElse(0.0);
 
-        itemRepository.save(itemToUpdate.withAverageRating(average));
+        itemRepository.updateWithoutNotification(itemToUpdate.withAverageRating(average));
     }
 }
