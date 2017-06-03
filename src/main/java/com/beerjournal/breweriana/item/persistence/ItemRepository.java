@@ -53,6 +53,10 @@ public class ItemRepository {
         return updatedItem;
     }
 
+    Item updateWithoutNotification(Item item) {
+        return crudRepository.save(item);
+    }
+
     private void deleteImages(Item item) {
         item.getImageIds().forEach(fileRepository::deleteFileById);
     }
