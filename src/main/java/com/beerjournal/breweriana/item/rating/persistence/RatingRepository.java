@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class RatingRepository {
                 .findOneByItemIdAndRaterId(rating.getItemId(), rating.getRaterId());
         existingRating.ifPresent(ratingCrudRepository::delete);
 
-        Rating savedRating = ratingCrudRepository.save(rating);
+        Rating savedRating = ratingCrudRepository.save(rating.withCreated(LocalDateTime.now()));
 
         notifyUpdate(savedRating.getItemId());
         return savedRating;

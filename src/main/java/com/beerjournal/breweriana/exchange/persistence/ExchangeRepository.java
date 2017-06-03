@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +27,10 @@ public class ExchangeRepository {
     }
 
     public ExchangeOffer save(ExchangeOffer exchangeOffer) {
+        return crudRepository.save(exchangeOffer.withCreated(LocalDateTime.now()));
+    }
+
+    public ExchangeOffer update(ExchangeOffer exchangeOffer) {
         return crudRepository.save(exchangeOffer);
     }
 

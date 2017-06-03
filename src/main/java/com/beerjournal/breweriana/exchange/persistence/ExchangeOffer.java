@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Document
 @Data
 @Wither
-@EqualsAndHashCode(exclude = {"id"})
+@EqualsAndHashCode(exclude = {"id", "created"})
 @RequiredArgsConstructor(access = PRIVATE)
 public final class ExchangeOffer {
 
@@ -26,6 +27,7 @@ public final class ExchangeOffer {
     private final Set<ItemRef> desiredItems;
     private final Set<ItemRef> offeredItems;
     private final ExchangeState state;
+    private final LocalDateTime created;
 
     public Set<ItemRef> getOfferedItems() {
         return Collections.unmodifiableSet(offeredItems);
@@ -38,7 +40,7 @@ public final class ExchangeOffer {
     @Builder
     public static ExchangeOffer of(ObjectId offerorId, ObjectId ownerId, @Singular  Set<ItemRef> desiredItems,
                                    @Singular Set<ItemRef> offeredItems, ExchangeState state) {
-        return new ExchangeOffer(null, offerorId, ownerId, desiredItems, offeredItems, state);
+        return new ExchangeOffer(null, offerorId, ownerId, desiredItems, offeredItems, state, null);
     }
 
 }

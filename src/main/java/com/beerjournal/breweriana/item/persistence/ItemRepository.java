@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,8 +26,8 @@ public class ItemRepository {
     }
 
     public Item save(Item item) {
-        Item savedItem = crudRepository.save(item);
-        notifyInsert(item);
+        Item savedItem = crudRepository.save(item.withCreated(LocalDateTime.now()));
+        notifyInsert(savedItem);
         return savedItem;
     }
 

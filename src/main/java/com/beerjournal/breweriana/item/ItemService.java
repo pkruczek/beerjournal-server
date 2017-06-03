@@ -51,7 +51,8 @@ class ItemService {
                 .withId(toObjectId(itemId))
                 .withAverageRating(item.getAverageRating())
                 .withImageIds(item.getImageIds())
-                .withMainImageId(item.getMainImageId());
+                .withMainImageId(item.getMainImageId())
+                .withCreated(item.getCreated());
 
         Item updatedItem = itemRepository.update(itemToUpdate);
         return ItemDto.of(updatedItem);

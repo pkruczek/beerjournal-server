@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Repository
@@ -15,7 +17,7 @@ public class EventRepository {
     private final EventCrudRepository crudRepository;
 
     Event save(Event event) {
-        return crudRepository.save(event);
+        return crudRepository.save(event.withCreated(LocalDateTime.now()));
     }
 
     public Page<Event> findAll(int page, int size) {

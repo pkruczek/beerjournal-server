@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ class ExchangeOfferDetailsDto {
     @Singular private final Set<ItemRefDto> desiredItems;
     @Singular private final Set<ItemRefDto> offeredItems;
     private final String state;
+    private final LocalDateTime created;
 
     static ExchangeOfferDetailsDto of(ExchangeOffer offer) {
         return builder()
@@ -36,6 +38,7 @@ class ExchangeOfferDetailsDto {
                 .desiredItems(toItemRefDtos(offer.getDesiredItems()))
                 .offeredItems(toItemRefDtos(offer.getOfferedItems()))
                 .state(toStringState(offer.getState()))
+                .created(offer.getCreated())
                 .build();
     }
 

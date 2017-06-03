@@ -56,13 +56,13 @@ public class UserRepository {
 
     public User update(User updatedUser) {
         User savedUser = crudRepository.save(updatedUser);
-        notifyUpdate(updatedUser);
+        notifyUpdate(savedUser);
         return savedUser;
     }
 
     public User save(User user) {
         User savedUser = crudRepository.save(user);
-        notifyInsert(user);
+        notifyInsert(savedUser);
         return savedUser;
     }
 

@@ -10,12 +10,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @Document
 @Data
 @Wither
-@EqualsAndHashCode(exclude = {"id"})
+@EqualsAndHashCode(exclude = {"id", "created"})
 @RequiredArgsConstructor(access = PRIVATE)
 public final class User {
 
@@ -27,10 +29,11 @@ public final class User {
     private final String email;
     private final String password;
     private final ObjectId avatarFileId;
+    private final LocalDateTime created;
 
     @Builder
     static User of(String firstName, String lastName, String email, String password, ObjectId avatarFileId) {
-        return new User(null, firstName, lastName, email, password, avatarFileId);
+        return new User(null, firstName, lastName, email, password, avatarFileId, null);
     }
 
 }
