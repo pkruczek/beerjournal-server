@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.beerjournal.infrastructure.error.ErrorInfo.USER_DUPLICATE_EMAIL;
-import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND;
+import static com.beerjournal.infrastructure.error.ErrorInfo.USER_NOT_FOUND_BY_ID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ class UserService {
 
     UserDto getUserWithId(String userId) {
         User user = userRepository.findOneById(Converters.toObjectId(userId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND_BY_ID));
         return UserDto.of(user);
     }
 

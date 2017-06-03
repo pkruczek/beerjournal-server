@@ -59,7 +59,7 @@ class ItemService {
 
     private User verifyUser(String ownerId) {
         User user = userRepository.findOneById(toObjectId(ownerId))
-                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(USER_NOT_FOUND_BY_ID));
         if (!securityUtils.checkIfAuthorized(ownerId)){
             throw new BeerJournalException(COLLECTION_FORBIDDEN_MODIFICATION);
         }

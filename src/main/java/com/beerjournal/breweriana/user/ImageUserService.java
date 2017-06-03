@@ -70,6 +70,6 @@ class ImageUserService {
     private User getUserInstance(String userId) {
         return userRepository
                 .findOneById(Converters.toObjectId(userId))
-                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND));
+                .orElseThrow(() -> new BeerJournalException(ErrorInfo.USER_NOT_FOUND_BY_ID));
     }
 }

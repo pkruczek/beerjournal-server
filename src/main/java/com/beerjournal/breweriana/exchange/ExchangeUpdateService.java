@@ -46,7 +46,7 @@ class ExchangeUpdateService {
 
     private void validateModifiability(ExchangeState state) {
         if(!state.isModifiable()) {
-            throw new BeerJournalException(ErrorInfo.EXCHANGE_NOT_MODIFIABLE);
+            throw new BeerJournalException(ErrorInfo.MAIL_NOT_SEND);
         }
     }
 
