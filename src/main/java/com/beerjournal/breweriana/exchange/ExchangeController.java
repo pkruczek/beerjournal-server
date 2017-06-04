@@ -52,8 +52,8 @@ class ExchangeController {
 
     @GetMapping(params = {"offerorId", "desiredItemId"})
     ResponseEntity<Collection<ExchangeOfferDetailsDto>> getExchangesByOferrorAndDesiredItemId(@RequestParam String offerorId,
-                                                                                              @RequestParam String itemId) {
-        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndDesiredItemId(offerorId, itemId), HttpStatus.OK);
+                                                                                              @RequestParam String desiredItemId) {
+        return new ResponseEntity<>(exchangeFindService.findExchangesByOfferorAndDesiredItemId(offerorId, desiredItemId), HttpStatus.OK);
     }
 
     @GetMapping(params = {"offerorId", "ownerId", "offeredItemIds", "desiredItemIds"})
