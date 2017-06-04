@@ -56,7 +56,9 @@ class ImageItemService {
 
         Item item = getItemInstance(itemId);
         ObjectId imageId = saveImage(multipartFile);
-        Item itemToUpdate = item.withMainImageId(imageId);
+        Item itemToUpdate = item
+                .withNewImageId(imageId)
+                .withMainImageId(imageId);
         itemRepository.update(itemToUpdate);
         return Converters.toMap(imageId);
     }
