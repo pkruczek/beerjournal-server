@@ -64,11 +64,20 @@ public final class Item {
     }
 
     public Item withoutImageId(ObjectId imageId) {
-        return withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
+        Item item = withImageIds(Sets.difference(this.imageIds, ImmutableSet.of(imageId)));
+        if (this.mainImageId.equals(imageId)) return item.withReplacedMainImageId(item.getImageIds());
+        else return item;
     }
 
     public Item withMainImageId() {
         return withMainImageId(getNewOrExistingMainImageId());
+    }
+
+    public Item withReplacedMainImageId(Set<ObjectId> imageIds) {
+        return withMainImageId(
+                imageIds.stream()
+                        .findFirst()
+                        .orElse(null));
     }
 
     private ObjectId getNewOrExistingMainImageId() {
